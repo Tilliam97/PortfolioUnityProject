@@ -18,7 +18,15 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] int jumpMax; 
     [SerializeField] float jumpHeight; 
     [SerializeField] float gravity;
-    
+
+    // Dash
+    [SerializeField] float dashForce;
+    [SerializeField] float dashUpwardForce;
+    [SerializeField] float dashTime;
+    [SerializeField] int dashMax;
+    public KeyCode dashKey = KeyCode.E;
+    private bool dashing;
+    private int dashCount;
 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
@@ -57,6 +65,13 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void movement() 
     {
+        if (groundedPlayer)
+        {
+            jumpCount = 0;
+            playerVel.y = 0;
+            dashCount = 0;
+        }
+
         // sprint /**/
         isSprinting = Input.GetKey( sprintKey ); 
         if ( !isSprinting ) 
@@ -68,14 +83,18 @@ public class PlayerController : MonoBehaviour, IDamage
             playerSpeed = sprintSpeed; 
         }
         // sprint 
+        
+        // Dash
+        if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
+        {
+            StartCoroutine(Dash());
+            dashCount++;
+        }
+        // Dash
 
         groundedPlayer = controller.isGrounded; 
 
-        if ( groundedPlayer ) 
-        {
-            jumpCount = 0;
-            playerVel.y = 0; 
-        }
+        
 
         move = Input.GetAxis( "Horizontal" ) * transform.right 
              + Input.GetAxis( "Vertical" ) * transform.forward; 
@@ -93,6 +112,14 @@ public class PlayerController : MonoBehaviour, IDamage
         controller.Move( playerVel * Time.deltaTime ); 
     }
 
+    private IEnumerator Dash()
+    {
+        dashing = true;
+
+        playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
+        yield return new WaitForSeconds(dashTime);
+        playerVel = Vector3.zero;
+    }
     IEnumerator shoot() 
     {
         isShooting = true; 
