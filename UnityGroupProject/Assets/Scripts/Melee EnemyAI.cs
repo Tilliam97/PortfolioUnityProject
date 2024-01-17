@@ -4,17 +4,66 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NewBehaviourScript : MonoBehaviour
+public class MeleeEnemyAI : MonoBehaviour, IDamage
 {
+
+    [SerializeField] Renderer model;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Transform shootPos;
+
+    [SerializeField] int HP;
+    [SerializeField] GameObject bullet;
+    [SerializeField] float fireRate;
+
+    bool isShooting;
+    bool playerInRange;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.instance.updateGameGoal(1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (playerInRange)
+        {
+            agent.SetDestination(GameManager.instance.player.transform.position);
+
+            if (!isShooting) 
+            {
+                StartCoroutine(fire());            
+            }
+        }
+    }
+
+    IEnumerator fire()
+    {
+        isShooting = true;
+
+        yield return new WaitForSeconds(fireRate);
+
+        isShooting = false;
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+
+        StartCoroutine(flashRed());
+
+        if (HP <= 0)
+        {
+            GameManager.instance.updateGameGoal(-1);
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator flashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = Color.white;
     }
 }
