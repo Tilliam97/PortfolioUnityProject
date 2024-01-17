@@ -9,13 +9,14 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
 
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform shootPos;
+    [SerializeField] Transform meleePos;
 
     [SerializeField] int HP;
-    [SerializeField] GameObject bullet;
-    [SerializeField] float fireRate;
+    [SerializeField] GameObject weapon;
+    [SerializeField] float swingSpeed;
+    [SerializeField] GameObject weaponAni;
 
-    bool isShooting;
+    bool isSwinging;
     bool playerInRange;
 
     // Start is called before the first frame update
@@ -31,20 +32,21 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         {
             agent.SetDestination(GameManager.instance.player.transform.position);
 
-            if (!isShooting) 
+            if (!isSwinging) 
             {
-                StartCoroutine(fire());            
+                StartCoroutine(slice());            
             }
         }
     }
 
-    IEnumerator fire()
+    IEnumerator slice()
     {
-        isShooting = true;
+        isSwinging = true;
 
-        yield return new WaitForSeconds(fireRate);
+        weaponAni.GetComponent<Animator>().Play("basic weapon swing");
+        yield return new WaitForSeconds(swingSpeed);
 
-        isShooting = false;
+        isSwinging = false;
     }
 
     public void takeDamage(int amount)
@@ -65,5 +67,21 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = Color.white;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
     }
 }
