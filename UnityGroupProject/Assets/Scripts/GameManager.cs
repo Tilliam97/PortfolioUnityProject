@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this; // this creates our one instance so each class can talk to it 
         player = GameObject.FindGameObjectWithTag( "Player" ); 
-        playerScript = player.GetComponent<PlayerController>(); 
+        playerScript = player.GetComponent<PlayerController>();
         playerSpawnPos = GameObject.FindWithTag( "Player Spawn Pos" ); 
     }
     

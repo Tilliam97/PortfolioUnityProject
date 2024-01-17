@@ -151,18 +151,18 @@ public class PlayerController : MonoBehaviour, IDamage
     }
     
     public void respawn() 
-    {/*
+    {
         HP = HPOrig;
         updatePlayerUI(); 
 
         controller.enabled = false;
-        transform.position = GameManager.instance.playerSpawnPos.transform.position; 
-        controller.enabled = true; */
+        transform.position = GameManager.instance.playerSpawnPos.transform.position;
+        controller.enabled = true; 
     }
 
     public void updatePlayerUI() 
     {
-        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
     }
 
     IEnumerator flashDamage() 
