@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    private bool dashing;
+    //private bool dashing; 
     private int dashCount;
 
     [SerializeField] int shootDamage;
@@ -65,13 +65,6 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void movement() 
     {
-        if (groundedPlayer)
-        {
-            jumpCount = 0;
-            playerVel.y = 0;
-            dashCount = 0;
-        }
-
         // sprint /**/
         isSprinting = Input.GetKey( sprintKey ); 
         if ( !isSprinting ) 
@@ -83,8 +76,17 @@ public class PlayerController : MonoBehaviour, IDamage
             playerSpeed = sprintSpeed; 
         }
         // sprint 
+
+        groundedPlayer = controller.isGrounded; 
+
+        if ( groundedPlayer ) 
+        {
+            jumpCount = 0; 
+            playerVel.y = 0; 
+            dashCount = 0; 
+        }
         
-        // Dash
+        // Dash 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
         {
             StartCoroutine(Dash());
@@ -92,17 +94,13 @@ public class PlayerController : MonoBehaviour, IDamage
         }
         // Dash
 
-        groundedPlayer = controller.isGrounded; 
-
-        
-
         move = Input.GetAxis( "Horizontal" ) * transform.right 
              + Input.GetAxis( "Vertical" ) * transform.forward; 
 
         controller.Move( move * playerSpeed * Time.deltaTime ); // this is telling the player object to move at a speed based on time 
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
-        if ( Input.GetKey( jumpKey ) && jumpCount < jumpMax ) 
+        if ( Input.GetKeyDown( jumpKey ) && jumpCount < jumpMax ) 
         {
             playerVel.y = jumpHeight; 
             jumpCount++; 
@@ -114,7 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     private IEnumerator Dash()
     {
-        dashing = true;
+        //dashing = true;
 
         playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
         yield return new WaitForSeconds(dashTime);
