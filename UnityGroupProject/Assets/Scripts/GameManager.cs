@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         statePaused(); 
         menuActive = menuLose; 
-        menuActive.SetActive( true ); 
+        menuActive.SetActive( true );
     }
 }
 
