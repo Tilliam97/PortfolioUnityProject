@@ -84,8 +84,8 @@ MonoBehaviour:
   model: {fileID: 7887875202338973849}
   agent: {fileID: 5424511291295173082}
   shootPos: {fileID: 9013636828089520479}
-  HP: 10
-  bullet: {fileID: 0}
+  HP: 5
+  bullet: {fileID: 6154725216592373602, guid: 6c2ee1f3ea4ea1b48964ca71d714fe8a, type: 3}
   shootrate: 1
 --- !u!195 &5424511291295173082
 NavMeshAgent:
@@ -101,7 +101,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 6
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -199,7 +199,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 25
   m_Center: {x: 0, y: 0, z: 0}

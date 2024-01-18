@@ -47,8 +47,9 @@ public class RangedEnemy : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        StartCoroutine(flashRed());
 
-        if(HP <= 0)
+        if (HP <= 0)
         {
             GameManager.instance.updateGameGoal(-1);
             Destroy(gameObject);
@@ -57,9 +58,10 @@ public class RangedEnemy : MonoBehaviour, IDamage
 
     IEnumerator flashRed()
     {
+        Color color = model.GetComponent<Material>().color;
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
-        model.material.color = Color.white;
+        model.material.color = color;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -72,7 +74,10 @@ public class RangedEnemy : MonoBehaviour, IDamage
 
     public void OnTriggerExit(Collider other)
     {
-        playerInRange = false;
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+        }
     }
 
 }
