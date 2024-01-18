@@ -167,16 +167,16 @@ MonoBehaviour:
   sprintSpeed: 12
   jumpKey: 32
   jumpMax: 2
-  jumpHeight: 15
+  jumpHeight: 12
   gravity: -25
-  dashForce: 60
-  dashUpwardForce: 0
-  dashTime: 0.2
-  dashMax: 2
+  dashForce: 30
+  dashUpwardForce: 2
+  dashTime: 0.3
+  dashMax: 3
   dashKey: 306
   shootDamage: 1
   shootRate: 1
-  shootDist: 8
+  shootDist: 15
 --- !u!143 &5147314191507747474
 CharacterController:
   m_ObjectHideFlags: 0
