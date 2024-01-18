@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour, IDamage
         if ( Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused ) 
         {
             StartCoroutine( shoot() );
-            Debug.Log(shoot());
+            /*Debug.Log(shoot());*/
         }
 
         movement(); 
