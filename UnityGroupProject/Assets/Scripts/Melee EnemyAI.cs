@@ -12,9 +12,9 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] Transform meleePos;
 
     [SerializeField] int HP;
-    [SerializeField] GameObject weapon;
+    [SerializeField] GameObject meleeWeapon;
     [SerializeField] float swingSpeed;
-    [SerializeField] GameObject weaponAni;
+    [SerializeField] Animator weaponAniController;
 
     bool isSwinging;
     bool playerInRange;
@@ -32,18 +32,17 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         {
             agent.SetDestination(GameManager.instance.player.transform.position);
 
-            if (!isSwinging) 
+            if (!isSwinging)
             {
-                StartCoroutine(slice());            
+                StartCoroutine(swing());
             }
         }
     }
 
-    IEnumerator slice()
+    IEnumerator swing()
     {
         isSwinging = true;
 
-        weaponAni.GetComponent<Animator>().Play("basic weapon swing");
         yield return new WaitForSeconds(swingSpeed);
 
         isSwinging = false;
@@ -74,6 +73,8 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            weaponAniController.SetBool("swing", true);
+            //swingSpeed = weaponAniController.speed;
         }
     }
 
@@ -82,6 +83,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            weaponAniController.SetBool("swing", false);
         }
     }
 }
