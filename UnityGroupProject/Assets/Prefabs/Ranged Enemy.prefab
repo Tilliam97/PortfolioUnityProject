@@ -40,7 +40,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1775839993703402254}
-  - component: {fileID: 5571486272449316649}
   - component: {fileID: 5877875010369676221}
   - component: {fileID: 5424511291295173082}
   - component: {fileID: 4012518429476285955}
@@ -70,24 +69,6 @@ Transform:
   - {fileID: 9013636828089520479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5571486272449316649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2735599315737873185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 862c337d3aa649b4187e0a63792601e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Model: {fileID: 7887875202338973849}
-  agent: {fileID: 5424511291295173082}
-  shootPos: {fileID: 9013636828089520479}
-  HP: 5
-  bullet: {fileID: 0}
-  shootSpeed: 0
 --- !u!114 &5877875010369676221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +76,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2735599315737873185}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c43d96d63e41be48ba0bb1240a13843, type: 3}
   m_Name: 
