@@ -12,7 +12,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] Transform meleePos;
 
     [SerializeField] int HP;
-    [SerializeField] GameObject weapon;
+    [SerializeField] GameObject meleeWeapon;
     [SerializeField] float swingSpeed;
     [SerializeField] Animator weaponAniController;
 
@@ -74,7 +74,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         {
             playerInRange = true;
             weaponAniController.SetBool("swing", true);
-            swingSpeed = weaponAniController.speed;
+            //swingSpeed = weaponAniController.speed;
         }
     }
 
