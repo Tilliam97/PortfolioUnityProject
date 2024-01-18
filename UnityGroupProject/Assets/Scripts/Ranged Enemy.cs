@@ -25,7 +25,23 @@ public class RangedEnemy : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        agent.SetDestination(GameManager.instance.player.transform.position);
+        if(playerInRange)
+        {
+            agent.SetDestination(GameManager.instance.player.transform.position);
+
+            if (!isShooting)
+            {
+                StartCoroutine(shoot());
+            }
+        }
+    }
+
+    IEnumerator shoot()
+    {
+        isShooting = true;
+        Instantiate(bullet, shootPos.position, transform.rotation);
+        yield return new WaitForSeconds(shootrate);
+        isShooting = false;
     }
 
     public void takeDamage(int amount)
@@ -46,21 +62,17 @@ public class RangedEnemy : MonoBehaviour, IDamage
         model.material.color = Color.white;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void OnTriggerExit(Collider other)
+    {
+        playerInRange = false;
+    }
 
 }
