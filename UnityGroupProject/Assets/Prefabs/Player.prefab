@@ -52,14 +52,20 @@ MonoBehaviour:
   controller: {fileID: 1630252478213871286}
   HP: 10
   playerSpeed: 5
+  sprintKey: 304
+  sprintSpeed: 10
+  jumpKey: 32
   jumpMax: 2
   jumpHeight: 12
   gravity: -25
+  dashForce: 0
+  dashUpwardForce: 0
+  dashTime: 0
+  dashMax: 0
+  dashKey: 101
   shootDamage: 1
   shootRate: 0.3
   shootDist: 25
-  sprintKey: 304
-  sprintSpeed: 10
 --- !u!143 &1630252478213871286
 CharacterController:
   m_ObjectHideFlags: 0
