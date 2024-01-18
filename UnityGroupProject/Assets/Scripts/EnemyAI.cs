@@ -45,7 +45,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int damage)
     {
         HP -= damage;
-      
+
         StartCoroutine(flashRed());
 
         if (HP <= 0)
@@ -55,8 +55,8 @@ public class EnemyAI : MonoBehaviour, IDamage
         }
     }
 
-    IEnumerator flashRed() { 
-        
+    IEnumerator flashRed()
+    {
         Model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         Model.material.color = Color.white;
