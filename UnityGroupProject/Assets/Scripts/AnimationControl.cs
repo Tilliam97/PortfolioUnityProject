@@ -12,7 +12,8 @@ public class AnimationControl : MonoBehaviour
     {
         if (Input.GetButtonDown("Reload"))
         {
-            TP.GetComponent<Animator>().Play("Reload");
+            //TP.GetComponent<Animator>().Play("Reload");
+            TP.GetComponent<Animator>().Play("basic weapon swing");
         }
     }
 }

@@ -54,11 +54,12 @@ public class PlayerController : MonoBehaviour, IDamage
     // Update is called once per frame 
     void Update() 
     {
-        Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red ); 
+        Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
         if ( Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused ) 
         {
-            StartCoroutine( shoot() ); 
+            StartCoroutine( shoot() );
+            Debug.Log(shoot());
         }
 
         movement(); 
