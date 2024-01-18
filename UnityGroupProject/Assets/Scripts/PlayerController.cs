@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] CharacterController controller;
 
     [SerializeField] int HP; 
-    [SerializeField] float playerSpeed; 
+    [SerializeField] float playerSpeed;
     
     public KeyCode sprintKey = KeyCode.LeftShift; 
     float playerSpeedOrig; 
@@ -38,16 +38,17 @@ public class PlayerController : MonoBehaviour, IDamage
     bool groundedPlayer;
     int jumpCount;
     bool isShooting;
-    int HPOrig; 
+    int HPOrig;
 
     // Start is called before the first frame update 
     void Start() 
     {
         HPOrig = HP; 
-        respawn(); 
         // sprint 
-        playerSpeedOrig = playerSpeed; 
+        playerSpeedOrig = playerSpeed;
         // sprint 
+
+        respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
     }
     
     // Update is called once per frame 
@@ -65,6 +66,12 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void movement() 
     {
+        move = Input.GetAxis("Horizontal") * transform.right
+            + Input.GetAxis("Vertical") * transform.forward;
+
+        controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
+
+
         // sprint /**/
         isSprinting = Input.GetKey( sprintKey ); 
         if ( !isSprinting ) 
@@ -94,10 +101,7 @@ public class PlayerController : MonoBehaviour, IDamage
         }
         // Dash
 
-        move = Input.GetAxis( "Horizontal" ) * transform.right 
-             + Input.GetAxis( "Vertical" ) * transform.forward; 
-
-        controller.Move( move * playerSpeed * Time.deltaTime ); // this is telling the player object to move at a speed based on time 
+       
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
         if ( Input.GetKeyDown( jumpKey ) && jumpCount < jumpMax ) 

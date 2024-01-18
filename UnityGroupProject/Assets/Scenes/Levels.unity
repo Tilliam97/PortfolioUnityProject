@@ -829,8 +829,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2195580802391485357, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      propertyPath: dashKey
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195580802391485357, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      propertyPath: dashMax
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195580802391485357, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      propertyPath: dashTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195580802391485357, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
       propertyPath: dashForce
-      value: 60
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2195580802391485357, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      propertyPath: dashUpwardForce
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
       propertyPath: m_Name
