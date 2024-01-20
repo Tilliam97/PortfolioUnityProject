@@ -20,7 +20,7 @@ public class Laser : MonoBehaviour
     //isToggleble
     //true - turret can be turned off -> goto isFiring
     //false - turret can not be turned off
-    [SerializeField] bool isToggleble;
+    [SerializeField] public bool isToggel;
 
 
     void Start()
@@ -33,7 +33,7 @@ public class Laser : MonoBehaviour
     {
         CheckReq();
 
-        if (isToggleble) // checks if can fire 
+        if (isToggel) // checks if can fire 
         {
             if (!isShooting)
             {
@@ -54,7 +54,7 @@ public class Laser : MonoBehaviour
     {
         if (reqKey)
         {
-            isToggleble = true;
+            isToggel = true;
         }
     }
 }

@@ -7,11 +7,14 @@ public class DestructableObjectg : MonoBehaviour, IDamage
     [SerializeField] int HP;
     [SerializeField] Renderer model;
 
+    // add chance for dropping item
+        // chance drops or garantee drops
+
     public void takeDamage(int amount)
     {
         HP -= amount;
 
-        StartCoroutine(flashRed());
+        StartCoroutine(flashRed()); // for testing if took damage - change to breaking animation or image swapping if possible
 
         if (HP <= 0)
         {

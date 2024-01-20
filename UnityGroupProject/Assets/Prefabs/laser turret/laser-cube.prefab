@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8152084228487626366}
+  - component: {fileID: 433986511920728370}
   - component: {fileID: 3165036581875454528}
   - component: {fileID: 7648764763001880178}
   - component: {fileID: 2676325248606727892}
-  - component: {fileID: 433986511920728370}
   m_Layer: 0
   m_Name: laser-cube
   m_TagString: Untagged
@@ -36,6 +36,23 @@ Transform:
   - {fileID: 7026908744176471134}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &433986511920728370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631949974186489427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d66334a05608741b00e6a5924c7a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 7648764763001880178}
+  projectile: {fileID: 8791473406900096221, guid: 9a5ba993b6e479646aec93ca4ceb5c9c, type: 3}
+  shootPos: {fileID: 6491663278034008688}
+  shotSpeed: 0.1
+  isOn: 0
 --- !u!33 &3165036581875454528
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -107,22 +124,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &433986511920728370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631949974186489427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4d66334a05608741b00e6a5924c7a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 7648764763001880178}
-  projectile: {fileID: 8791473406900096221, guid: 9a5ba993b6e479646aec93ca4ceb5c9c, type: 3}
-  shootPos: {fileID: 6491663278034008688}
-  shotSpeed: 0.1
 --- !u!1 &7043304090363910780
 GameObject:
   m_ObjectHideFlags: 0
