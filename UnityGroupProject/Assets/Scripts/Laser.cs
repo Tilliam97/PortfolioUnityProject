@@ -11,10 +11,18 @@ public class Laser : MonoBehaviour
 
     bool isShooting;
 
-    // add toggle to turn off laser 
-        // tie to an interactable game obj
+    //key toggle
+    //interact toggle
+    bool reqKey;
+        // based on kills, collectable, interactable
 
-    // Start is called before the first frame update
+    // bool
+    //isToggleble
+    //true - turret can be turned off -> goto isFiring
+    //false - turret can not be turned off
+    [SerializeField] bool isToggleble;
+
+
     void Start()
     {
         
@@ -23,9 +31,14 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isShooting)
+        CheckReq();
+
+        if (isToggleble) // checks if can fire 
         {
-            StartCoroutine(shoot());
+            if (!isShooting)
+            {
+                StartCoroutine(shoot());
+            }
         }
     }
 
@@ -35,5 +48,13 @@ public class Laser : MonoBehaviour
         Instantiate(projectile, shootPos.position, transform.rotation);
         yield return new WaitForSeconds(shotSpeed);
         isShooting = false;
+    }
+
+    void CheckReq()
+    {
+        if (reqKey)
+        {
+            isToggleble = true;
+        }
     }
 }
