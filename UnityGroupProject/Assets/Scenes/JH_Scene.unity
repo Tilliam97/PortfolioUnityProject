@@ -675,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: isToggel
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: isToggleble
@@ -1103,11 +1103,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ccc441bffcfc849a4addd30bae4ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
+  isOn: 1
   reqKey: 0
   codeKey: 1
   model: {fileID: 1032505045}
-  toggel: {fileID: 673389375}
+  areToggles:
+  - {fileID: 673389375}
+  - {fileID: 1866804664}
 --- !u!65 &1032505044
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2142,6 +2144,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3784477733141938767, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
   m_PrefabInstance: {fileID: 2116758801}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1866804664 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+  m_PrefabInstance: {fileID: 738833348}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1866804665 stripped
 Transform:
