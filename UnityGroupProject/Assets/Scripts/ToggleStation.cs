@@ -18,12 +18,8 @@ public class ToggleStation : MonoBehaviour, IDamage
     [SerializeField] List<GameObject> areToggles;
 
     int interact;
-
     Laser laser;
     List<Laser> numLaser = new List<Laser>();
-
-    
-    // Start is called before the first frame update
 
     void Start()
     {
@@ -31,7 +27,6 @@ public class ToggleStation : MonoBehaviour, IDamage
         {
             numLaser.Add(areToggles[i].GetComponent<Laser>());
         }
-
         if (isOn)
         {
             interact = 1;

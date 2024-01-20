@@ -57,4 +57,9 @@ public class Laser : MonoBehaviour
             isToggel = true;
         }
     }
+
+    public void Toggel()
+    {
+        isToggel = !isToggel;
+    }
 }
