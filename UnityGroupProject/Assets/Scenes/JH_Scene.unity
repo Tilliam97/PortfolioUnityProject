@@ -309,6 +309,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
+--- !u!1 &123318787 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+  m_PrefabInstance: {fileID: 853677942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &187377573 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3784477733141938767, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
@@ -951,6 +956,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6396380532146689381, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.7127094
@@ -997,7 +1006,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6396380532146689381, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1664007498}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1723660338}
   m_SourcePrefab: {fileID: 100100000, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
 --- !u!4 &937452036 stripped
 Transform:
@@ -1659,7 +1671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.97629607
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1667,7 +1679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.2164396
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1679,7 +1691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -1921,6 +1933,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6396380532146689381, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
   m_PrefabInstance: {fileID: 853677942}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1723660338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123318787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64fe7e32058ecc24b8c2d452af7e0984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeSave: 2
+  canTP: 1
+  Player: {fileID: 123318787}
+  fallTrapScript: {fileID: 1756774853}
 --- !u!1001 &1734642694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1982,6 +2010,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d857b158288b704281b3eb110cbc1a3, type: 3}
+--- !u!114 &1756774853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8528195823080003701, guid: e894643f53668844bb9979a1f0b1070a, type: 3}
+  m_PrefabInstance: {fileID: 6533658653410568000}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3478f6d66cbaab644a9c665c6264d287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1765880201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3072,6 +3111,10 @@ PrefabInstance:
     - target: {fileID: 8820744581497510682, guid: e894643f53668844bb9979a1f0b1070a, type: 3}
       propertyPath: m_Name
       value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8820744581497510682, guid: e894643f53668844bb9979a1f0b1070a, type: 3}
+      propertyPath: m_TagString
+      value: Fall TP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

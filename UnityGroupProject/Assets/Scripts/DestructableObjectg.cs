@@ -18,7 +18,7 @@ public class DestructableObjectg : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // play destruction animation if added
         }
     }
     IEnumerator flashRed()

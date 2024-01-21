@@ -14,7 +14,16 @@ public class FallTrap : MonoBehaviour
 
     bool overtimedamage = false;
     private Coroutine damageCoroutine;
+    
 
+    void Start()
+    {
+        
+    }
+    void Update()
+    {
+           
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (damageOvertime)
