@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic; 
 using UnityEngine; 
 
-public class PlayerController : MonoBehaviour, IDamage 
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
 {
     [SerializeField] CharacterController controller;
 
@@ -35,10 +35,15 @@ public class PlayerController : MonoBehaviour, IDamage
 
     Vector3 move; 
     Vector3 playerVel; 
-    bool groundedPlayer;
+    public bool groundedPlayer;
     int jumpCount;
     bool isShooting;
     int HPOrig;
+
+    [SerializeField] SafeTP safeTP;
+    Vector3 posSafe;
+    public float rotYSafe;
+    bool canTP;
 
     // Start is called before the first frame update 
     void Start() 
@@ -49,6 +54,7 @@ public class PlayerController : MonoBehaviour, IDamage
         // sprint 
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
+        canTP = safeTP.canTP; 
     }
     
     // Update is called once per frame 
@@ -60,6 +66,13 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             StartCoroutine( shoot() );
             /*Debug.Log(shoot());*/
+        }
+
+        
+        if (canTP)
+        {
+            posSafe = safeTP.playerPos;
+            rotYSafe = safeTP.yRot;
         }
 
         movement(); 
@@ -141,6 +154,17 @@ public class PlayerController : MonoBehaviour, IDamage
 
         yield return new WaitForSeconds( shootRate ); 
         isShooting = false; 
+    }
+
+    public void takeDamageTP(int amount, bool TP)
+    {
+        if (!TP)
+            takeDamage(amount);
+        else
+        {
+            takeDamage(amount);
+            transform.position = posSafe; // working on adjusting cam pos.
+        }
     }
 
     public void takeDamage( int amount ) 

@@ -54,7 +54,7 @@ public class ToggleStation : MonoBehaviour, IDamage
 
         Toggle();
     }
-
+    
     void Toggle()
     {
         if (interact == 1)

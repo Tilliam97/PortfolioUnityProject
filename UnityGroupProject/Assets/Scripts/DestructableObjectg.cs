@@ -21,6 +21,7 @@ public class DestructableObjectg : MonoBehaviour, IDamage
             Destroy(gameObject); // play destruction animation if added
         }
     }
+    
     IEnumerator flashRed()
     {
         Color color = model.material.color;

@@ -5,13 +5,12 @@ using UnityEngine;
 public class SafeTP : MonoBehaviour
 {
     [SerializeField] float timeSave;
-    [SerializeField] bool canTP;
+    [SerializeField] public bool canTP;
     [SerializeField] GameObject Player;
 
-    [SerializeField] FallTrap fallTrapScript;
     CharacterController controller;
-    Vector3 playerPos;
-    float yRot;
+    public Vector3 playerPos;
+    public float yRot;
     bool isGrounded;
     bool canSave;
     
@@ -20,7 +19,6 @@ public class SafeTP : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("script found " + fallTrapScript);
         canSave = true;
         controller = Player.GetComponent<CharacterController>();
     }

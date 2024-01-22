@@ -56,10 +56,10 @@ public class FallTrap : MonoBehaviour
             return; 
         }
 
-        IDamage dmg = other.GetComponent<IDamage>();
+        IDamageTeleport dmg = other.GetComponent<IDamageTeleport>();
 
         if (dmg != null)
-            dmg.takeDamage(damageAmount);
+            dmg.takeDamageTP(damageAmount, tpPlayer);
     }
 
     IEnumerator DamageOverTime(Collider other)
