@@ -51,9 +51,4 @@ public class SafeTP : MonoBehaviour
         yield return new WaitForSeconds(timeSave);
         canSave = true;
     }
-
-    public void SafeSpawn(GameObject obj)
-    {
-        Debug.Log("Player tried to Safe Spawn");
-    }
 }

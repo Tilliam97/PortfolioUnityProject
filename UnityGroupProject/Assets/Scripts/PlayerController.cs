@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    //private bool dashing; 
+    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames
     private int dashCount;
     #endregion
 
@@ -70,14 +70,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
             StartCoroutine( shoot() );
             /*Debug.Log(shoot());*/
         }
-
-        
-        if (canTP)
-        {
-            posSafe = safeTP.playerPos;
-            rotYSafe = safeTP.yRot;
-        }
-
+        TPCheck();
         movement(); 
     }
 
@@ -133,11 +126,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
 
     private IEnumerator Dash()
     {
-        //dashing = true;
-
+        //isdashing = true;
         playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
         yield return new WaitForSeconds(dashTime);
         playerVel = Vector3.zero;
+        //isdashing = false;
     }
     IEnumerator shoot() 
     {
@@ -157,6 +150,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
 
         yield return new WaitForSeconds( shootRate ); 
         isShooting = false; 
+    }
+
+    void TPCheck()
+    {
+        if (canTP)
+        {
+            posSafe = safeTP.playerPos;
+            rotYSafe = safeTP.yRot;
+        }
     }
 
     public void takeDamageTP(int amount, bool TP)

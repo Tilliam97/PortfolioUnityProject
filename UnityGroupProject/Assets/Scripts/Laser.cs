@@ -12,23 +12,11 @@ public class Laser : MonoBehaviour
     bool isShooting;
 
     //key toggle
-    //interact toggle
     bool reqKey;
         // based on kills, collectable, interactable
 
-    // bool
-    //isToggleble
-    //true - turret can be turned off -> goto isFiring
-    //false - turret can not be turned off
     [SerializeField] public bool isToggel;
 
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         CheckReq();
@@ -50,7 +38,7 @@ public class Laser : MonoBehaviour
         isShooting = false;
     }
 
-    void CheckReq()
+    void CheckReq() // will need updating when code is required
     {
         if (reqKey)
         {
@@ -58,8 +46,8 @@ public class Laser : MonoBehaviour
         }
     }
 
-    public void Toggel()
+    public void Toggel()  // must be public so toggle station can properly read
     {
         isToggel = !isToggel;
-    }
+    } 
 }

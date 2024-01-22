@@ -22,10 +22,6 @@ public class FallTrap : MonoBehaviour
             // turn off physical collider
         }
     }
-    void Update()
-    {
-           
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (damageOvertime)

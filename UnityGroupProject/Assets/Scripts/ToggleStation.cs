@@ -48,7 +48,7 @@ public class ToggleStation : MonoBehaviour, IDamage
         }
 
         interact += amount;
-        if (interact > 1)
+        if (interact > 1) // this will cause problems if base player damage is greater than 1
             interact = 0;
 
         Toggle();
