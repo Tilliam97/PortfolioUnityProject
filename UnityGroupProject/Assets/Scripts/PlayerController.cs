@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
     [SerializeField] float jumpHeight; 
     [SerializeField] float gravity;
 
-    // Dash
+    #region Dash
     [SerializeField] float dashForce;
     [SerializeField] float dashUpwardForce;
     [SerializeField] float dashTime;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
     public KeyCode dashKey = KeyCode.E;
     //private bool dashing; 
     private int dashCount;
+    #endregion
 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
@@ -40,10 +41,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
     bool isShooting;
     int HPOrig;
 
+    #region SafeTelport
     [SerializeField] SafeTP safeTP;
     Vector3 posSafe;
-    public float rotYSafe;
+    float rotYSafe;
     bool canTP;
+    #endregion
 
     // Start is called before the first frame update 
     void Start() 
@@ -158,12 +161,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
 
     public void takeDamageTP(int amount, bool TP)
     {
-        if (!TP)
+        if (!TP)  // teleport is false
             takeDamage(amount);
-        else
+        else      // teleport is true and will teleport player to last safe pos
         {
             takeDamage(amount);
             transform.position = posSafe; // working on adjusting cam pos.
+            gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
+            //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
         }
     }
 

@@ -6,7 +6,6 @@ public class FallTrap : MonoBehaviour
 {
     // will damage the player when fell into: Spikes, Lava, voids
 
-    [SerializeField] Rigidbody rb;
     [SerializeField] int damageAmount;
     [SerializeField] bool tpPlayer;
     [SerializeField] bool damageOvertime;
@@ -18,7 +17,10 @@ public class FallTrap : MonoBehaviour
 
     void Start()
     {
-        
+        if (tpPlayer)
+        {
+            // turn off physical collider
+        }
     }
     void Update()
     {
@@ -33,12 +35,6 @@ public class FallTrap : MonoBehaviour
         }
         else
             DamagePlayer(other);
-
-        if (tpPlayer) // use for jumps that are impossible to make it back to level
-        {
-            // teleport payer if set true to teleport player
-            // teleport player to safest location
-        }
     }
     private void OnTriggerExit(Collider other)
     {

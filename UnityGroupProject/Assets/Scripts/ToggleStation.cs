@@ -18,7 +18,6 @@ public class ToggleStation : MonoBehaviour, IDamage
     [SerializeField] List<GameObject> areToggles;
 
     int interact;
-    Laser laser;
     List<Laser> numLaser = new List<Laser>();
 
     void Start()
