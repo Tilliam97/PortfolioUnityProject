@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic; 
 using UnityEngine; 
 
-public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
 {
     [SerializeField] CharacterController controller;
 
@@ -206,6 +206,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport
         GameManager.instance.playerDamageFlash.SetActive( true ); 
         yield return new WaitForSeconds( 0.1f ); 
         GameManager.instance.playerDamageFlash.SetActive( false ); 
+    }
+
+    public void HealMe(int amount)
+    {
+        HP += amount;
+        if (HP > HPOrig)
+            HP = HPOrig;
+        updatePlayerUI();
+        // UI make flash green
     }
 }
 
