@@ -6,9 +6,9 @@ public class Collectible : MonoBehaviour
 {
     [SerializeField] string collectType;  // key,  health pack
 
-    [SerializeField] bool enemyCanDrop;   // can an enemy drop this?
+    [SerializeField] bool enemyCanDrop;   // can an enemy drop this?  // not implemented
 
-    [SerializeField] int keyCode;         // code used
+    [SerializeField] int keyCode;         // code used                // not implemented
     [SerializeField] int grantHealth;     // amount to heal
 
     Collider objColid;
