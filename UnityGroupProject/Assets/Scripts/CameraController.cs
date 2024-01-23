@@ -8,7 +8,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] int lockVertMin, lockVertMax;
     [SerializeField] bool invertY;
 
-    float xRot; 
+    float xRot;
+
+    public bool tp;
 
     // Start is called before the first frame update 
     void Start() 
@@ -36,8 +38,16 @@ public class CameraController : MonoBehaviour
         transform.localRotation = Quaternion.Euler( xRot, 0, 0 );
 
         // rotate the player on the Y-axis 
-        transform.parent.Rotate( Vector3.up * mouseX ); 
+        transform.parent.Rotate( Vector3.up * mouseX );
 
+       
+        // rotate camera when of direction of last known pos - player must be teleporting
+        if (tp)
+        {
+            // set x-axis to be leveled
+            //transform.localRotation = Quaternion.Euler(Vector3.right);
+            tp = false;
+        }
     }
 }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic; 
 using UnityEngine; 
 
-public class PlayerController : MonoBehaviour, IDamage 
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
 {
     [SerializeField] CharacterController controller;
 
@@ -19,14 +19,15 @@ public class PlayerController : MonoBehaviour, IDamage
     [SerializeField] float jumpHeight; 
     [SerializeField] float gravity;
 
-    // Dash
+    #region Dash
     [SerializeField] float dashForce;
     [SerializeField] float dashUpwardForce;
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    //private bool dashing; 
+    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames
     private int dashCount;
+    #endregion
 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
@@ -35,10 +36,17 @@ public class PlayerController : MonoBehaviour, IDamage
 
     Vector3 move; 
     Vector3 playerVel; 
-    bool groundedPlayer;
+    public bool groundedPlayer;
     int jumpCount;
     bool isShooting;
     int HPOrig;
+
+    #region SafeTelport
+    [SerializeField] SafeTP safeTP;
+    Vector3 posSafe;
+    float rotYSafe;
+    bool canTP;
+    #endregion
 
     // Start is called before the first frame update 
     void Start() 
@@ -49,6 +57,7 @@ public class PlayerController : MonoBehaviour, IDamage
         // sprint 
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
+        canTP = safeTP.canTP; 
     }
     
     // Update is called once per frame 
@@ -61,7 +70,7 @@ public class PlayerController : MonoBehaviour, IDamage
             StartCoroutine( shoot() );
             /*Debug.Log(shoot());*/
         }
-
+        TPCheck();
         movement(); 
     }
 
@@ -117,11 +126,11 @@ public class PlayerController : MonoBehaviour, IDamage
 
     private IEnumerator Dash()
     {
-        //dashing = true;
-
+        //isdashing = true;
         playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
         yield return new WaitForSeconds(dashTime);
         playerVel = Vector3.zero;
+        //isdashing = false;
     }
     IEnumerator shoot() 
     {
@@ -141,6 +150,28 @@ public class PlayerController : MonoBehaviour, IDamage
 
         yield return new WaitForSeconds( shootRate ); 
         isShooting = false; 
+    }
+
+    void TPCheck()
+    {
+        if (canTP)
+        {
+            posSafe = safeTP.playerPos;
+            rotYSafe = safeTP.yRot;
+        }
+    }
+
+    public void takeDamageTP(int amount, bool TP)
+    {
+        if (!TP)  // teleport is false
+            takeDamage(amount);
+        else      // teleport is true and will teleport player to last safe pos
+        {
+            takeDamage(amount);
+            transform.position = posSafe; // working on adjusting cam pos.
+            gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
+            //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
+        }
     }
 
     public void takeDamage( int amount ) 
@@ -175,6 +206,15 @@ public class PlayerController : MonoBehaviour, IDamage
         GameManager.instance.playerDamageFlash.SetActive( true ); 
         yield return new WaitForSeconds( 0.1f ); 
         GameManager.instance.playerDamageFlash.SetActive( false ); 
+    }
+
+    public void HealMe(int amount)
+    {
+        HP += amount;
+        if (HP > HPOrig)
+            HP = HPOrig;
+        updatePlayerUI();
+        // UI make flash green
     }
 }
 
