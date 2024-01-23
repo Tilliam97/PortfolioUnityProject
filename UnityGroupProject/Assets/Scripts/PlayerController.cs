@@ -4,35 +4,46 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
 {
-    [SerializeField] CharacterController controller;
+    [Header("----- Player Settings -----")] 
+    [SerializeField] CharacterController controller; 
+    [SerializeField] int HP;
 
-    [SerializeField] int HP; 
-    [SerializeField] float playerSpeed;
-    
+    [Header("----- Player Speed & Sprint Settings -----")] 
     public KeyCode sprintKey = KeyCode.LeftShift; 
-    float playerSpeedOrig; 
+    [SerializeField] float playerSpeed; 
     [SerializeField] float sprintSpeed; 
+    float playerSpeedOrig; 
     bool isSprinting;
 
+    [Header("----- Player Jump Settings -----")] 
     public KeyCode jumpKey = KeyCode.Space; 
     [SerializeField] int jumpMax; 
     [SerializeField] float jumpHeight; 
     [SerializeField] float gravity;
 
-    #region Dash
-    [SerializeField] float dashForce;
-    [SerializeField] float dashUpwardForce;
-    [SerializeField] float dashTime;
-    [SerializeField] int dashMax;
-    public KeyCode dashKey = KeyCode.E;
-    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames
+    #region Dash 
+    [Header("----- Player Dash Settings -----")] 
+    [SerializeField] float dashForce; 
+    [SerializeField] float dashUpwardForce; 
+    [SerializeField] float dashTime; 
+    [SerializeField] int dashMax; 
+    public KeyCode dashKey = KeyCode.E; 
+    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
     #endregion
 
-    [SerializeField] int shootDamage;
-    [SerializeField] float shootRate;
+    [Header("----- Player Gun Settings -----")] 
+    [SerializeField] int shootDamage; 
+    [SerializeField] float shootRate; 
     [SerializeField] int shootDist;
 
+    #region SafeTelport 
+    [Header("----- Safe Teleport Settings ----- ")] 
+    [SerializeField] SafeTP safeTP; 
+    Vector3 posSafe; 
+    float rotYSafe; 
+    bool canTP; 
+    #endregion 
 
     Vector3 move; 
     Vector3 playerVel; 
@@ -41,12 +52,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
     bool isShooting;
     int HPOrig;
 
-    #region SafeTelport
-    [SerializeField] SafeTP safeTP;
-    Vector3 posSafe;
-    float rotYSafe;
-    bool canTP;
-    #endregion
 
     // Start is called before the first frame update 
     void Start() 
