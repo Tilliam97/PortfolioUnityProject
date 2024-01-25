@@ -2,11 +2,28 @@ using System.Collections;
 using System.Collections.Generic; 
 using UnityEngine; 
 
-public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill 
 {
+    #region Player Settings 
     [Header("----- Player Settings -----")] 
     [SerializeField] CharacterController controller; 
-    [SerializeField] int HP;
+    [Range (1, 10)] [SerializeField] int HP; 
+    
+    public KeyCode reloadKey = KeyCode.R; 
+    [Range (1, 100)] [SerializeField] int PistolAmmoCapacity; 
+    [Range (1, 12)] [SerializeField] int PistolMagCapacity; 
+
+    int CurrPistolAmmo; 
+    int MaxPistolAmmo; 
+    int CurrPistolMag; 
+    int MaxPistolMag; 
+
+    //[Range (1, 25)] [SerializeField] int SniperAmmoCapacity; 
+    //[Range (1, 8)] [SerializeField] int SniperMagCapacity; 
+    //
+    //[Range (1, 50)] [SerializeField] int ShotgunAmmoCapacity; 
+    //[Range (1, 5)] [SerializeField] int ShotgunMagCapacity; 
+    #endregion 
 
     #region Speed & Sprint Variables 
     [Header("----- Player Speed & Sprint Settings -----")] 
@@ -60,13 +77,21 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
     int HPOrig;
 
 
+
+
+
     // Start is called before the first frame update 
     void Start() 
     {
         HPOrig = HP; 
-        // sprint 
-        playerSpeedOrig = playerSpeed;
-        // sprint 
+        playerSpeedOrig = playerSpeed; 
+
+        // wip 
+        MaxPistolAmmo = PistolAmmoCapacity; 
+        MaxPistolMag = PistolMagCapacity; 
+        CurrPistolAmmo = MaxPistolAmmo; 
+        CurrPistolMag = MaxPistolMag; 
+        // wip
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
         canTP = safeTP.canTP; 
@@ -79,11 +104,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
 
         if ( Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused ) 
         {
-            StartCoroutine( shoot() );
-            /*Debug.Log(shoot());*/
+            StartCoroutine( shoot() ); 
+            /*Debug.Log(shoot()); */
         }
-        TPCheck();
+
+        TPCheck(); 
         movement(); 
+        Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo ); 
     }
 
     void movement() 
@@ -144,9 +171,60 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         playerVel = Vector3.zero;
         //isdashing = false;
     }
+
+
+    #region Reload WIP 
+    void Reload( ref int CurrMag, ref int MaxMag, ref int CurrAmmo, ref int MaxAmmo ) // may have to pass these by reference 
+    {
+        if ( Input.GetKeyDown( reloadKey ) && CurrMag != MaxMag ) 
+        {
+            int magFill = MaxMag - CurrMag; 
+
+            if ( CurrAmmo > 0 && CurrAmmo >= magFill ) 
+            { 
+                CurrMag += magFill; 
+                CurrAmmo -= magFill; 
+            }
+            else if ( CurrAmmo > 0 && CurrAmmo < magFill ) // use CurrAmmo (less than magFill, greater than 0) 
+            {
+                CurrMag += CurrAmmo; 
+                CurrAmmo = 0; 
+            }
+        }
+    }
+
+    void FillAmmo( int CurrAmmo, int MaxAmmo, int fillAmount ) 
+    {
+        if ( CurrAmmo + fillAmount > MaxAmmo ) 
+        {
+            CurrAmmo = MaxAmmo; 
+        }
+        else 
+        {
+            CurrAmmo += fillAmount; 
+        }
+    }
+
+    public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
+    {
+        switch ( ammoType ) 
+        {
+            case AmmoTypes.PISTOL: 
+                FillAmmo( CurrPistolAmmo, MaxPistolAmmo, ammoAmount ); 
+                break; 
+            case AmmoTypes.SNIPER: 
+                break; 
+            case AmmoTypes.SHOTGUN: 
+                break; 
+            default: 
+                break; 
+        }
+    }
+    #endregion 
+
     IEnumerator shoot() 
     {
-        isShooting = true; 
+        isShooting = true;
 
         RaycastHit hit; 
         if ( Physics.Raycast( Camera.main.ViewportPointToRay( new Vector2( 0.5f, 0.5f )), out hit, shootDist )) 
@@ -154,12 +232,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
             // we need to damage stuff 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
 
-            if ( hit.transform != transform && dmg != null ) // if we did not hit ourselves & if what we hit can take damage 
+            if ( hit.transform != transform && dmg != null && CurrPistolMag > 0 ) // if we did not hit ourselves & if what we hit can take damage 
             {
                 dmg.takeDamage( shootDamage ); 
             }
         }
+        CurrPistolMag--; 
 
+        Debug.Log( CurrPistolMag ); 
+        //Debug.Log( CurrPistolAmmo ); 
+        
         yield return new WaitForSeconds( shootRate ); 
         isShooting = false; 
     }
@@ -228,5 +310,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         updatePlayerUI();
         // UI make flash green
     }
+
+    
 }
 
