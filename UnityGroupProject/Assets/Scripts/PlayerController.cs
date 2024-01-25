@@ -8,18 +8,22 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
     [SerializeField] CharacterController controller; 
     [SerializeField] int HP;
 
+    #region Speed & Sprint Variables 
     [Header("----- Player Speed & Sprint Settings -----")] 
     public KeyCode sprintKey = KeyCode.LeftShift; 
     [SerializeField] float playerSpeed; 
     [SerializeField] float sprintSpeed; 
     float playerSpeedOrig; 
-    bool isSprinting;
+    bool isSprinting; 
+    #endregion 
 
+    #region Jump Variables 
     [Header("----- Player Jump Settings -----")] 
     public KeyCode jumpKey = KeyCode.Space; 
     [SerializeField] int jumpMax; 
     [SerializeField] float jumpHeight; 
-    [SerializeField] float gravity;
+    [SerializeField] float gravity; 
+    #endregion 
 
     #region Dash 
     [Header("----- Player Dash Settings -----")] 
@@ -32,10 +36,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
     private int dashCount;
     #endregion
 
+    #region Gun Variables 
     [Header("----- Player Gun Settings -----")] 
     [SerializeField] int shootDamage; 
     [SerializeField] float shootRate; 
-    [SerializeField] int shootDist;
+    [SerializeField] int shootDist; 
+    #endregion 
 
     #region SafeTelport 
     [Header("----- Safe Teleport Settings ----- ")] 
@@ -44,6 +50,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
     float rotYSafe; 
     bool canTP; 
     #endregion 
+
 
     Vector3 move; 
     Vector3 playerVel; 
