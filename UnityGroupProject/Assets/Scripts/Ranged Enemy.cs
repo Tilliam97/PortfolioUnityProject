@@ -5,13 +5,18 @@ using UnityEngine.AI;
 
 public class RangedEnemy : MonoBehaviour, IDamage
 {
+    [Header("----- Components -----")]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform shootPos;
 
-    [SerializeField] int HP;
+    [Header("----- Enemy Stats -----")]
+    [Range(1, 100)][SerializeField] int HP;
+    
+    [Header("----- Gun Attributes -----")]
     [SerializeField] GameObject bullet;
     [SerializeField] float shootrate;
+
 
     bool isShooting;
     bool playerInRange;
