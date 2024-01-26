@@ -9,7 +9,7 @@ public class StopWatch : MonoBehaviour
 {
     bool stopWatchActive = true;
     float currTime;
-    public Text currTimeText;
+    public TMP_Text currTimeText;
 
     // Start is called before the first frame update
     void Start()
