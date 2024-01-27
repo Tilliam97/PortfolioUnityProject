@@ -6,37 +6,71 @@ using UnityEngine.AI;
 
 public class MeleeEnemyAI : MonoBehaviour, IDamage
 {
-
+    [Header ( "---- Components ----" )]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
-
-    [SerializeField] int HP;
-    [SerializeField] GameObject meleeWeapon;
-    [SerializeField] float swingSpeed;
+    [SerializeField] Transform headPos;
     [SerializeField] Animator weaponAniController;
+
+    [Header("----- Enemy Stats -----")]
+    [Range (1,5)] [SerializeField] int HP;
+    [SerializeField] int fov;
+    [SerializeField] int fovAtk;
+
+    [Header (" ---- Weapon Attributes ----")]
+    [SerializeField] GameObject meleeWeapon;
+    [Range (0.1f, 4.0f)][SerializeField] float swingSpeed;
 
     bool isSwinging;
     bool playerInRange;
+    Vector3 playerDir;
+    float angleToPlayer;
+
 
     // Start is called before the first frame update
     void Start()
     {
         GameManager.instance.updateGameGoal(1);
+        weaponAniController.SetBool("swing", false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (playerInRange)
         {
-            agent.SetDestination(GameManager.instance.player.transform.position);
-
-            if (!isSwinging)
+            if (canSeePlayer())
             {
-                StartCoroutine(swing());
             }
         }
+    }
+
+    bool canSeePlayer()
+    {
+        playerDir = GameManager.instance.player.transform.position - headPos.position;
+
+        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 0, playerDir.z), transform.forward);
+
+        Debug.Log(angleToPlayer);
+        Debug.DrawRay(headPos.position, playerDir);
+
+        RaycastHit hit;
+        if(Physics.Raycast(headPos.position, playerDir, out hit)) 
+        {
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= fov )
+            {
+                agent.SetDestination(GameManager.instance.player.transform.position);
+
+                if (angleToPlayer <= fovAtk && !isSwinging)
+                    StartCoroutine(swing());
+                
+                return true;
+            }
+        }
+
+        return false;
     }
 
     IEnumerator swing()
@@ -52,6 +86,9 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     {
         HP -= amount;
 
+        //if taking damage outside fov go to player's last known position 
+        agent.SetDestination(GameManager.instance.player.transform.position);
+
         StartCoroutine(flashRed());
 
         if (HP <= 0)
@@ -61,20 +98,23 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         }
     }
 
+
     IEnumerator flashRed()
     {
+        //Store the orig color 
+        Color origColor = model.material.color;
+
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
-        model.material.color = Color.white;
+        model.material.color = origColor;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
+            playerInRange = true; 
             weaponAniController.SetBool("swing", true);
-            //swingSpeed = weaponAniController.speed;
         }
     }
 
