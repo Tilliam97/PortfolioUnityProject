@@ -4,20 +4,21 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MeleeEnemyAI : MonoBehaviour, IDamage
+public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 {
     [Header ( "---- Components ----" )]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
     [SerializeField] Transform headPos;
-    [SerializeField] Animator weaponAniController;
+    [SerializeField] Animator simAni;
 
     [Header("----- Enemy Stats -----")]
     [Range (1,5)] [SerializeField] int HP;
     [SerializeField] int fov;
     [SerializeField] int fovAtk;
     [SerializeField] int targetFaceSpeed;
+     [SerializeField] int animSpeedTrans;
 
     [Header (" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
@@ -33,12 +34,17 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         GameManager.instance.updateGameGoal(1);
-        weaponAniController.SetBool("swing", false);
+        simAni.SetBool("swing", false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        float animSpeed = agent.velocity.normalized.magnitude;
+
+
+        simAni.SetFloat("Speed", Mathf.Lerp(simAni.GetFloat("Speed"), animSpeed, Time.deltaTime * animSpeedTrans));
+
         if (playerInRange)
         {
             if (canSeePlayer())
@@ -81,7 +87,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
 
     void faceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(playerDir);
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, transform.position.y, playerDir.z));
         //Smooth rotation over time while moving and inside stopping distance 
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * targetFaceSpeed);
 
@@ -128,7 +134,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
-            weaponAniController.SetBool("swing", true);
+            simAni.SetBool("swing", true);
         }
     }
 
@@ -137,7 +143,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            weaponAniController.SetBool("swing", false);
+            simAni.SetBool("swing", false);
         }
     }
 }
