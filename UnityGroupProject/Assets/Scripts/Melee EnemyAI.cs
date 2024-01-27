@@ -20,7 +20,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
 
     [Header (" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
-    [Range (0.1f, 4.0f)][SerializeField] float swingSpeed;
+    [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
 
     bool isSwinging;
     bool playerInRange;
@@ -38,7 +38,6 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        
         if (playerInRange)
         {
             if (canSeePlayer())
@@ -49,23 +48,25 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
 
     bool canSeePlayer()
     {
-        playerDir = GameManager.instance.player.transform.position - headPos.position;
+        playerDir = playerDir = GameManager.instance.player.transform.position - headPos.position;
 
         angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 0, playerDir.z), transform.forward);
 
         Debug.Log(angleToPlayer);
-        Debug.DrawRay(headPos.position, playerDir);
+        Debug.DrawRay(transform.position, playerDir);
 
         RaycastHit hit;
-        if(Physics.Raycast(headPos.position, playerDir, out hit)) 
+        if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= fov )
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= fov)
             {
                 agent.SetDestination(GameManager.instance.player.transform.position);
 
                 if (angleToPlayer <= fovAtk && !isSwinging)
+                {
                     StartCoroutine(swing());
-                
+                }
+
                 return true;
             }
         }
@@ -89,6 +90,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
+
         StartCoroutine(flashRed());
 
         if (HP <= 0)
@@ -97,7 +99,6 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
             Destroy(gameObject);
         }
     }
-
 
     IEnumerator flashRed()
     {
@@ -113,7 +114,7 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true; 
+            playerInRange = true;
             weaponAniController.SetBool("swing", true);
         }
     }
