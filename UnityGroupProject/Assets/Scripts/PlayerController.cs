@@ -238,13 +238,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 dmg.takeDamage(shootDamage);
             }
         }
-        if (CurrPistolMag > 0)
+        if ( CurrPistolMag > 0 ) 
         {
-           CurrPistolMag--;
-           updatePlayerUI();
+            CurrPistolMag--;
+            updatePlayerUI();
         }
 
-        Debug.Log(CurrPistolMag);
+        //Debug.Log(CurrPistolMag); 
         //Debug.Log( CurrPistolAmmo ); 
 
         yield return new WaitForSeconds(shootRate);
