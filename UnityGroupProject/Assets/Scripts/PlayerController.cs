@@ -237,7 +237,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 dmg.takeDamage( shootDamage ); 
             }
         }
-        CurrPistolMag--; 
+        if ( CurrPistolMag > 0 ) 
+        {
+            CurrPistolMag--; 
+        }
 
         Debug.Log( CurrPistolMag ); 
         //Debug.Log( CurrPistolAmmo ); 
