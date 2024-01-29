@@ -66,7 +66,6 @@ public class MeleeEnemyAI : MonoBehaviour, IDamage
                 if (angleToPlayer <= fovAtk && !isSwinging)
                     StartCoroutine(swing());
 
-                //if inside stopping distance rotate enemy
                 if (agent.remainingDistance < agent.stoppingDistance)
                 {
                     faceTarget();

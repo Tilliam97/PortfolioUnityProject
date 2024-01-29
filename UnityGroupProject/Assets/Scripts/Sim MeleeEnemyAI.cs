@@ -55,9 +55,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     bool canSeePlayer()
     {
-        playerDir = playerDir = GameManager.instance.player.transform.position - headPos.position;
+        playerDir = GameManager.instance.player.transform.position - headPos.position;
 
-        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 0, playerDir.z), transform.forward);
+        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 
+                                                0, playerDir.z),    
+                                                transform.forward);
 
         Debug.Log(angleToPlayer);
         Debug.DrawRay(transform.position, playerDir);
@@ -87,9 +89,12 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     void faceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, transform.position.y, playerDir.z));
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 
+                                                             transform.position.y, 
+                                                             playerDir.z));
         //Smooth rotation over time while moving and inside stopping distance 
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * targetFaceSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, 
+                                    Time.deltaTime * targetFaceSpeed);
 
     }
 
@@ -97,9 +102,15 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         isSwinging = true;
 
+        if (agent.remainingDistance <= agent.stoppingDistance)
+            simAni.SetBool("swing", true);
+
         yield return new WaitForSeconds(swingSpeed);
 
         isSwinging = false;
+
+        if (agent.remainingDistance > agent.stoppingDistance || angleToPlayer >= fovAtk)
+            simAni.SetBool("swing", false);
     }
 
     public void takeDamage(int amount)
@@ -133,8 +144,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
-            simAni.SetBool("swing", true);
+            playerInRange = true;          
         }
     }
 
@@ -143,7 +153,6 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            simAni.SetBool("swing", false);
         }
     }
 }
