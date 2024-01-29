@@ -240,7 +240,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
         if ( CurrPistolMag > 0 ) 
         {
-            CurrPistolMag--; 
+            CurrPistolMag--;
+            updatePlayerUI();
         }
 
         Debug.Log(CurrPistolMag);
