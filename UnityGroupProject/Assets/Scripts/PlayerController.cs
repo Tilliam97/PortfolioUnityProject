@@ -244,7 +244,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             updatePlayerUI();
         }
 
-        Debug.Log(CurrPistolMag);
+        //Debug.Log(CurrPistolMag); 
         //Debug.Log( CurrPistolAmmo ); 
 
         yield return new WaitForSeconds(shootRate);
