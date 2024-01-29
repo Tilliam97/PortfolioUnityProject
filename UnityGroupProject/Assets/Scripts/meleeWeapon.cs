@@ -6,7 +6,6 @@ public class meleeWeapon : MonoBehaviour
 {
     [SerializeField] GameObject weapon;
     [SerializeField] int dmgAmt;
-    [SerializeField] float swingSpeed;
 
     // Start is called before the first frame update
     /*void Start()
