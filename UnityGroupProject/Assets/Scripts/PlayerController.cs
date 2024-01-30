@@ -1,85 +1,119 @@
-using System.Collections; 
-using System.Collections.Generic; 
-using UnityEngine; 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill
 {
-    [Header("----- Player Settings -----")] 
-    [SerializeField] CharacterController controller; 
-    [SerializeField] int HP;
+    #region Player Settings 
+    [Header("----- Player Settings -----")]
+    [SerializeField] CharacterController controller;
+    [Range(1, 10)][SerializeField] int HP;
 
-    [Header("----- Player Speed & Sprint Settings -----")] 
-    public KeyCode sprintKey = KeyCode.LeftShift; 
-    [SerializeField] float playerSpeed; 
-    [SerializeField] float sprintSpeed; 
-    float playerSpeedOrig; 
+    public KeyCode reloadKey = KeyCode.R;
+    [Range(1, 100)][SerializeField] int PistolAmmoCapacity;
+    [Range(1, 12)][SerializeField] int PistolMagCapacity;
+
+    int CurrPistolAmmo;
+    int MaxPistolAmmo;
+    int CurrPistolMag;
+    int MaxPistolMag;
+
+    //[Range (1, 25)] [SerializeField] int SniperAmmoCapacity; 
+    //[Range (1, 8)] [SerializeField] int SniperMagCapacity; 
+    //
+    //[Range (1, 50)] [SerializeField] int ShotgunAmmoCapacity; 
+    //[Range (1, 5)] [SerializeField] int ShotgunMagCapacity; 
+    #endregion
+
+    #region Speed & Sprint Variables 
+    [Header("----- Player Speed & Sprint Settings -----")]
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] float playerSpeed;
+    [SerializeField] float sprintSpeed;
+    float playerSpeedOrig;
     bool isSprinting;
+    #endregion
 
-    [Header("----- Player Jump Settings -----")] 
-    public KeyCode jumpKey = KeyCode.Space; 
-    [SerializeField] int jumpMax; 
-    [SerializeField] float jumpHeight; 
+    #region Jump Variables 
+    [Header("----- Player Jump Settings -----")]
+    public KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] int jumpMax;
+    [SerializeField] float jumpHeight;
     [SerializeField] float gravity;
+    #endregion
 
     #region Dash 
-    [Header("----- Player Dash Settings -----")] 
-    [SerializeField] float dashForce; 
-    [SerializeField] float dashUpwardForce; 
-    [SerializeField] float dashTime; 
-    [SerializeField] int dashMax; 
-    public KeyCode dashKey = KeyCode.E; 
+    [Header("----- Player Dash Settings -----")]
+    [SerializeField] float dashForce;
+    [SerializeField] float dashUpwardForce;
+    [SerializeField] float dashTime;
+    [SerializeField] int dashMax;
+    public KeyCode dashKey = KeyCode.E;
     //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
     #endregion
 
-    [Header("----- Player Gun Settings -----")] 
-    [SerializeField] int shootDamage; 
-    [SerializeField] float shootRate; 
+    #region Gun Variables 
+    [Header("----- Player Gun Settings -----")]
+    [SerializeField] int shootDamage;
+    [SerializeField] float shootRate;
     [SerializeField] int shootDist;
+    #endregion
 
     #region SafeTelport 
-    [Header("----- Safe Teleport Settings ----- ")] 
-    [SerializeField] SafeTP safeTP; 
-    Vector3 posSafe; 
-    float rotYSafe; 
-    bool canTP; 
-    #endregion 
+    [Header("----- Safe Teleport Settings ----- ")]
+    [SerializeField] SafeTP safeTP;
+    Vector3 posSafe;
+    float rotYSafe;
+    bool canTP;
+    #endregion
 
-    Vector3 move; 
-    Vector3 playerVel; 
+
+    Vector3 move;
+    Vector3 playerVel;
     public bool groundedPlayer;
     int jumpCount;
     bool isShooting;
     int HPOrig;
 
 
+
+
+
     // Start is called before the first frame update 
-    void Start() 
+    void Start()
     {
-        HPOrig = HP; 
-        // sprint 
+        HPOrig = HP;
         playerSpeedOrig = playerSpeed;
-        // sprint 
+
+        // wip 
+        MaxPistolAmmo = PistolAmmoCapacity;
+        MaxPistolMag = PistolMagCapacity;
+        CurrPistolAmmo = MaxPistolAmmo;
+        CurrPistolMag = MaxPistolMag;
+        // wip
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
-        canTP = safeTP.canTP; 
+        canTP = safeTP.canTP;
     }
-    
+
     // Update is called once per frame 
-    void Update() 
+    void Update()
     {
-        Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
-        if ( Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused ) 
+        if (Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused)
         {
-            StartCoroutine( shoot() );
-            /*Debug.Log(shoot());*/
+            StartCoroutine(shoot());
+            /*Debug.Log(shoot()); */
         }
+
         TPCheck();
-        movement(); 
+        movement();
+        Reload(ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo);
     }
 
-    void movement() 
+    void movement()
     {
         move = Input.GetAxis("Horizontal") * transform.right
             + Input.GetAxis("Vertical") * transform.forward;
@@ -88,26 +122,26 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
 
 
         // sprint /**/
-        isSprinting = Input.GetKey( sprintKey ); 
-        if ( !isSprinting ) 
+        isSprinting = Input.GetKey(sprintKey);
+        if (!isSprinting)
         {
-            playerSpeed = playerSpeedOrig; 
+            playerSpeed = playerSpeedOrig;
         }
-        else if ( isSprinting ) 
+        else if (isSprinting)
         {
-            playerSpeed = sprintSpeed; 
+            playerSpeed = sprintSpeed;
         }
         // sprint 
 
-        groundedPlayer = controller.isGrounded; 
+        groundedPlayer = controller.isGrounded;
 
-        if ( groundedPlayer ) 
+        if (groundedPlayer)
         {
-            jumpCount = 0; 
-            playerVel.y = 0; 
-            dashCount = 0; 
+            jumpCount = 0;
+            playerVel.y = 0;
+            dashCount = 0;
         }
-        
+
         // Dash 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
         {
@@ -116,17 +150,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         }
         // Dash
 
-       
+
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
-        if ( Input.GetKeyDown( jumpKey ) && jumpCount < jumpMax ) 
+        if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
         {
-            playerVel.y = jumpHeight; 
-            jumpCount++; 
+            playerVel.y = jumpHeight;
+            jumpCount++;
         }
 
-        playerVel.y += gravity * Time.deltaTime; 
-        controller.Move( playerVel * Time.deltaTime ); 
+        playerVel.y += gravity * Time.deltaTime;
+        controller.Move(playerVel * Time.deltaTime);
     }
 
     private IEnumerator Dash()
@@ -137,24 +171,84 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         playerVel = Vector3.zero;
         //isdashing = false;
     }
-    IEnumerator shoot() 
-    {
-        isShooting = true; 
 
-        RaycastHit hit; 
-        if ( Physics.Raycast( Camera.main.ViewportPointToRay( new Vector2( 0.5f, 0.5f )), out hit, shootDist )) 
+
+    #region Reload WIP 
+    void Reload(ref int CurrMag, ref int MaxMag, ref int CurrAmmo, ref int MaxAmmo) // may have to pass these by reference 
+    {
+        if (Input.GetKeyDown(reloadKey) && CurrMag != MaxMag)
+        {
+            int magFill = MaxMag - CurrMag;
+
+            if (CurrAmmo > 0 && CurrAmmo >= magFill)
+            {
+                CurrMag += magFill;
+                CurrAmmo -= magFill;
+                updatePlayerUI();
+            }
+            else if (CurrAmmo > 0 && CurrAmmo < magFill) // use CurrAmmo (less than magFill, greater than 0) 
+            {
+                CurrMag += CurrAmmo;
+                CurrAmmo = 0;
+            }
+        }
+    }
+
+    void FillAmmo(int CurrAmmo, int MaxAmmo, int fillAmount)
+    {
+        if (CurrAmmo + fillAmount > MaxAmmo)
+        {
+            CurrAmmo = MaxAmmo;
+        }
+        else
+        {
+            CurrAmmo += fillAmount;
+        }
+    }
+
+    public void RefillAmmo(AmmoTypes ammoType, int ammoAmount)
+    {
+        switch (ammoType)
+        {
+            case AmmoTypes.PISTOL:
+                FillAmmo(CurrPistolAmmo, MaxPistolAmmo, ammoAmount);
+                break;
+            case AmmoTypes.SNIPER:
+                break;
+            case AmmoTypes.SHOTGUN:
+                break;
+            default:
+                break;
+        }
+    }
+    #endregion 
+
+    IEnumerator shoot()
+    {
+        isShooting = true;
+
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
         {
             // we need to damage stuff 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
 
-            if ( hit.transform != transform && dmg != null ) // if we did not hit ourselves & if what we hit can take damage 
+            if (hit.transform != transform && dmg != null && CurrPistolMag > 0) // if we did not hit ourselves & if what we hit can take damage 
             {
-                dmg.takeDamage( shootDamage ); 
+                dmg.takeDamage(shootDamage);
             }
         }
+        if ( CurrPistolMag > 0 ) 
+        {
+            CurrPistolMag--;
+            updatePlayerUI();
+        }
 
-        yield return new WaitForSeconds( shootRate ); 
-        isShooting = false; 
+        //Debug.Log(CurrPistolMag); 
+        //Debug.Log( CurrPistolAmmo ); 
+
+        yield return new WaitForSeconds(shootRate);
+        isShooting = false;
     }
 
     void TPCheck()
@@ -179,38 +273,40 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         }
     }
 
-    public void takeDamage( int amount ) 
+    public void takeDamage(int amount)
     {
-        HP -= amount; 
+        HP -= amount;
         updatePlayerUI();
-        StartCoroutine( flashDamage() ); 
+        StartCoroutine(flashDamage());
 
-        if ( HP <= 0 ) 
+        if (HP <= 0)
         {
-            GameManager.instance.youLose(); 
+            GameManager.instance.youLose();
         }
     }
-    
-    public void respawn() 
+
+    public void respawn()
     {
         HP = HPOrig;
-        updatePlayerUI(); 
+        updatePlayerUI();
 
         controller.enabled = false;
         transform.position = GameManager.instance.playerSpawnPos.transform.position;
-        controller.enabled = true; 
+        controller.enabled = true;
     }
 
-    public void updatePlayerUI() 
+    public void updatePlayerUI()
     {
-        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.playerAmmoBar.fillAmount = (float)CurrPistolMag / PistolMagCapacity;
+
     }
 
-    IEnumerator flashDamage() 
+    IEnumerator flashDamage()
     {
-        GameManager.instance.playerDamageFlash.SetActive( true ); 
-        yield return new WaitForSeconds( 0.1f ); 
-        GameManager.instance.playerDamageFlash.SetActive( false ); 
+        GameManager.instance.playerDamageFlash.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        GameManager.instance.playerDamageFlash.SetActive(false);
     }
 
     public void HealMe(int amount)
@@ -221,5 +317,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal
         updatePlayerUI();
         // UI make flash green
     }
+
+
 }
 

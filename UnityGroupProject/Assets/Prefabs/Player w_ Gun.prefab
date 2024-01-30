@@ -51,6 +51,7 @@ MonoBehaviour:
   lockVertMin: -90
   lockVertMax: 90
   invertY: 0
+  tp: 0
 --- !u!20 &9083217712418962278
 Camera:
   m_ObjectHideFlags: 0
@@ -125,6 +126,7 @@ GameObject:
   - component: {fileID: 5246438177183981008}
   - component: {fileID: 7877883221735078743}
   - component: {fileID: 1532862703722818084}
+  - component: {fileID: -6696462668802823922}
   m_Layer: 0
   m_Name: Player w_ Gun
   m_TagString: Player
@@ -162,8 +164,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 5147314191507747474}
   HP: 10
-  playerSpeed: 8
+  reloadKey: 114
+  PistolAmmoCapacity: 29
+  PistolMagCapacity: 12
   sprintKey: 304
+  playerSpeed: 8
   sprintSpeed: 12
   jumpKey: 32
   jumpMax: 2
@@ -177,6 +182,8 @@ MonoBehaviour:
   shootDamage: 1
   shootRate: 1
   shootDist: 15
+  safeTP: {fileID: -6696462668802823922}
+  groundedPlayer: 0
 --- !u!143 &5147314191507747474
 CharacterController:
   m_ObjectHideFlags: 0
@@ -297,6 +304,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-6696462668802823922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641708334176150113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64fe7e32058ecc24b8c2d452af7e0984, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeSave: 0
+  canTP: 0
+  Player: {fileID: 641708334176150113}
+  playerPos: {x: 0, y: 0, z: 0}
+  yRot: 0
 --- !u!1 &1632982162049172135
 GameObject:
   m_ObjectHideFlags: 0
