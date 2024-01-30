@@ -1,5 +1,6 @@
 using System.Collections; 
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI; 
 
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public Image playerHPBar;
     public Image playerAmmoBar;
 
+    public GameObject reloadPrompt;
+    
 
     public GameObject player;
     public PlayerController playerScript;
