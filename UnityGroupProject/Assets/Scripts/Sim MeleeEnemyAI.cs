@@ -22,6 +22,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     [Header (" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
+    [SerializeField] Collider weaponCollider;
     [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
 
     bool isSwinging;
@@ -41,7 +42,6 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     void Update()
     {
         float animSpeed = agent.velocity.normalized.magnitude;
-
 
         simAni.SetFloat("Speed", Mathf.Lerp(simAni.GetFloat("Speed"), animSpeed, Time.deltaTime * animSpeedTrans));
 
@@ -153,6 +153,18 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            simAni.SetBool("swing", false);
         }
     }
+
+    public void weaponColliderOn()
+    {
+        weaponCollider.enabled = true;
+    }
+
+    public void weaponColliderOff()
+    {
+        weaponCollider.enabled = false;
+    }
+
 }
