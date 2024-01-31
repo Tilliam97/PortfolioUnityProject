@@ -227,7 +227,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    void FillAmmo( int fillAmount ) 
+    public void FillAmmo( int fillAmount ) 
     {
         if ( CurAmmo + fillAmount > MaxAmmo ) 
         {
