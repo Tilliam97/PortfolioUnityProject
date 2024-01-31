@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     void Start()
     {
         HPOrig = HP;
+        //updateHealthText();
         playerSpeedOrig = playerSpeed;
 
         // wip 
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         MaxPistolMag = PistolMagCapacity;
         CurrPistolAmmo = MaxPistolAmmo;
         CurrPistolMag = MaxPistolMag;
+        //updateAmmoText();
         // wip
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
@@ -117,9 +119,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             movement();
             Reload(ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo);
 
-            if (magIsEmpty && !isFlashing)
+            if (magIsEmpty && !isFlashing && CurrPistolAmmo > 0)
             {
                 StartCoroutine(promptReload());
+            }
+            else if (magIsEmpty && CurrPistolAmmo == 0)
+            {
+                OutOfAmmo();
             }
 
         }
@@ -320,9 +326,19 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerAmmoBar.fillAmount = (float)CurrPistolMag / PistolMagCapacity;
+        updateHealthText();
+        updateAmmoText();
+
     }
 
-
+    public void updateHealthText()
+    {
+        GameManager.instance.HPTxt.text = HP + "/" + HPOrig;
+    }
+    public void updateAmmoText()
+    {
+        GameManager.instance.AmmoTxt.text = CurrPistolMag + "/" + CurrPistolAmmo;
+    }
 
 
     IEnumerator flashDamage()
@@ -349,6 +365,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         GameManager.instance.reloadPrompt.SetActive(false);
         yield return new WaitForSeconds(0.3f);
         isFlashing = false;
+    }
+
+    public void OutOfAmmo()
+    {
+        GameManager.instance.outOfAmmoPrompt.SetActive(true);
+        if (CurrPistolAmmo > 0 || CurrPistolMag > 0)
+        {
+            GameManager.instance.outOfAmmoPrompt.SetActive(false);
+        }
     }
 
 

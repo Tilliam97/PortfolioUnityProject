@@ -13,10 +13,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin; 
     [SerializeField] GameObject menuLose;
     public GameObject playerDamageFlash; 
+    
     public Image playerHPBar;
     public Image playerAmmoBar;
+    public TMP_Text HPTxt;
+    public TMP_Text AmmoTxt;
 
     public GameObject reloadPrompt;
+    public GameObject outOfAmmoPrompt;
     
 
     public GameObject player;
