@@ -320,7 +320,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         shootDist = gun.shootDist; 
         shootRate = gun.shootRate; 
 
-
+        CurMag = gunList[selectedGun].CurGunMag; 
+        MaxMag = gunList[selectedGun].MaxGunMag; 
+        CurAmmo = gunList[selectedGun].CurGunCapacity; 
+        MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
