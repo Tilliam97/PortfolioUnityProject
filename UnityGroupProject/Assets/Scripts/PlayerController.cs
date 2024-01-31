@@ -201,31 +201,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
 
     #region Reload 
-    void Reload( ref int curMag, ref int maxMag, ref int curAmmo, ref int maxAmmo ) 
-    {
-        if ( Input.GetKeyDown( reloadKey ) && curMag != maxMag ) 
-        {
-            int magFill = maxMag - curMag; 
-
-            if ( curAmmo > 0 && curAmmo >= magFill ) 
-            {
-                curMag += magFill; 
-                curAmmo -= magFill; 
-            }
-            else if ( curAmmo > 0 && curAmmo < magFill ) // use CurrAmmo (less than magFill, greater than 0) 
-            {
-                curMag += curAmmo; 
-                curAmmo = 0; 
-            }
-            updatePlayerUI(); 
-
-            if ( curMag > 0 ) 
-            {
-                magIsEmpty = false; 
-            }
-        }
-    }
-
     void Reload() 
     {
         if ( Input.GetKeyDown( reloadKey ) && CurMag != MaxMag ) // if you push the R key & you are not at full mag capacity 
@@ -252,18 +227,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    void FillAmmo( int CurrAmmo, int MaxAmmo, int fillAmount ) 
-    {
-        if ( CurrAmmo + fillAmount > MaxAmmo ) 
-        {
-            CurrAmmo = MaxAmmo; 
-        }
-        else 
-        {
-            CurrAmmo += fillAmount; 
-        }
-    }
-
     void FillAmmo( int fillAmount ) 
     {
         if ( CurAmmo + fillAmount > MaxAmmo ) 
@@ -276,13 +239,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-
     public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
     {
         switch ( ammoType ) 
         {
             case AmmoTypes.PISTOL: 
-                //FillAmmo(CurrPistolAmmo, MaxPistolAmmo, ammoAmount); 
                 FillAmmo( ammoAmount ); 
                 break; 
             case AmmoTypes.SNIPER: 
