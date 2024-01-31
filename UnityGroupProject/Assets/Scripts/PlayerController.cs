@@ -307,6 +307,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        updatePlayerUI();
         OutOfAmmo();
     }
 
@@ -378,7 +379,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / PistolMagCapacity;
+        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / MaxMag;
         updateHealthText();
         updateAmmoText();
 
