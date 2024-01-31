@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill
@@ -76,6 +77,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool isShooting;
     int HPOrig;
 
+    bool isFlashing;
+    bool magIsEmpty;
 
 
 
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     void Start()
     {
         HPOrig = HP;
+        //updateHealthText();
         playerSpeedOrig = playerSpeed;
 
         // wip 
@@ -91,6 +95,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         MaxPistolMag = PistolMagCapacity;
         CurrPistolAmmo = MaxPistolAmmo;
         CurrPistolMag = MaxPistolMag;
+        //updateAmmoText();
         // wip
 
         respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
@@ -100,17 +105,30 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Update is called once per frame 
     void Update()
     {
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
-
-        if (Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused)
+        if (!GameManager.instance.isPaused)
         {
-            StartCoroutine(shoot());
-            /*Debug.Log(shoot()); */
-        }
+            Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
-        TPCheck();
-        movement();
-        Reload(ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo);
+            if (Input.GetButton("Shoot") & !isShooting && !GameManager.instance.isPaused)
+            {
+                StartCoroutine(shoot());
+                /*Debug.Log(shoot()); */
+            }
+
+            TPCheck();
+            movement();
+            Reload(ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo);
+
+            if (magIsEmpty && !isFlashing && CurrPistolAmmo > 0)
+            {
+                StartCoroutine(promptReload());
+            }
+            else if (magIsEmpty && CurrPistolAmmo == 0)
+            {
+                OutOfAmmo();
+            }
+
+        }
     }
 
     void movement()
@@ -184,12 +202,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             {
                 CurrMag += magFill;
                 CurrAmmo -= magFill;
-                updatePlayerUI();
             }
             else if (CurrAmmo > 0 && CurrAmmo < magFill) // use CurrAmmo (less than magFill, greater than 0) 
             {
                 CurrMag += CurrAmmo;
                 CurrAmmo = 0;
+            }
+            updatePlayerUI();
+
+            if (CurrMag > 0)
+            {
+                magIsEmpty = false;
             }
         }
     }
@@ -238,10 +261,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 dmg.takeDamage(shootDamage);
             }
         }
-        if ( CurrPistolMag > 0 ) 
+        if (CurrPistolMag > 0)
         {
             CurrPistolMag--;
             updatePlayerUI();
+        }
+        if (CurrPistolMag == 0)
+        {
+            magIsEmpty = true;
         }
 
         //Debug.Log(CurrPistolMag); 
@@ -299,8 +326,20 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
         GameManager.instance.playerAmmoBar.fillAmount = (float)CurrPistolMag / PistolMagCapacity;
+        updateHealthText();
+        updateAmmoText();
 
     }
+
+    public void updateHealthText()
+    {
+        GameManager.instance.HPTxt.text = HP + "/" + HPOrig;
+    }
+    public void updateAmmoText()
+    {
+        GameManager.instance.AmmoTxt.text = CurrPistolMag + "/" + CurrPistolAmmo;
+    }
+
 
     IEnumerator flashDamage()
     {
@@ -316,6 +355,25 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             HP = HPOrig;
         updatePlayerUI();
         // UI make flash green
+    }
+
+    IEnumerator promptReload()
+    {
+        isFlashing = true;
+        GameManager.instance.reloadPrompt.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        GameManager.instance.reloadPrompt.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
+        isFlashing = false;
+    }
+
+    public void OutOfAmmo()
+    {
+        GameManager.instance.outOfAmmoPrompt.SetActive(true);
+        if (CurrPistolAmmo > 0 || CurrPistolMag > 0)
+        {
+            GameManager.instance.outOfAmmoPrompt.SetActive(false);
+        }
     }
 
 
