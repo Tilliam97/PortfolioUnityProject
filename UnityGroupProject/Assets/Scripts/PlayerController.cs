@@ -1,6 +1,7 @@
 using System.Collections; 
 using System.Collections.Generic; 
-using Unity.VisualScripting; 
+using Unity.VisualScripting;
+using UnityEditor.UIElements;
 using UnityEngine; 
 
 public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill 
@@ -51,7 +52,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] int CurMag; 
     [SerializeField] int MaxMag; 
     [SerializeField] int CurAmmo; 
-    [SerializeField] int MaxAmmo; 
+    [SerializeField] int MaxAmmo;
+    [SerializeField] GunStats currGun; 
     #endregion
 
     #region SafeTelport 
@@ -237,8 +239,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 FillAmmo( ammoAmount ); 
                 break; 
             case AmmoTypes.SNIPER: 
+                FillAmmo( ammoAmount ); 
                 break; 
             case AmmoTypes.SHOTGUN: 
+                FillAmmo( ammoAmount ); 
                 break; 
             default: 
                 break; 
@@ -283,11 +287,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 && selectedGun < gunList.Count-1 ) 
         {
             selectedGun++; 
+            currGun = gunList[selectedGun]; 
             changeGun(); 
         }
         else if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 && selectedGun > 0 ) 
         {
-            selectedGun--; 
+            selectedGun--;
+            currGun = gunList[selectedGun]; 
             changeGun(); 
         }
     }

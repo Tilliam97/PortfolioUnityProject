@@ -14,18 +14,21 @@ public class CapsulePickup : MonoBehaviour
 
     private void OnTriggerEnter( Collider other ) 
     {
-
         if ( other.CompareTag( "Player" )) 
         {
             switch ( capsule.capsuleType ) 
             {
                 case CapsuleType.HEALTH: 
                     GameManager.instance.playerScript.HealMe( capsule.refillAmount ); 
-                    break;
+                    break; 
                 case CapsuleType.A_PISTOL: 
+                    GameManager.instance.playerScript.RefillAmmo( AmmoTypes.PISTOL, capsule.refillAmount ); 
+                    break; 
                 case CapsuleType.A_SHOTGUN: 
+                    GameManager.instance.playerScript.RefillAmmo( AmmoTypes.SHOTGUN, capsule.refillAmount ); 
+                    break; 
                 case CapsuleType.A_SNIPER: 
-                    GameManager.instance.playerScript.FillAmmo( capsule.refillAmount ); 
+                    GameManager.instance.playerScript.RefillAmmo( AmmoTypes.SNIPER, capsule.refillAmount ); 
                     break; 
                 default:
                     break; 
