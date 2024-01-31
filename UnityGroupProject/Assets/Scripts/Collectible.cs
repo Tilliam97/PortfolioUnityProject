@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// scraping for CapsulePickup script.  does the same thing
+
 public enum CollectibleTypes 
 {
     HEALTH = 1, 
@@ -13,6 +15,8 @@ public enum CollectibleTypes
 public class Collectible : MonoBehaviour
 {
     [SerializeField] string collectType;  // key,  health pack
+    [SerializeField] ScriptableObject collectableObject;
+
 
     [SerializeField] bool enemyCanDrop;   // can an enemy drop this?  // not implemented
 
