@@ -1,12 +1,23 @@
 using System.Collections; 
 using System.Collections.Generic; 
-using UnityEngine; 
+using UnityEngine;
+
+public enum CapsuleType 
+{
+    HEALTH = 1, 
+    A_PISTOL, 
+    A_SHOTGUN, 
+    A_SNIPER, 
+    KEY 
+}
+
 
 [CreateAssetMenu] 
 
-public class AmmoCollectible : ScriptableObject 
+public class CapsuleCollectible : ScriptableObject 
 {
     public int refillAmount; 
+    public CapsuleType capsuleType; 
 
     public GameObject model; 
     public AudioClip collectSound; 
