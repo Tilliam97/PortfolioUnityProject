@@ -10,20 +10,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] CharacterController controller; 
     [Range(1, 10)][SerializeField] int HP; 
 
-    public KeyCode reloadKey = KeyCode.R; 
-    [Range(1, 100)][SerializeField] int PistolAmmoCapacity; 
-    [Range(1, 12)][SerializeField] int PistolMagCapacity; 
-
-    int CurrPistolAmmo; 
-    int MaxPistolAmmo; 
-    int CurrPistolMag; 
-    int MaxPistolMag; 
-
-    //[Range (1, 25)] [SerializeField] int SniperAmmoCapacity; 
-    //[Range (1, 8)] [SerializeField] int SniperMagCapacity; 
-    
-    //[Range (1, 50)] [SerializeField] int ShotgunAmmoCapacity; 
-    //[Range (1, 5)] [SerializeField] int ShotgunMagCapacity; 
+    public KeyCode reloadKey = KeyCode.R;  
     #endregion
 
     #region Speed & Sprint Variables 
@@ -87,6 +74,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool isFlashing;
     bool magIsEmpty;
 
+    bool isReloading;
 
 
 
@@ -115,6 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             movement(); 
             TPCheck(); 
+            OutOfAmmo();
             // Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
             if ( gunList.Count > 0 ) 
@@ -128,14 +117,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                     StartCoroutine( shoot() ); 
                 }
 
-                if (magIsEmpty && !isFlashing && CurrPistolAmmo > 0)
+                if (magIsEmpty && !isFlashing && CurAmmo > 0)
                 {
                     StartCoroutine(promptReload());
                 }
-                else if (magIsEmpty && CurrPistolAmmo == 0)
-                {
-                    OutOfAmmo();
-                }
+                
             }
         }
     }
@@ -210,12 +196,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             if ( CurAmmo > 0 && CurAmmo >= magFill ) // if you have enough ammo to fully fill your mag 
             {
                 CurMag += magFill; 
-                CurAmmo -= magFill; 
+                CurAmmo -= magFill;
+                gunList[selectedGun].CurGunMag = CurMag;
+                gunList[selectedGun].CurGunCapacity = CurAmmo;
             }
             else if ( CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
             {
                 CurMag += CurAmmo; 
-                CurAmmo = 0; 
+                CurAmmo = 0;
+                gunList[selectedGun].CurGunMag = CurMag;
+                gunList[selectedGun].CurGunCapacity = CurAmmo;
             }
             updatePlayerUI(); 
 
@@ -262,8 +252,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if ( gunList[selectedGun].CurGunMag > 0 ) 
         {
             isShooting = true; 
-            gunList[selectedGun].CurGunMag--; 
-
+            gunList[selectedGun].CurGunMag--;
+            CurMag--;
             RaycastHit hit; 
             if ( Physics.Raycast(Camera.main.ViewportPointToRay( new Vector2( 0.5f, 0.5f )), out hit, shootDist )) 
             {
@@ -277,8 +267,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
                 //Instantiate(gunList[selectedGun].hitEffect, hit.point, gunList[selectedGun].hitEffect.transform.rotation ); // gunshot effect, applicable for every gun 
             }
+            if (CurMag == 0)
+            {
+                magIsEmpty = true;
+            }
             
-            yield return new WaitForSeconds( shootRate ); 
+            updatePlayerUI();
+            yield return new WaitForSeconds( shootRate );
             isShooting = false; 
         }
     }
@@ -309,12 +304,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial; 
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        updatePlayerUI();
+        OutOfAmmo();
     }
 
     public void getGunStats( GunStats gun ) 
     {
         gunList.Add( gun ); 
+        selectedGun = gunList.Count - 1; 
 
         shootDamage = gun.shootDamage; 
         shootDist = gun.shootDist; 
@@ -328,7 +326,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
 
-        selectedGun = gunList.Count - 1; 
+        updatePlayerUI();
     }
 
 
@@ -379,7 +377,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurrPistolMag / PistolMagCapacity;
+        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / MaxMag;
         updateHealthText();
         updateAmmoText();
 
@@ -391,7 +389,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
     public void updateAmmoText()
     {
-        GameManager.instance.AmmoTxt.text = CurrPistolMag + "/" + CurrPistolAmmo;
+        GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
     }
 
 
@@ -424,12 +422,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void OutOfAmmo()
     {
         GameManager.instance.outOfAmmoPrompt.SetActive(true);
-        if (CurrPistolAmmo > 0 || CurrPistolMag > 0)
+        if (CurAmmo > 0 || CurMag > 0)
         {
             GameManager.instance.outOfAmmoPrompt.SetActive(false);
         }
     }
-
-
 }
 
