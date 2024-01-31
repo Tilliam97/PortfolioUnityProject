@@ -14,10 +14,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [Range(1, 100)][SerializeField] int PistolAmmoCapacity; 
     [Range(1, 12)][SerializeField] int PistolMagCapacity; 
 
-    int CurrPistolAmmo; 
-    int MaxPistolAmmo; 
-    int CurrPistolMag; 
-    int MaxPistolMag; 
 
     //[Range (1, 25)] [SerializeField] int SniperAmmoCapacity; 
     //[Range (1, 8)] [SerializeField] int SniperMagCapacity; 
@@ -87,6 +83,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool isFlashing;
     bool magIsEmpty;
 
+    bool isReloading;
 
 
 
@@ -128,11 +125,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                     StartCoroutine( shoot() ); 
                 }
 
-                if (magIsEmpty && !isFlashing && CurrPistolAmmo > 0)
+                if (magIsEmpty && !isFlashing && CurAmmo > 0)
                 {
                     StartCoroutine(promptReload());
                 }
-                else if (magIsEmpty && CurrPistolAmmo == 0)
+                else if (magIsEmpty && CurAmmo == 0)
                 {
                     OutOfAmmo();
                 }
@@ -309,7 +306,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial; 
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        OutOfAmmo();
     }
 
     public void getGunStats( GunStats gun ) 
@@ -320,12 +318,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         shootDist = gun.shootDist; 
         shootRate = gun.shootRate; 
 
-
+        CurMag = gunList[selectedGun].CurGunMag; 
+        MaxMag = gunList[selectedGun].MaxGunMag; 
+        CurAmmo = gunList[selectedGun].CurGunCapacity; 
+        MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
 
         selectedGun = gunList.Count - 1; 
+        updatePlayerUI();
     }
 
 
@@ -376,7 +378,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurrPistolMag / PistolMagCapacity;
+        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / PistolMagCapacity;
         updateHealthText();
         updateAmmoText();
 
@@ -388,7 +390,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
     public void updateAmmoText()
     {
-        GameManager.instance.AmmoTxt.text = CurrPistolMag + "/" + CurrPistolAmmo;
+        GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
     }
 
 
@@ -421,12 +423,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void OutOfAmmo()
     {
         GameManager.instance.outOfAmmoPrompt.SetActive(true);
-        if (CurrPistolAmmo > 0 || CurrPistolMag > 0)
+        if (CurAmmo > 0 || CurMag > 0)
         {
             GameManager.instance.outOfAmmoPrompt.SetActive(false);
         }
     }
-
-
 }
 
