@@ -307,6 +307,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
         updatePlayerUI();
         OutOfAmmo();
+        if (CurMag == 0)
+        {
+            magIsEmpty = true;
+        }
+        else
+        {
+            magIsEmpty = false;
+        }
     }
 
     public void getGunStats( GunStats gun ) 
