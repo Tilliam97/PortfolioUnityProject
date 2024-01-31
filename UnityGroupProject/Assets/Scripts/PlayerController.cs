@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
 
 
-        // sprint /**/
+        // sprint 
         isSprinting = Input.GetKey(sprintKey);
         if (!isSprinting)
         {
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
 
 
-    #region Reload WIP 
+    #region Reload 
     void Reload(ref int CurrMag, ref int MaxMag, ref int CurrAmmo, ref int MaxAmmo) // may have to pass these by reference 
     {
         if (Input.GetKeyDown(reloadKey) && CurrMag != MaxMag)

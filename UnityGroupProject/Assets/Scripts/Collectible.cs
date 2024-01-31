@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CollectibleTypes 
+{
+    HEALTH = 1, 
+    PISTOL, 
+    SNIPER, 
+    SHOTGUN 
+}
+
 public class Collectible : MonoBehaviour
 {
     [SerializeField] string collectType;  // key,  health pack
