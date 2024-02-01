@@ -7,6 +7,8 @@ public class meleeWeapon : MonoBehaviour
     [SerializeField] GameObject weapon;
     [SerializeField] int dmgAmt;
 
+    public AudioClip swingSound;
+
     // Start is called before the first frame update
     /*void Start()
     {

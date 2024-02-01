@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHeal 
 {
-    void HealMe(int amount);
+    void HealMe(int amount); // use for other sources of healing other than collectables.
 }

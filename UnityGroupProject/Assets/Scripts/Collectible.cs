@@ -2,10 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// scraping for CapsulePickup script.  does the same thing
+// use this if creating a 1 time object that doesnt need a new scriptable abject
+
+public enum CollectibleTypes 
+{
+    HEALTH = 1, 
+    PISTOL, 
+    SNIPER, 
+    SHOTGUN 
+}
+
 public class Collectible : MonoBehaviour
 {
-    [SerializeField] string collectType;  // key,  health pack  -- change to scriptible obj - return string from obj.
-    [SerializeField] ScriptableObject collectionType;
+
+    [SerializeField] string collectType;  // key,  health pack
+    [SerializeField] ScriptableObject collectableObject;
 
 
     [SerializeField] bool enemyCanDrop;   // can an enemy drop this?  // not implemented

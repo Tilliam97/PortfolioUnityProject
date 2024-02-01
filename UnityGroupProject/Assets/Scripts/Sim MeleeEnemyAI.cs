@@ -18,22 +18,29 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] int fov;
     [SerializeField] int fovAtk;
     [SerializeField] int targetFaceSpeed;
-     [SerializeField] int animSpeedTrans;
+    [SerializeField] int animSpeedTrans;
+    [SerializeField] int roamDist;
+    [SerializeField] int roamPauseTime;
 
     [Header (" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
+    [SerializeField] Collider weaponCollider;
     [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
 
     bool isSwinging;
     bool playerInRange;
     Vector3 playerDir;
     float angleToPlayer;
-
+    //roam fields
+    bool destChosen;
+    Vector3 startPos;
+    float stopDistOrig;
 
     // Start is called before the first frame update
     void Start()
     {
         GameManager.instance.updateGameGoal(1);
+        agent.stoppingDistance = stopDistOrig;
         simAni.SetBool("swing", false);
     }
 
@@ -42,14 +49,37 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         float animSpeed = agent.velocity.normalized.magnitude;
 
-
         simAni.SetFloat("Speed", Mathf.Lerp(simAni.GetFloat("Speed"), animSpeed, Time.deltaTime * animSpeedTrans));
 
-        if (playerInRange)
+        if (playerInRange && !canSeePlayer())
         {
-            if (canSeePlayer())
-            {
-            }
+            StartCoroutine(roam());
+        }
+        else if (!playerInRange)
+        {
+            StartCoroutine(roam());
+        }
+    }
+
+    IEnumerator roam()
+    {
+        if (agent.remainingDistance < 0.05f && !destChosen)
+        {
+            destChosen = true;
+            //roaming dist needs to be zero to roam to exact pos
+            agent.stoppingDistance = 0;
+            yield return new WaitForSeconds(roamPauseTime);
+
+            //move above yield to roam on start
+            Vector3 randomPos = Random.insideUnitSphere * roamDist;
+            randomPos += startPos;
+
+            NavMeshHit hit;
+            NavMesh.SamplePosition(randomPos, out hit, roamDist, 1);
+            agent.SetDestination(hit.position);
+
+            destChosen = false;
+
         }
     }
 
@@ -153,6 +183,19 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            simAni.SetBool("swing", false);
+            agent.stoppingDistance = 0;
         }
     }
+
+    public void weaponColliderOn()
+    {
+        weaponCollider.enabled = true;
+    }
+
+    public void weaponColliderOff()
+    {
+        weaponCollider.enabled = false;
+    }
+
 }

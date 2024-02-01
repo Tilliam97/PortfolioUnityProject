@@ -28,3 +28,8 @@ public class StopWatch : MonoBehaviour
         currTimeText.text = time.ToString(@"mm\:ss\:fff");
     }
 }
+
+/*if (!isReloading)
+{
+
+}*/
