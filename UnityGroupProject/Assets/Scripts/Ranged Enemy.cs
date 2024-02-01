@@ -40,17 +40,9 @@ public class RangedEnemy : MonoBehaviour, IDamage
     bool playerInRange;
     Vector3 playerDir;
     float angleToPlayer;
-<<<<<<< HEAD
     bool destChosen;
     Vector3 startingPos;
     float stoppingDistOrig;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        startingPos = transform.position;
-        stoppingDistOrig = agent.stoppingDistance;
-=======
 
     #region Enemy HP Bar 
     public Image enemyHPBar; 
@@ -61,10 +53,12 @@ public class RangedEnemy : MonoBehaviour, IDamage
     // Start is called before the first frame update
     void Start()
     {
+
+        startingPos = transform.position;
+        stoppingDistOrig = agent.stoppingDistance;
+
         HPOrig = HP; 
         updateEnemyUI(); 
-
->>>>>>> b8ff92c27c5dd9136e697e5b65972af4a600fc2e
         GameManager.instance.updateGameGoal(1);
     }
 
