@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    [SerializeField] string collectType;  // key,  health pack
+    [SerializeField] string collectType;  // key,  health pack  -- change to scriptible obj - return string from obj.
+    [SerializeField] ScriptableObject collectionType;
+
 
     [SerializeField] bool enemyCanDrop;   // can an enemy drop this?  // not implemented
 
@@ -25,7 +27,7 @@ public class Collectible : MonoBehaviour
     void Collect()                        // what collecting does
     {
         // Check collection type
-        NameCheck(collectType);
+        NameCheck(collectType);  
         // Key reference code here
 
         // Health 
