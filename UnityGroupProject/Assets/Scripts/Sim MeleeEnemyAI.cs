@@ -40,7 +40,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         GameManager.instance.updateGameGoal(1);
-        agent.stoppingDistance = stopDistOrig;
+        stopDistOrig = agent.stoppingDistance;
         simAni.SetBool("swing", false);
     }
 
@@ -109,6 +109,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
                 {
                     faceTarget();
                 }
+
+                agent.stoppingDistance = stopDistOrig;
 
                 return true;
             }

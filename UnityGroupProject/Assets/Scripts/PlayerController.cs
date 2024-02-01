@@ -1,6 +1,6 @@
 using System.Collections; 
 using System.Collections.Generic; 
-using Unity.VisualScripting;
+using Unity.VisualScripting; 
 using UnityEngine; 
 
 public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill 
@@ -51,8 +51,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] int CurMag; 
     [SerializeField] int MaxMag; 
     [SerializeField] int CurAmmo; 
-    [SerializeField] int MaxAmmo;
-    [SerializeField] GunStats currGun; 
+    [SerializeField] int MaxAmmo; 
     #endregion
 
     #region SafeTelport 
@@ -231,7 +230,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         updatePlayerUI();
     }
-
+    
     public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
     {
         switch ( ammoType ) 
@@ -240,10 +239,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 FillAmmo( ammoAmount ); 
                 break; 
             case AmmoTypes.SNIPER: 
-                FillAmmo( ammoAmount ); 
                 break; 
             case AmmoTypes.SHOTGUN: 
-                FillAmmo( ammoAmount ); 
                 break; 
             default: 
                 break; 
@@ -288,13 +285,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 && selectedGun < gunList.Count-1 ) 
         {
             selectedGun++; 
-            currGun = gunList[selectedGun]; 
             changeGun(); 
         }
         else if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 && selectedGun > 0 ) 
         {
-            selectedGun--;
-            currGun = gunList[selectedGun]; 
+            selectedGun--; 
             changeGun(); 
         }
     }
@@ -448,6 +443,18 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (CurAmmo > 0 || CurMag > 0)
         {
             GameManager.instance.outOfAmmoPrompt.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Pistol": 
+                {
+
+                    break;
+                }
         }
     }
 }

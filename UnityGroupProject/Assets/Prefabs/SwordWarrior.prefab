@@ -119,8 +119,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.075
-  m_Height: 0.98
+  m_Radius: 0.2
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: -0.00022485617, y: 0.59, z: 0.0027376593}
 --- !u!1 &771219853399723759
@@ -2141,7 +2141,7 @@ NavMeshAgent:
   m_Acceleration: 35
   avoidancePriority: 50
   m_AngularSpeed: 800
-  m_StoppingDistance: 3
+  m_StoppingDistance: 2.4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
