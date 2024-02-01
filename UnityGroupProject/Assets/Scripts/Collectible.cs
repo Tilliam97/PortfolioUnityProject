@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // scraping for CapsulePickup script.  does the same thing
+// use this if creating a 1 time object that doesnt need a new scriptable abject
 
 public enum CollectibleTypes 
 {
