@@ -38,7 +38,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     float stopDistOrig;
 
     #region Enemy HP Bar 
-    public Image enemyHPBar; 
+    //public Image enemyHPBar; 
     int HPOrig; 
     #endregion 
 
@@ -47,7 +47,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     void Start()
     {
         HPOrig = HP; 
-        updateEnemyUI(); 
+        //updateEnemyUI(); 
 
         GameManager.instance.updateGameGoal(1);
         stopDistOrig = agent.stoppingDistance;
@@ -158,7 +158,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updateEnemyUI(); 
+        //updateEnemyUI(); 
 
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
@@ -184,11 +184,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     }
 
     #region Enemy HP Bar 
-    public void updateEnemyUI() 
-    {
-        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
-        this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
-    }
+    //public void updateEnemyUI() 
+    //{
+    //    //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+    //    this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
+    //}
 
     #endregion 
 
