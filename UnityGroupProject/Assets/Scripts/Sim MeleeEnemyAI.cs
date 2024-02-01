@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.AI;
+using System.Collections; 
+using System.Collections.Generic; 
+using Unity.VisualScripting; 
+using UnityEngine; 
+using UnityEngine.AI; 
+using UnityEngine.UI; 
 
 public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 {
@@ -36,9 +37,18 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     Vector3 startPos;
     float stopDistOrig;
 
+    #region Enemy HP Bar 
+    public Image enemyHPBar; 
+    int HPOrig; 
+    #endregion 
+
+
     // Start is called before the first frame update
     void Start()
     {
+        HPOrig = HP; 
+        updateEnemyUI(); 
+
         GameManager.instance.updateGameGoal(1);
         agent.stoppingDistance = stopDistOrig;
         simAni.SetBool("swing", false);
@@ -146,6 +156,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updateEnemyUI(); 
 
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
@@ -169,6 +180,15 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         yield return new WaitForSeconds(0.1f);
         model.material.color = origColor;
     }
+
+    #region Enemy HP Bar 
+    public void updateEnemyUI() 
+    {
+        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+        this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
+    }
+
+    #endregion 
 
     private void OnTriggerEnter(Collider other)
     {

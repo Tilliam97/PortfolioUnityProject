@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
-using UnityEngine;
-using UnityEngine.AI;
+using System.Collections; 
+using System.Collections.Generic; 
+using System.Runtime.Serialization.Formatters; 
+using UnityEngine; 
+using UnityEngine.AI; 
+using UnityEngine.UI; 
 
 /// <summary>
 /// Task List Today
@@ -38,10 +39,19 @@ public class RangedEnemy : MonoBehaviour, IDamage
     bool playerInRange;
     Vector3 playerDir;
     float angleToPlayer;
-    
+
+    #region Enemy HP Bar 
+    public Image enemyHPBar; 
+    int HPOrig; 
+    #endregion 
+
+
     // Start is called before the first frame update
     void Start()
     {
+        HPOrig = HP; 
+        updateEnemyUI(); 
+
         GameManager.instance.updateGameGoal(1);
     }
 
@@ -105,6 +115,7 @@ public class RangedEnemy : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updateEnemyUI(); 
         agent.SetDestination(GameManager.instance.player.transform.position);
         StartCoroutine(flashRed());
 
@@ -124,6 +135,15 @@ public class RangedEnemy : MonoBehaviour, IDamage
         yield return new WaitForSeconds(0.1f);
         model.material.color = color;
     }
+
+    #region Enemy HP Bar 
+    public void updateEnemyUI() 
+    {
+        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+        this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
+    }
+
+    #endregion 
 
     private void OnTriggerEnter(Collider other)
     {
