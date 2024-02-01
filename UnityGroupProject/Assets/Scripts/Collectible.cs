@@ -16,8 +16,6 @@ public enum CollectibleTypes
 public class Collectible : MonoBehaviour
 {
     [SerializeField] string collectType;  // key,  health pack
-    [SerializeField] ScriptableObject collectableObject;
-
 
     [SerializeField] bool enemyCanDrop;   // can an enemy drop this?  // not implemented
 

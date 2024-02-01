@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
-using UnityEngine;
-using UnityEngine.AI;
+using System.Collections; 
+using System.Collections.Generic; 
+using System.Runtime.Serialization.Formatters; 
+using UnityEngine; 
+using UnityEngine.AI; 
+using UnityEngine.UI; 
 
 /// <summary>
 /// Task List Today
 /// 
-/// 1. Have the enemy follow the player up ramps and jump
+/// 1. Have the enemy roam around
 /// 2. 
 /// 3. 
 /// 4. 
@@ -28,7 +29,8 @@ public class RangedEnemy : MonoBehaviour, IDamage
     [SerializeField] int fovshoot;
     [SerializeField] int targetFaceSpeed;
     [SerializeField] int animSpeedTrans;
-    [SerializeField] int attackRange;
+    [SerializeField] int roamDist;
+    [SerializeField] int roamPauseTimer;
     
     [Header("----- Gun Attributes -----")]
     [SerializeField] GameObject bullet;
@@ -38,22 +40,63 @@ public class RangedEnemy : MonoBehaviour, IDamage
     bool playerInRange;
     Vector3 playerDir;
     float angleToPlayer;
+<<<<<<< HEAD
+    bool destChosen;
+    Vector3 startingPos;
+    float stoppingDistOrig;
     
     // Start is called before the first frame update
     void Start()
     {
+        startingPos = transform.position;
+        stoppingDistOrig = agent.stoppingDistance;
+=======
+
+    #region Enemy HP Bar 
+    public Image enemyHPBar; 
+    int HPOrig; 
+    #endregion 
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        HPOrig = HP; 
+        updateEnemyUI(); 
+
+>>>>>>> b8ff92c27c5dd9136e697e5b65972af4a600fc2e
         GameManager.instance.updateGameGoal(1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange)
+        if (playerInRange && !canSeePlayer())
         {
-            if (canSeePlayer())
-            {
+            StartCoroutine(roam());
+        }
 
-            }
+        else if (!playerInRange)
+        {
+            StartCoroutine(roam());
+        }
+    }
+
+    IEnumerator roam()
+    {
+        if (agent.remainingDistance < 0.05f && !destChosen)
+        {
+            destChosen = true;
+            agent.stoppingDistance = 0;
+            yield return new WaitForSeconds(roamPauseTimer);
+            destChosen = false;
+
+            Vector3 randomPos = Random.insideUnitSphere * roamDist;
+            randomPos += startingPos;
+
+            NavMeshHit hit;
+            NavMesh.SamplePosition(randomPos, out hit, roamDist, 1);
+            agent.SetDestination(hit.position);
         }
     }
 
@@ -69,6 +112,8 @@ public class RangedEnemy : MonoBehaviour, IDamage
         {
             if (hit.collider.CompareTag("Player") && angleToPlayer <= viewCone)
             {
+                StopCoroutine(roam());
+
                 agent.SetDestination(GameManager.instance.player.transform.position);
                 
                 if (agent.remainingDistance < agent.stoppingDistance)
@@ -78,6 +123,8 @@ public class RangedEnemy : MonoBehaviour, IDamage
                     if (angleToPlayer <= fovshoot && !isShooting)
                         StartCoroutine(shoot());
                 }
+
+                agent.stoppingDistance = stoppingDistOrig;
 
                 return true;
             }
@@ -105,6 +152,7 @@ public class RangedEnemy : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updateEnemyUI(); 
         agent.SetDestination(GameManager.instance.player.transform.position);
         StartCoroutine(flashRed());
 
@@ -125,6 +173,15 @@ public class RangedEnemy : MonoBehaviour, IDamage
         model.material.color = color;
     }
 
+    #region Enemy HP Bar 
+    public void updateEnemyUI() 
+    {
+        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+        this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
+    }
+
+    #endregion 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -138,6 +195,7 @@ public class RangedEnemy : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            agent.stoppingDistance = 0;
         }
     }
 
