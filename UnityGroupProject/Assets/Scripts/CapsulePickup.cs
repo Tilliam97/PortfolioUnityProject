@@ -21,7 +21,7 @@ public class CapsulePickup : MonoBehaviour
                 case CapsuleType.HEALTH: 
                     GameManager.instance.playerScript.HealMe( capsule.refillAmount ); 
                     break; 
-                case CapsuleType.A_PISTOL: 
+                /*case CapsuleType.A_PISTOL: 
                     GameManager.instance.playerScript.RefillAmmo( AmmoTypes.PISTOL, capsule.refillAmount ); 
                     break; 
                 case CapsuleType.A_SHOTGUN: 
@@ -29,11 +29,11 @@ public class CapsulePickup : MonoBehaviour
                     break; 
                 case CapsuleType.A_SNIPER: 
                     GameManager.instance.playerScript.RefillAmmo( AmmoTypes.SNIPER, capsule.refillAmount ); 
-                    break; 
+                    break;*/ 
                 default:
                     break; 
             }
-            Destroy( gameObject ); 
+            //Destroy( gameObject ); 
         }
     }
 }
