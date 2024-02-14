@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    [Range(-25.0f, 0)]public float gravity;
+    [SerializeField] float gravity;
     #endregion
 
     #region Dash 
@@ -69,10 +69,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     int jumpCount;
     bool isShooting;
     int HPOrig;
-    int selectedGun;
-
-    float gravityCurr;
-    float startJumpHeight;
+    int selectedGun; 
 
     bool isFlashing;
     bool magIsEmpty;
@@ -86,8 +83,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         HPOrig = HP; 
         playerSpeedOrig = playerSpeed;
-        gravityCurr = gravity;
-        startJumpHeight = jumpHeight;
+
         // wip 
         //MaxPistolAmmo = PistolAmmoCapacity;
         //MaxPistolMag = PistolMagCapacity;
@@ -158,8 +154,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             playerVel.y = 0;
             dashCount = 0;
         }
-
-
 
         // Dash 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
@@ -462,21 +456,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                     break;
                 }
         }
-    }
-
-    public void WallRunStart()
-    {
-        gravity = -2.5f;
-        jumpHeight = startJumpHeight / 4;
-        jumpCount = 0;
-        playerVel.y = 0;
-        dashCount = 0;
-    }
-
-    public void WallRunEnd()
-    {
-        gravity = gravityCurr;
-        jumpHeight = startJumpHeight;
     }
 }
 
