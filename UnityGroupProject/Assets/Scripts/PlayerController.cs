@@ -1,16 +1,17 @@
-using System.Collections; 
-using System.Collections.Generic; 
-using Unity.VisualScripting; 
-using UnityEngine; 
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Unity.VisualScripting;
+using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill 
+public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, IAmmoRefill
 {
     #region Player Settings 
-    [Header("----- Player Settings -----")] 
-    [SerializeField] CharacterController controller; 
-    [Range(1, 10)][SerializeField] int HP; 
+    [Header("----- Player Settings -----")]
+    [SerializeField] CharacterController controller;
+    [Range(1, 10)][SerializeField] int HP;
 
-    public KeyCode reloadKey = KeyCode.R;  
+    public KeyCode reloadKey = KeyCode.R;
     #endregion
 
     #region Speed & Sprint Variables 
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    [Range(-25.0f, 0)]public float gravity;
+    [Range(-25.0f, 0)] public float gravity;
     #endregion
 
     #region Dash 
@@ -42,16 +43,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #endregion
 
     #region Gun Variables 
-    [Header("----- Player Gun Settings -----")] 
-    [SerializeField] List<GunStats> gunList = new List<GunStats>(); 
-    [SerializeField] GameObject gunModel; 
-    [SerializeField] int shootDamage; 
-    [SerializeField] float shootRate; 
-    [SerializeField] int shootDist; 
-    [SerializeField] int CurMag; 
-    [SerializeField] int MaxMag; 
-    [SerializeField] int CurAmmo; 
-    [SerializeField] int MaxAmmo; 
+    [Header("----- Player Gun Settings -----")]
+    [SerializeField] List<GunStats> gunList = new List<GunStats>();
+    [SerializeField] GameObject gunModel;
+    [SerializeField] int shootDamage;
+    [SerializeField] float shootRate;
+    [SerializeField] int shootDist;
+    [SerializeField] int CurMag;
+    [SerializeField] int MaxMag;
+    [SerializeField] int CurAmmo;
+    [SerializeField] int MaxAmmo;
     #endregion
 
     #region SafeTelport 
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Start is called before the first frame update 
     void Start()
     {
-        HPOrig = HP; 
+        HPOrig = HP;
         playerSpeedOrig = playerSpeed;
         gravityCurr = gravity;
         startJumpHeight = jumpHeight;
@@ -103,29 +104,32 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Update is called once per frame 
     void Update()
     {
-        if ( !GameManager.instance.isPaused ) 
+        if (!GameManager.instance.isPaused)
         {
-            movement(); 
-            TPCheck(); 
-            OutOfAmmo();
+            movement();
+            TPCheck();
+            if (gunList.Count != 0)
+            {
+                OutOfAmmo();
+            }
             // Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
-            if ( gunList.Count > 0 ) 
+            if (gunList.Count > 0)
             {
-                selectGun(); 
+                selectGun();
                 //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
-                Reload(); 
+                Reload();
 
-                if ( Input.GetButton( "Shoot" ) & !isShooting ) 
+                if (Input.GetButton("Shoot") & !isShooting)
                 {
-                    StartCoroutine( shoot() ); 
+                    StartCoroutine(shoot());
                 }
 
                 if (magIsEmpty && !isFlashing && CurAmmo > 0)
                 {
                     StartCoroutine(promptReload());
                 }
-                
+
             }
         }
     }
@@ -193,84 +197,86 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
 
     #region Reload 
-    void Reload() 
+    void Reload()
     {
-        if ( Input.GetKeyDown( reloadKey ) && CurMag != MaxMag ) // if you push the R key & you are not at full mag capacity 
+        if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
             int magFill = MaxMag - CurMag; // this is how much ammo is needed to fill the mag 
 
-            if ( CurAmmo > 0 && CurAmmo >= magFill ) // if you have enough ammo to fully fill your mag 
+            if (CurAmmo > 0 && CurAmmo >= magFill) // if you have enough ammo to fully fill your mag 
             {
-                CurMag += magFill; 
+                CurMag += magFill;
                 CurAmmo -= magFill;
                 gunList[selectedGun].CurGunMag = CurMag;
                 gunList[selectedGun].CurGunCapacity = CurAmmo;
             }
-            else if ( CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
+            else if (CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
             {
-                CurMag += CurAmmo; 
+                CurMag += CurAmmo;
                 CurAmmo = 0;
                 gunList[selectedGun].CurGunMag = CurMag;
                 gunList[selectedGun].CurGunCapacity = CurAmmo;
             }
-            updatePlayerUI(); 
+            updatePlayerUI();
 
 
-            if ( CurMag > 0 ) 
+            if (CurMag > 0)
             {
-                magIsEmpty = false; 
+                magIsEmpty = false;
             }
         }
     }
 
-    public void FillAmmo( int fillAmount ) 
+    public void FillAmmo(int fillAmount)
     {
-        if ( CurAmmo + fillAmount > MaxAmmo ) 
+        if (CurAmmo + fillAmount > MaxAmmo)
         {
-            CurAmmo = MaxAmmo; 
+            CurAmmo = MaxAmmo;
         }
-        else 
+        else
         {
-            CurAmmo += fillAmount; 
+            CurAmmo += fillAmount;
         }
 
         updatePlayerUI();
     }
-    
-    public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
+
+    public void RefillAmmo(AmmoTypes ammoType, int ammoAmount)
     {
-        switch ( ammoType ) 
+        switch (ammoType)
         {
-            case AmmoTypes.PISTOL: 
-                FillAmmo( ammoAmount ); 
-                break; 
-            case AmmoTypes.SNIPER: 
-                break; 
-            case AmmoTypes.SHOTGUN: 
-                break; 
-            default: 
-                break; 
+            case AmmoTypes.PISTOL:
+                FillAmmo(ammoAmount);
+                break;
+            case AmmoTypes.SNIPER:
+                FillAmmo(ammoAmount);
+                break;
+            case AmmoTypes.SHOTGUN:
+                FillAmmo(ammoAmount);
+                break;
+            default:
+                break;
         }
     }
 
     #endregion 
 
-    IEnumerator shoot() 
+    IEnumerator shoot()
     {
-        if ( gunList[selectedGun].CurGunMag > 0 ) 
+        if (gunList[selectedGun].CurGunMag > 0)
         {
-            isShooting = true; 
+            isShooting = true;
             gunList[selectedGun].CurGunMag--;
             CurMag--;
-            RaycastHit hit; 
-            if ( Physics.Raycast(Camera.main.ViewportPointToRay( new Vector2( 0.5f, 0.5f )), out hit, shootDist )) 
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
             {
                 // we need to damage stuff 
-                IDamage dmg = hit.collider.GetComponent<IDamage>(); 
+                IDamage dmg = hit.collider.GetComponent<IDamage>();
 
-                if ( hit.transform != transform && dmg != null ) // if we did not hit ourselves & if what we hit can take damage 
+                if (hit.transform != transform && dmg != null) // if we did not hit ourselves & if what we hit can take damage 
                 {
-                    dmg.takeDamage( shootDamage ); 
+                    dmg.takeDamage(shootDamage);
                 }
 
                 //Instantiate(gunList[selectedGun].hitEffect, hit.point, gunList[selectedGun].hitEffect.transform.rotation ); // gunshot effect, applicable for every gun 
@@ -279,37 +285,37 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             {
                 magIsEmpty = true;
             }
-            
+
             updatePlayerUI();
-            yield return new WaitForSeconds( shootRate );
-            isShooting = false; 
+            yield return new WaitForSeconds(shootRate);
+            isShooting = false;
         }
     }
 
-    void selectGun() 
+    void selectGun()
     {
-        if ( Input.GetAxis( "Mouse ScrollWheel" ) > 0 && selectedGun < gunList.Count-1 ) 
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && selectedGun < gunList.Count - 1)
         {
-            selectedGun++; 
-            changeGun(); 
+            selectedGun++;
+            changeGun();
         }
-        else if ( Input.GetAxis( "Mouse ScrollWheel" ) < 0 && selectedGun > 0 ) 
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && selectedGun > 0)
         {
-            selectedGun--; 
-            changeGun(); 
+            selectedGun--;
+            changeGun();
         }
     }
 
-    void changeGun() 
+    void changeGun()
     {
-        shootDamage = gunList[selectedGun].shootDamage; 
-        shootDist = gunList[selectedGun].shootDist; 
-        shootRate = gunList[selectedGun].shootRate; 
+        shootDamage = gunList[selectedGun].shootDamage;
+        shootDist = gunList[selectedGun].shootDist;
+        shootRate = gunList[selectedGun].shootRate;
 
-        CurMag = gunList[selectedGun].CurGunMag; 
-        MaxMag = gunList[selectedGun].MaxGunMag; 
-        CurAmmo = gunList[selectedGun].CurGunCapacity; 
-        MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
+        CurMag = gunList[selectedGun].CurGunMag;
+        MaxMag = gunList[selectedGun].MaxGunMag;
+        CurAmmo = gunList[selectedGun].CurGunCapacity;
+        MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
@@ -325,22 +331,22 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    public void getGunStats( GunStats gun ) 
+    public void getGunStats(GunStats gun)
     {
-        gunList.Add( gun ); 
-        selectedGun = gunList.Count - 1; 
+        gunList.Add(gun);
+        selectedGun = gunList.Count - 1;
 
-        shootDamage = gun.shootDamage; 
-        shootDist = gun.shootDist; 
-        shootRate = gun.shootRate; 
+        shootDamage = gun.shootDamage;
+        shootDist = gun.shootDist;
+        shootRate = gun.shootRate;
 
-        CurMag = gunList[selectedGun].CurGunMag; 
-        MaxMag = gunList[selectedGun].MaxGunMag; 
-        CurAmmo = gunList[selectedGun].CurGunCapacity; 
-        MaxAmmo = gunList[selectedGun].MaxGunCapacity; 
+        CurMag = gunList[selectedGun].CurGunMag;
+        MaxMag = gunList[selectedGun].MaxGunMag;
+        CurAmmo = gunList[selectedGun].CurGunCapacity;
+        MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
 
         updatePlayerUI();
         if (CurMag == 0)
@@ -454,13 +460,42 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.tag)
+        if (gunList.Count != 0)
         {
-            case "Pistol": 
-                {
-
-                    break;
-                }
+            switch (other.tag)
+            {
+                case "Pistol":
+                    {
+                        if (gunList[selectedGun].model.tag == other.tag)
+                        {
+                            RefillAmmo(AmmoTypes.PISTOL, 36);
+                            Destroy(other.gameObject);
+                        }
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        if (gunList[selectedGun].model.tag == other.tag)
+                        {
+                            RefillAmmo(AmmoTypes.SHOTGUN, 9);
+                            Destroy(other.gameObject);
+                        }
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        if (gunList[selectedGun].model.tag == other.tag)
+                        {
+                            RefillAmmo(AmmoTypes.SNIPER, 12);
+                            Destroy(other.gameObject);
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
         }
     }
 
