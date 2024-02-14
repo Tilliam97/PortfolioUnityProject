@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser : MonoBehaviour
+public class Laser : MonoBehaviour, IToggle
 {
     [SerializeField] Renderer model;
     [SerializeField] GameObject projectile;
@@ -46,7 +46,7 @@ public class Laser : MonoBehaviour
         }
     }
 
-    public void Toggel()  // must be public so toggle station can properly read
+    public void ToggleMe()  // must be public so toggle station can properly read
     {
         isToggel = !isToggel;
     } 
