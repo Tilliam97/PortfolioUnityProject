@@ -10,7 +10,8 @@ public enum CollectibleTypes
     HEALTH = 1, 
     PISTOL, 
     SNIPER, 
-    SHOTGUN 
+    SHOTGUN, 
+    LASER_GUN 
 }
 
 public class Collectible : MonoBehaviour

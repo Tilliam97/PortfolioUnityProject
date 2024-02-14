@@ -8,6 +8,7 @@ public enum CapsuleType
     A_PISTOL, 
     A_SHOTGUN, 
     A_SNIPER, 
+    A_LASER_GUN, 
     KEY 
 }
 
