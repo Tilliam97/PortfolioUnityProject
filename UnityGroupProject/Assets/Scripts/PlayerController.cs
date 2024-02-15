@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Player Settings 
     [Header("----- Player Settings -----")]
     [SerializeField] CharacterController controller;
-    [Range(1, 10)][SerializeField] int HP;
+    [Range(1, 100)][SerializeField] int HP;
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion

@@ -62,19 +62,19 @@ public class Laser : MonoBehaviour, IToggle
     {
         laserLine.enabled = true;  // turns on line renderer
         RaycastHit hit;
-        Vector3 forward = shootPos.transform.TransformDirection(Vector3.forward)*10;
+        Vector3 forward = shootPos.transform.TransformDirection(Vector3.forward);
         
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f); // .1 is the min befor it breaks player restart cause it goes negative very quickly
         
         if (Physics.Raycast(shootPos.position, forward, out hit, 100.0f))
         {
             //Debug.DrawLine(shootPos.position, hit.point, Color.red);
-            laserLine.SetPosition(0, hit.point - shootPos.position);
+            laserLine.SetPosition(1, hit.point - shootPos.position + Vector3.forward);
             // deal player damage when player enters path
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (hit.transform != transform && dmg != null)
             {
-                dmg.takeDamage(damageAmt);
+                dmg.takeDamage(damageAmt);  // this does damage on each individual raycast hit causing rapid hits  even if wait for seconds is every .1 seconds
             }
             
         }
