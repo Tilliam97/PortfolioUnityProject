@@ -66,7 +66,7 @@ public class Laser : MonoBehaviour, IToggle
         if (Physics.Raycast(shootPos.position, forward, out hit, 100.0f))
         {
             Debug.DrawLine(shootPos.position, hit.point, Color.red);
-            //laserLine.SetPosition(0, hit.point);
+            laserLine.SetPosition(0, hit.point - shootPos.position);
             // deal player damage when player enters path
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             //dmg.takeDamage(damageAmt);
