@@ -36,10 +36,11 @@ public class Laser : MonoBehaviour, IToggle
             //{
             //    //StartCoroutine(shoot());
             //}
-            LaserOn();
+            StartCoroutine(LaserOn());
         }
         else
         {
+            StopCoroutine(LaserOn());
             laserLine.enabled = false;
         }
     }
@@ -57,21 +58,30 @@ public class Laser : MonoBehaviour, IToggle
     // raycasts infront of itself.
     // on hit deal damage through IDamage and pass in the amount of damage
     // make new method to do above ^^^
-    void LaserOn()
+    IEnumerator LaserOn()
     {
         laserLine.enabled = true;  // turns on line renderer
         RaycastHit hit;
         Vector3 forward = shootPos.transform.TransformDirection(Vector3.forward)*10;
         
+        yield return new WaitForSeconds(0.1f);
+        
         if (Physics.Raycast(shootPos.position, forward, out hit, 100.0f))
         {
-            Debug.DrawLine(shootPos.position, hit.point, Color.red);
+            //Debug.DrawLine(shootPos.position, hit.point, Color.red);
             laserLine.SetPosition(0, hit.point - shootPos.position);
             // deal player damage when player enters path
             IDamage dmg = hit.collider.GetComponent<IDamage>();
-            //dmg.takeDamage(damageAmt);
+            if (hit.transform != transform && dmg != null)
+            {
+                dmg.takeDamage(damageAmt);
+            }
+            
         }
+        
     }
+
+   
 
     void CheckReq() // will need updating when code is required
     {
