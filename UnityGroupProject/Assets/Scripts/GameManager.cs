@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
     public GameObject playerDamageFlash; 
     
     public Image playerHPBar;
-    public Image playerAmmoBar;
     public TMP_Text HPTxt;
+
+    public GameObject gunPistol;
+    public GameObject gunShotgun;
+    public GameObject gunSniper;
     public TMP_Text AmmoTxt;
 
     public GameObject reloadPrompt;

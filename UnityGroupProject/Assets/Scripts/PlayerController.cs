@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             {
                 OutOfAmmo();
             }
-            // Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
+            Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
             if (gunList.Count > 0)
             {
@@ -407,10 +407,45 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / MaxMag;
         updateHealthText();
         updateAmmoText();
+        updateGunImage();
+    }
 
+    public void updateGunImage()
+    {
+        if (gunList.Count != 0)
+        {
+            switch (gunList[selectedGun].model.tag)
+            {
+                case "Pistol":
+                    {
+                        GameManager.instance.gunPistol.SetActive(true);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        GameManager.instance.gunShotgun.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        GameManager.instance.gunSniper.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        break;
+                    }
+                case "Laser Gun":
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
     }
 
     public void updateHealthText()
@@ -419,7 +454,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
     public void updateAmmoText()
     {
-        GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
+        if (gunList.Count == 0)
+        {
+            GameManager.instance.AmmoTxt.text = "00/00";
+        }
+        else
+        {
+            GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
+        }
     }
 
 
