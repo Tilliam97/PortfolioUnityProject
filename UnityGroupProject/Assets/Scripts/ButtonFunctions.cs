@@ -18,7 +18,11 @@ public class ButtonFunctions : MonoBehaviour
 
     public void quit() 
     { 
-        Application.Quit();
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+			Application.Quit();
+        #endif
     }
 
     public void respawnPayer()
