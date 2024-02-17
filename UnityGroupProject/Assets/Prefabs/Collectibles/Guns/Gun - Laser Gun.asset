@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
+  m_Name: Gun - Laser Gun
+  m_EditorClassIdentifier: 
+  shootDamage: 2
+  shootRate: 0.1
+  shootDist: 300
+  CurGunMag: 40
+  MaxGunMag: 40
+  CurGunCapacity: 40
+  MaxGunCapacity: 40
+  model: {fileID: 1401861103751533819, guid: 63516215c7713dc45a420e45e2ee5ca6, type: 3}
+  hitEffect: {fileID: 0}
+  shootSound: {fileID: 0}
+  shootSoundVol: 0

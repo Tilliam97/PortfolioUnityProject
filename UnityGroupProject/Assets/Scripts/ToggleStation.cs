@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.VisualScripting;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,14 +19,14 @@ public class ToggleStation : MonoBehaviour, IDamage
     [SerializeField] List<GameObject> areToggles;
 
     int interact;
-    List<Laser> numLaser = new List<Laser>();
+    //List<Laser> numLaser = new List<Laser>(); // change to take in any object
 
     void Start()
     {
-        for (int i = 0; i < areToggles.Count; i++)
-        {
-            numLaser.Add(areToggles[i].GetComponent<Laser>());
-        }
+        //for (int i = 0; i < areToggles.Count; i++)
+        //{
+        //    numLaser.Add(areToggles[i].GetComponent<Laser>());
+        //}
         if (isOn)
         {
             interact = 1;
@@ -56,31 +57,26 @@ public class ToggleStation : MonoBehaviour, IDamage
     
     void Toggle()
     {
+        // toggling desired objs.
+        // change toggel of game object script is on to on
+        for (int i = 0; i < areToggles.Count; i++)
+        {
+            //numLaser[i].isToggel = true;
+            IToggle toggleMe = areToggles[i].GetComponentInChildren<IToggle>();
+            toggleMe.ToggleMe();
+        }
+
+        // color change for button
         if (interact == 1)
         {
             // on
             model.material.color = Color.green;
-            // change toggel of game object script is on to on
-            for (int i = 0; i < numLaser.Count; i++)
-            {
-                numLaser[i].isToggel = true;
-            }
         }
         else
         {
             // off
             model.material.color = Color.red;
-            // change toggel of game object script is on to off
-            for (int i = 0; i < numLaser.Count; i++)
-            {
-                numLaser[i].isToggel = false;
-            }
         }
     }
-    //public void TakeKey(int amount)  // use if key is added
-    //{
-    //    if(codeKey == amount)
-    //        reqKey = false;
-    //}
 
 }

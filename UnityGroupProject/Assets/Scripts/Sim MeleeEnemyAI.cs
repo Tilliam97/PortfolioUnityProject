@@ -1,13 +1,13 @@
-using System.Collections; 
-using System.Collections.Generic; 
-using Unity.VisualScripting; 
-using UnityEngine; 
-using UnityEngine.AI; 
-using UnityEngine.UI; 
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 {
-    [Header ( "---- Components ----" )]
+    [Header("---- Components ----")]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
@@ -15,7 +15,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] Animator simAni;
 
     [Header("----- Enemy Stats -----")]
-    [Range (1,5)] [SerializeField] int HP;
+    [Range(1, 5)][SerializeField] int HP;
     [SerializeField] int fov;
     [SerializeField] int fovAtk;
     [SerializeField] int targetFaceSpeed;
@@ -23,7 +23,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] int roamDist;
     [SerializeField] int roamPauseTime;
 
-    [Header (" ---- Weapon Attributes ----")]
+    [Header(" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
     [SerializeField] Collider weaponCollider;
     [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
@@ -38,16 +38,16 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     float stopDistOrig;
 
     #region Enemy HP Bar 
-    public Image enemyHPBar; 
-    int HPOrig; 
-    #endregion 
+    public Image enemyHPBar;
+    int HPOrig;
+    #endregion
 
 
     // Start is called before the first frame update
     void Start()
     {
-        HPOrig = HP; 
-        updateEnemyUI(); 
+        HPOrig = HP;
+        updateEnemyUI();
 
         GameManager.instance.updateGameGoal(1);
         stopDistOrig = agent.stoppingDistance;
@@ -97,8 +97,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         playerDir = GameManager.instance.player.transform.position - headPos.position;
 
-        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 
-                                                0, playerDir.z),    
+        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x,
+                                                0, playerDir.z),
                                                 transform.forward);
 
         Debug.Log(angleToPlayer);
@@ -131,11 +131,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     void faceTarget()
     {
-        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x, 
-                                                             transform.position.y, 
+        Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x,
+                                                             transform.position.y,
                                                              playerDir.z));
         //Smooth rotation over time while moving and inside stopping distance 
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, 
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot,
                                     Time.deltaTime * targetFaceSpeed);
 
     }
@@ -158,7 +158,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updateEnemyUI(); 
+        updateEnemyUI();
 
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
@@ -184,10 +184,10 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     }
 
     #region Enemy HP Bar 
-    public void updateEnemyUI() 
+    public void updateEnemyUI()
     {
         //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
-        this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
+        this.enemyHPBar.fillAmount = (float)HP / HPOrig;
     }
 
     #endregion 
@@ -196,7 +196,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;          
+            playerInRange = true;
         }
     }
 
