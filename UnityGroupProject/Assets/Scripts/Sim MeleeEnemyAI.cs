@@ -7,13 +7,16 @@ using UnityEngine.UI;
 
 public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 {
+    #region Enemy Components
     [Header("---- Components ----")]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
     [SerializeField] Transform headPos;
     [SerializeField] Animator simAni;
+    #endregion
 
+    #region Enemy Stats
     [Header("----- Enemy Stats -----")]
     [Range(1, 5)][SerializeField] int HP;
     [SerializeField] int fov;
@@ -22,11 +25,14 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] int animSpeedTrans;
     [SerializeField] int roamDist;
     [SerializeField] int roamPauseTime;
+    #endregion
 
+    #region Enemy Weapon 
     [Header(" ---- Weapon Attributes ----")]
     [SerializeField] GameObject meleeWeapon;
     [SerializeField] Collider weaponCollider;
     [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
+    #endregion
 
     bool isSwinging;
     bool playerInRange;
