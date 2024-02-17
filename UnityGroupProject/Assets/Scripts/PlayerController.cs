@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Player Settings 
     [Header("----- Player Settings -----")]
     [SerializeField] CharacterController controller;
-    [Range(1, 10)][SerializeField] int HP;
+    [Range(1, 100)][SerializeField] int HP;
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion
@@ -55,6 +55,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] int MaxAmmo;
     #endregion
 
+    #region Laser Gun Variables 
+
+
+
+
+    #endregion 
+
     #region SafeTelport 
     [Header("----- Safe Teleport Settings ----- ")]
     [SerializeField] SafeTP safeTP;
@@ -88,16 +95,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         HPOrig = HP;
         playerSpeedOrig = playerSpeed;
         gravityCurr = gravity;
-        startJumpHeight = jumpHeight;
-        // wip 
-        //MaxPistolAmmo = PistolAmmoCapacity;
-        //MaxPistolMag = PistolMagCapacity;
-        //CurrPistolAmmo = MaxPistolAmmo;
-        //CurrPistolMag = MaxPistolMag;
-        //updateAmmoText();
-        // wip
+        startJumpHeight = jumpHeight; 
 
-        respawn();  // moved down to bottom of start.  if UI doesn't exist in scene player original speed is not set
+        respawn(); 
         canTP = safeTP.canTP;
     }
 
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             {
                 OutOfAmmo();
             }
-            // Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
+            Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
             if (gunList.Count > 0)
             {
@@ -134,6 +134,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
+
+    #region Player Moveset 
     void movement()
     {
         move = Input.GetAxis("Horizontal") * transform.right
@@ -195,8 +197,70 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         //isdashing = false;
     }
 
+    IEnumerator shoot()
+    {
+        if (gunList[selectedGun].CurGunMag > 0)
+        {
+            isShooting = true;
+            gunList[selectedGun].CurGunMag--;
+            CurMag--;
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
+            {
+                // we need to damage stuff 
+                IDamage dmg = hit.collider.GetComponent<IDamage>();
 
-    #region Reload 
+                if (hit.transform != transform && dmg != null) // if we did not hit ourselves & if what we hit can take damage 
+                {
+                    dmg.takeDamage(shootDamage);
+                }
+
+                //Instantiate(gunList[selectedGun].hitEffect, hit.point, gunList[selectedGun].hitEffect.transform.rotation ); // gunshot effect, applicable for every gun 
+            }
+            if (CurMag == 0)
+            {
+                magIsEmpty = true;
+            }
+
+            updatePlayerUI();
+            yield return new WaitForSeconds(shootRate);
+            isShooting = false;
+        }
+    }
+
+    //IEnumerator shootLaser() 
+
+    #endregion
+
+
+    #region Heal/Reload/Gun Stuff 
+    #region Getters 
+    public int GetPlayerHP() 
+    {
+        return HP; 
+    }
+    public int GetPlayerHPOrig()
+    {
+        return HPOrig; 
+    }
+    
+    public string GetSelectedGunName() 
+    {
+        return gunList[selectedGun].model.tag; 
+    }
+
+    #endregion
+
+    public void HealMe( int amount ) 
+    {
+        HP += amount;       // Fill health 
+        if ( HP > HPOrig )  // Make sure health value isn't greater than max capacity 
+            HP = HPOrig; 
+        updatePlayerUI();   // Update health bar 
+
+        // UI make flash green? 
+    }
+
     void Reload()
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
@@ -227,68 +291,39 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    public void FillAmmo(int fillAmount)
+    public void FillAmmo( int fillAmount ) 
     {
-        if (CurAmmo + fillAmount > MaxAmmo)
+        if ( CurAmmo + fillAmount > MaxAmmo ) 
         {
-            CurAmmo = MaxAmmo;
+            CurAmmo = MaxAmmo; 
         }
-        else
+        else 
         {
-            CurAmmo += fillAmount;
+            CurAmmo += fillAmount; 
         }
+        //CurMag = MaxMag; // ammo capsule should set mag & ammo capacity to full, but this line causes errors 
 
-        updatePlayerUI();
+        updatePlayerUI(); 
     }
 
-    public void RefillAmmo(AmmoTypes ammoType, int ammoAmount)
+    public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
     {
-        switch (ammoType)
+        switch ( ammoType ) 
         {
-            case AmmoTypes.PISTOL:
-                FillAmmo(ammoAmount);
-                break;
-            case AmmoTypes.SNIPER:
-                FillAmmo(ammoAmount);
-                break;
-            case AmmoTypes.SHOTGUN:
-                FillAmmo(ammoAmount);
-                break;
-            default:
-                break;
-        }
-    }
-
-    #endregion 
-
-    IEnumerator shoot()
-    {
-        if (gunList[selectedGun].CurGunMag > 0)
-        {
-            isShooting = true;
-            gunList[selectedGun].CurGunMag--;
-            CurMag--;
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
-            {
-                // we need to damage stuff 
-                IDamage dmg = hit.collider.GetComponent<IDamage>();
-
-                if (hit.transform != transform && dmg != null) // if we did not hit ourselves & if what we hit can take damage 
-                {
-                    dmg.takeDamage(shootDamage);
-                }
-
-                //Instantiate(gunList[selectedGun].hitEffect, hit.point, gunList[selectedGun].hitEffect.transform.rotation ); // gunshot effect, applicable for every gun 
-            }
-            if (CurMag == 0)
-            {
-                magIsEmpty = true;
-            }
-
-            updatePlayerUI();
-            yield return new WaitForSeconds(shootRate);
-            isShooting = false;
+            case AmmoTypes.PISTOL: 
+                FillAmmo( ammoAmount ); 
+                break; 
+            case AmmoTypes.SNIPER: 
+                FillAmmo( ammoAmount ); 
+                break; 
+            case AmmoTypes.SHOTGUN: 
+                FillAmmo( ammoAmount ); 
+                break; 
+            case AmmoTypes.LASER: 
+                FillAmmo( ammoAmount ); 
+                break; 
+            default: 
+                break; 
         }
     }
 
@@ -359,6 +394,21 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
+    #endregion 
+
+
+    #region Take Damage/Respawn 
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        updatePlayerUI();
+        StartCoroutine(flashDamage());
+
+        if (HP <= 0)
+        {
+            GameManager.instance.youLose();
+        }
+    }
 
     void TPCheck()
     {
@@ -382,18 +432,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-        updatePlayerUI();
-        StartCoroutine(flashDamage());
-
-        if (HP <= 0)
-        {
-            GameManager.instance.youLose();
-        }
-    }
-
     public void respawn()
     {
         HP = HPOrig;
@@ -404,13 +442,52 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         controller.enabled = true;
     }
 
+    #endregion 
+
+
+    #region UI/Interface 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / MaxMag;
         updateHealthText();
         updateAmmoText();
+        updateGunImage();
+    }
 
+    public void updateGunImage()
+    {
+        if (gunList.Count != 0)
+        {
+            switch (gunList[selectedGun].model.tag)
+            {
+                case "Pistol":
+                    {
+                        GameManager.instance.gunPistol.SetActive(true);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        GameManager.instance.gunShotgun.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        GameManager.instance.gunSniper.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        break;
+                    }
+                case "Laser Gun":
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
     }
 
     public void updateHealthText()
@@ -419,7 +496,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
     public void updateAmmoText()
     {
-        GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
+        if (gunList.Count == 0)
+        {
+            GameManager.instance.AmmoTxt.text = "00/00";
+        }
+        else
+        {
+            GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
+        }
     }
 
 
@@ -430,14 +514,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         GameManager.instance.playerDamageFlash.SetActive(false);
     }
 
-    public void HealMe(int amount)
-    {
-        HP += amount;
-        if (HP > HPOrig)
-            HP = HPOrig;
-        updatePlayerUI();
-        // UI make flash green
-    }
+    
 
     IEnumerator promptReload()
     {
@@ -449,6 +526,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         isFlashing = false;
     }
 
+    
+
     public void OutOfAmmo()
     {
         GameManager.instance.outOfAmmoPrompt.SetActive(true);
@@ -458,45 +537,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    #endregion
+
+
+    private void OnTriggerEnter( Collider other ) 
     {
-        if (gunList.Count != 0)
-        {
-            switch (other.tag)
-            {
-                case "Pistol":
-                    {
-                        if (gunList[selectedGun].model.tag == other.tag)
-                        {
-                            RefillAmmo(AmmoTypes.PISTOL, 36);
-                            Destroy(other.gameObject);
-                        }
-                        break;
-                    }
-                case "Shotgun":
-                    {
-                        if (gunList[selectedGun].model.tag == other.tag)
-                        {
-                            RefillAmmo(AmmoTypes.SHOTGUN, 9);
-                            Destroy(other.gameObject);
-                        }
-                        break;
-                    }
-                case "Sniper":
-                    {
-                        if (gunList[selectedGun].model.tag == other.tag)
-                        {
-                            RefillAmmo(AmmoTypes.SNIPER, 12);
-                            Destroy(other.gameObject);
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
-        }
+        
     }
 
     public void WallRunStart()

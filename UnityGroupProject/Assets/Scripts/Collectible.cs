@@ -10,7 +10,8 @@ public enum CollectibleTypes
     HEALTH = 1, 
     PISTOL, 
     SNIPER, 
-    SHOTGUN 
+    SHOTGUN, 
+    LASER_GUN 
 }
 
 public class Collectible : MonoBehaviour
@@ -30,7 +31,7 @@ public class Collectible : MonoBehaviour
             return;
         objColid = other;
         Collect();
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     void Collect()                        // what collecting does

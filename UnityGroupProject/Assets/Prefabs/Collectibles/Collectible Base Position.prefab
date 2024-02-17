@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 3516559589990133655}
   - component: {fileID: 543062693545888909}
   - component: {fileID: 2424194970150604175}
-  - component: {fileID: 8330742936524091850}
   m_Layer: 0
   m_Name: Collectible
   m_TagString: Untagged
@@ -160,22 +159,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8330742936524091850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 8387637997525006840, guid: e7ad1c0406240fc4786734ec377ec34b, type: 3}
-  m_PrefabInstance: {fileID: 6241465393108567671}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 867051345891401912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 976a7c406417a48409f51489805dc751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collectType: 
-  enemyCanDrop: 0
-  keyCode: 0
-  grantHealth: 0
 --- !u!1 &5895091187251902324
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,7 +243,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Collectible
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
