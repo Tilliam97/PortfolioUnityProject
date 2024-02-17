@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Player Settings 
     [Header("----- Player Settings -----")]
     [SerializeField] CharacterController controller;
-    [Range(1, 10)][SerializeField] int HP;
+    [Range(1, 100)][SerializeField] int HP;
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             {
                 OutOfAmmo();
             }
-            // Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
+            Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
 
             if (gunList.Count > 0)
             {
@@ -449,11 +449,63 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public void updatePlayerUI()
     {
         GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.playerAmmoBar.fillAmount = (float)CurMag / MaxMag;
         updateHealthText();
         updateAmmoText();
-
+        updateGunImage();
     }
+
+    public void updateGunImage()
+    {
+        if (gunList.Count != 0)
+        {
+            switch (gunList[selectedGun].model.tag)
+            {
+                case "Pistol":
+                    {
+                        GameManager.instance.gunPistol.SetActive(true);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        GameManager.instance.gunShotgun.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        GameManager.instance.gunSniper.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        break;
+                    }
+                case "Laser Gun":
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+    }
+
+    public void updateHealthText()
+    {
+        GameManager.instance.HPTxt.text = HP + "/" + HPOrig;
+    }
+    public void updateAmmoText()
+    {
+        if (gunList.Count == 0)
+        {
+            GameManager.instance.AmmoTxt.text = "00/00";
+        }
+        else
+        {
+            GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
+        }
+    }
+
 
     IEnumerator flashDamage()
     {
@@ -462,10 +514,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         GameManager.instance.playerDamageFlash.SetActive(false);
     }
 
-    public void updateHealthText()
-    {
-        GameManager.instance.HPTxt.text = HP + "/" + HPOrig;
-    }
+    
 
     IEnumerator promptReload()
     {
@@ -477,10 +526,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         isFlashing = false;
     }
 
-    public void updateAmmoText()
-    {
-        GameManager.instance.AmmoTxt.text = CurMag + "/" + CurAmmo;
-    }
+    
 
     public void OutOfAmmo()
     {
