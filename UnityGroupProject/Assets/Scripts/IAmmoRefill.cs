@@ -6,7 +6,8 @@ public enum AmmoTypes
 {
     PISTOL = 1, 
     SNIPER, 
-    SHOTGUN
+    SHOTGUN, 
+    LASER 
 }
 
 public interface IAmmoRefill

@@ -31,7 +31,7 @@ public class Collectible : MonoBehaviour
             return;
         objColid = other;
         Collect();
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     void Collect()                        // what collecting does

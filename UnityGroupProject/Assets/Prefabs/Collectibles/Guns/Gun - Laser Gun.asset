@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
-  m_Name: Gun - AR
+  m_Name: Gun - Laser Gun
   m_EditorClassIdentifier: 
-  shootDamage: 1
-  shootRate: 0.2
-  shootDist: 250
-  CurGunMag: 12
-  MaxGunMag: 12
-  CurGunCapacity: 24
-  MaxGunCapacity: 36
-  model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
+  shootDamage: 2
+  shootRate: 0.1
+  shootDist: 300
+  CurGunMag: 40
+  MaxGunMag: 40
+  CurGunCapacity: 40
+  MaxGunCapacity: 40
+  model: {fileID: 1401861103751533819, guid: 63516215c7713dc45a420e45e2ee5ca6, type: 3}
   hitEffect: {fileID: 0}
   shootSound: {fileID: 0}
   shootSoundVol: 0
