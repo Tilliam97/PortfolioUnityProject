@@ -56,9 +56,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #endregion
 
     #region Laser Gun Variables 
+    [SerializeField] public Camera playerCamera; 
+    [SerializeField] public Transform laserOrigin; 
+    [SerializeField] public float gunRange = 50f; 
+    [SerializeField] public float fireRate = 0.2f; 
+    [SerializeField] public float laserDuration = 0f; 
 
-
-
+    LineRenderer laserLine; 
 
     #endregion 
 
@@ -92,6 +96,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Start is called before the first frame update 
     void Start()
     {
+        // 
+        laserLine = GetComponent<LineRenderer>(); 
+        // 
+
         HPOrig = HP;
         playerSpeedOrig = playerSpeed;
         gravityCurr = gravity;
@@ -227,8 +235,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             isShooting = false;
         }
     }
-
-    //IEnumerator shootLaser() 
+    /*
+    IEnumerator shootLaser() 
+    {
+        
+    }*/
 
     #endregion
 
