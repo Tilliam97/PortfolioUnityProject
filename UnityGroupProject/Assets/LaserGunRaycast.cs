@@ -44,13 +44,13 @@ public class LaserGunRaycast : MonoBehaviour
         }
 
 
-        /**/
+        /*
         IEnumerator ShootLaser() 
         {
             laserLine.enabled = true; 
             yield return new WaitForSeconds( laserDuration ); 
             laserLine.enabled = false; 
-        }
+        }*/
         
 
 
