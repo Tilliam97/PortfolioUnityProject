@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance;
     private Animator CameraObject;
 
     [Header("Menus")]
@@ -14,7 +15,9 @@ public class UIManager : MonoBehaviour
     public GameObject firstMenu;
     public GameObject playMenu;
     public GameObject exitMenu;
-    public GameObject leaderboards;
+    public GameObject leaderboardsMenu;
+    public GameObject creditsMenu;
+
 
     [Header("PANELS")]
     public GameObject mainCanvas;
@@ -47,17 +50,22 @@ public class UIManager : MonoBehaviour
     public AudioSource sliderSound;
     public AudioSource swooshSound;
 
-
+    [SerializeField] List<TMP_Text> leaderBoard;
+    List<string> leaderboardStrings;
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         CameraObject = transform.GetComponent<Animator>();
 
         playMenu.SetActive(false);
         exitMenu.SetActive(false);
-        leaderboards.SetActive(false);
+        leaderboardsMenu.SetActive(false);
+        creditsMenu.SetActive(false);
         firstMenu.SetActive(true);
         mainMenu.SetActive(true);
+
+        LoadLeaderboard();
     }
 
     // Update is called once per frame
@@ -69,15 +77,17 @@ public class UIManager : MonoBehaviour
     public void Play()
     {
         exitMenu.SetActive(false);
-        leaderboards.SetActive(false);
+        leaderboardsMenu.SetActive(false);
+        creditsMenu.SetActive(false);
         playMenu.SetActive(true);
     }
 
     public void ReturnMenu()
     {
         playMenu.SetActive(false);
-        leaderboards.SetActive(false);
+        leaderboardsMenu.SetActive(false);
         exitMenu.SetActive(false);
+        creditsMenu.SetActive(false);
         mainMenu.SetActive(true);
     }
 
@@ -124,6 +134,7 @@ public class UIManager : MonoBehaviour
         lineGeneral.SetActive(false);
         #endregion
     }
+
 
     public void GamePanel()
     {
@@ -195,24 +206,93 @@ public class UIManager : MonoBehaviour
     public void AreYouSure()
     {
         exitMenu.SetActive(true);
-        leaderboards.SetActive(false);
+        leaderboardsMenu.SetActive(false);
+        creditsMenu.SetActive(false);
         DisablePlayMenu();
     }
 
     public void LeaderboardMenu()
     {
         playMenu.SetActive(false);
-        leaderboards.SetActive(true);
+        leaderboardsMenu.SetActive(true);
+        creditsMenu.SetActive(false);
         exitMenu.SetActive(false);
+    }
+
+    public void CreditsMenu()
+    {
+        playMenu.SetActive(false);
+        leaderboardsMenu.SetActive(false);
+        creditsMenu.SetActive(true);
+        exitMenu.SetActive(false);
+    }
+
+    public void saveLeaderboard()
+    {
+        PlayerPrefs.SetInt("LeaderBoard_count", leaderBoard.Count);
+
+        for (int i = 0; i < leaderboardStrings.Count; i++)
+        {
+
+            PlayerPrefs.SetString("myList_" + i, leaderboardStrings[i]);
+
+        }
+    }
+
+    public void LoadLeaderboard()
+    {
+        for (int i = 0; i < leaderBoard.Count; i++)
+        {
+            string tempScore; 
+
+            if (leaderboardStrings == null)
+            {
+                leaderboardStrings = new List<string>();
+                for (int j = 0; j < leaderBoard.Count; j++)
+                {
+                    leaderboardStrings.Add(leaderBoard[j].text);
+                }
+            }
+            tempScore = PlayerPrefs.GetString("myList_" + i, leaderboardStrings[i]);
+            leaderboardStrings[i] = tempScore;
+        }
+    }
+
+    public void UpdateLeaderBoard()
+    {
+        LoadLeaderboard();
+
+        if (leaderboardStrings == null)
+        {
+            leaderboardStrings = new List<string>();
+            for (int i = 0; i < leaderBoard.Count; i++)
+            {
+                leaderboardStrings.Add(leaderBoard[i].text);
+            }
+        }
+
+         saveLeaderboard();
+
+
+        for (int i = 0; i < leaderBoard.Count; i++)
+        {
+
+            leaderBoard[i].text = leaderboardStrings[i];
+        }
+    }
+
+    public List<string> GetLeaderBoard()
+    {
+        return leaderboardStrings;
     }
 
     public void QuitGame()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
 			Application.Quit();
-        #endif
+#endif
     }
 
 

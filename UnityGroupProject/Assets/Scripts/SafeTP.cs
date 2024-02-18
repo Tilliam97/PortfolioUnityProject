@@ -17,7 +17,7 @@ public class SafeTP : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         canSave = true;
         controller = Player.GetComponent<CharacterController>();
@@ -26,7 +26,7 @@ public class SafeTP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = controller.isGrounded;
+        GroundedCheck();
         if (canTP)
         {
             if (isGrounded && canSave) // add restriction of canSave
@@ -50,5 +50,21 @@ public class SafeTP : MonoBehaviour
         // instantiate safe player spawn
         yield return new WaitForSeconds(timeSave);
         canSave = true;
+    }
+
+    void GroundedCheck()
+    {
+        // checking for object just below player using raycast cause I don't like controller.isgrounded feature
+
+        // change to a shpear cast so it isnt a single point or a plane cast
+        RaycastHit floorhit;
+        Vector3 down = transform.TransformDirection(-Vector3.up);
+        if (Physics.Raycast(transform.position, down, out floorhit, 1.1f))
+        {
+            //Debug.DrawLine(transform.position, floorhit.point, Color.red);
+            isGrounded = true;
+        }
+        else
+            isGrounded = false;
     }
 }
