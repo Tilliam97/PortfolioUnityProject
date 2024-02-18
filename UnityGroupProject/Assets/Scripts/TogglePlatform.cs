@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class TogglePlatform : MonoBehaviour, IToggle
 {
-    
+    [SerializeField] GameObject _platformOn;  // set platform that will represent on
+    [SerializeField] GameObject _platformOff; //  set platform that will represent off
+
     [SerializeField] bool _tangeble;
     [SerializeField] bool _contactBased;
     [SerializeField] bool _timedBased;
 
-    [SerializeField] GameObject _platformOn;  // set platform that will represent on
-    [SerializeField] GameObject _platformOff; //  set platform that will represent off
+    [SerializeField] float _timeBeforeGhost;
 
     void Start()
     {
@@ -34,5 +35,24 @@ public class TogglePlatform : MonoBehaviour, IToggle
             _platformOn.SetActive(false);
             _platformOff.SetActive(true);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_contactBased)
+        {
+            StartCoroutine(DisappearingAct());
+        }
+    }
+
+    IEnumerator DisappearingAct()
+    {
+        Color orig = _platformOn.GetComponent<MeshRenderer>().material.color;
+        _platformOn.GetComponent<MeshRenderer>().material.color = Color.yellow;
+        yield return new WaitForSeconds(_timeBeforeGhost);
+        SetPlatform(false);
+        yield return new WaitForSeconds(5f);
+        SetPlatform(true);
+        _platformOn.GetComponent<MeshRenderer>().material.color = orig;
     }
 }
