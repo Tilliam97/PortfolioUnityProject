@@ -27,9 +27,10 @@ public class StopWatch : MonoBehaviour
         TimeSpan time = TimeSpan.FromSeconds(currTime);
         currTimeText.text = time.ToString(@"mm\:ss\:fff");
     }
+
+    public string getTimeText()
+    {
+        return currTimeText.text;
+    }
 }
 
-/*if (!isReloading)
-{
-
-}*/
