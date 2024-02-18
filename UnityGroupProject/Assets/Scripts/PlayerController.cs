@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             if (!GameManager.instance.isPaused)
             {
-                Debug.Log("is disabled " + isDisabled);
+                //Debug.Log("is disabled " + isDisabled);
                 movement();
                 TPCheck();
                 if (gunList.Count != 0)
