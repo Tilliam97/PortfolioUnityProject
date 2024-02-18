@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     float gravityCurr;
     float startJumpHeight;
 
+    bool isDisabled;
 
 
     // Start is called before the first frame update 
@@ -103,32 +104,36 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Update is called once per frame 
     void Update()
     {
-        if (!GameManager.instance.isPaused)
+        if (!isDisabled)
         {
-            movement();
-            TPCheck();
-            if (gunList.Count != 0)
+            if (!GameManager.instance.isPaused)
             {
-                OutOfAmmo();
-            }
-            Debug.DrawRay( Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow ); 
-
-            if (gunList.Count > 0)
-            {
-                selectGun();
-                //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
-                Reload();
-
-                if (Input.GetButton("Shoot") & !isShooting)
+                Debug.Log("is disabled " + isDisabled);
+                movement();
+                TPCheck();
+                if (gunList.Count != 0)
                 {
-                    StartCoroutine(shoot());
+                    OutOfAmmo();
                 }
+                Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
-                if (magIsEmpty && !isFlashing && CurAmmo > 0)
+                if (gunList.Count > 0)
                 {
-                    StartCoroutine(promptReload());
-                }
+                    selectGun();
+                    //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
+                    Reload();
 
+                    if (Input.GetButton("Shoot") & !isShooting)
+                    {
+                        StartCoroutine(shoot());
+                    }
+
+                    if (magIsEmpty && !isFlashing && CurAmmo > 0)
+                    {
+                        StartCoroutine(promptReload());
+                    }
+
+                }
             }
         }
     }
@@ -155,7 +160,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
         // sprint 
 
-        groundedPlayer = controller.isGrounded;
+        //groundedPlayer = controller.isGrounded;
+        GroundedCheck();
 
         if (groundedPlayer)
         {
@@ -422,12 +428,28 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             takeDamage(amount);
         else      // teleport is true and will teleport player to last safe pos
         {
+            if (canTP)
+            {
+                StartCoroutine(Teleport());
+            }
+
             takeDamage(amount);
-            transform.position = posSafe; // working on adjusting cam pos.
-            gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
-            //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
         }
     }
+
+    IEnumerator Teleport()
+    {
+        isDisabled = true;
+        //Debug.Log("Tried to teleport.  player disabled " + isDisabled);
+        yield return new WaitForSeconds(.05f);
+        transform.position = new Vector3(posSafe.x, posSafe.y, posSafe.z); // working on adjusting cam pos.
+        //gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
+        //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
+        yield return new WaitForSeconds(.05f);
+        isDisabled = false;
+        //Debug.Log("player disabled " + isDisabled);
+    }
+
 
     public void respawn()
     {
@@ -555,6 +577,22 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         gravity = gravityCurr;
         jumpHeight = startJumpHeight;
+    }
+
+    void GroundedCheck()
+    {
+        // checking for object just below player using raycast cause I don't like controller.isgrounded feature
+
+        // change to a shpear cast so it isnt a single point or a plane cast
+        RaycastHit floorhit;
+        Vector3 down = transform.TransformDirection(-Vector3.up);
+        if (Physics.Raycast(transform.position, down, out floorhit, 1.1f))
+        {
+            Debug.DrawLine(transform.position, floorhit.point, Color.red);
+            groundedPlayer = true;
+        }
+        else
+            groundedPlayer = false;
     }
 }
 

@@ -9,12 +9,8 @@ public class TogglePlatform : MonoBehaviour, IToggle
     [SerializeField] bool _contactBased;
     [SerializeField] bool _timedBased;
 
-    [SerializeField] GameObject _platformOn;
-    [SerializeField] GameObject _platformOff;
-
-    int _currPlatIndex;
-    int _nextPlatIndex;
-    int _index;
+    [SerializeField] GameObject _platformOn;  // set platform that will represent on
+    [SerializeField] GameObject _platformOff; //  set platform that will represent off
 
     void Start()
     {
