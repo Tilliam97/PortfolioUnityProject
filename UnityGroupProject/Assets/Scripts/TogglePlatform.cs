@@ -12,10 +12,26 @@ public class TogglePlatform : MonoBehaviour, IToggle
     [SerializeField] bool _timedBased;
 
     [SerializeField] float _timeBeforeGhost;
+    [SerializeField] float _returnTime;
 
+    float _cTime;
+
+    bool isDisabled;
+    Color orig;
+    Renderer _platColor;
     void Start()
     {
         SetPlatform(_tangeble);
+        _platColor = _platformOn.GetComponent<Renderer>();
+        orig = _platColor.material.color;
+    }
+
+    void Update()
+    {
+        if (_timedBased && !isDisabled)
+        {
+            StartCoroutine(DisappearingAct());
+        }
     }
     public void ToggleMe()
     {
@@ -47,12 +63,22 @@ public class TogglePlatform : MonoBehaviour, IToggle
 
     IEnumerator DisappearingAct()
     {
-        Color orig = _platformOn.GetComponent<MeshRenderer>().material.color;
-        _platformOn.GetComponent<MeshRenderer>().material.color = Color.yellow;
-        yield return new WaitForSeconds(_timeBeforeGhost);
+        ColorTimerSet();
+        yield return new WaitForSeconds(_cTime);
+        _platColor.material.color = Color.yellow;
+        yield return new WaitForSeconds(_cTime);
+        
         SetPlatform(false);
-        yield return new WaitForSeconds(5f);
+        isDisabled = true;
+        _platColor.material.color = orig;
+        yield return new WaitForSeconds(_returnTime);
+
         SetPlatform(true);
-        _platformOn.GetComponent<MeshRenderer>().material.color = orig;
+        isDisabled = false;
+    }
+
+    void ColorTimerSet()
+    {
+        _cTime = _timeBeforeGhost / 2;
     }
 }
