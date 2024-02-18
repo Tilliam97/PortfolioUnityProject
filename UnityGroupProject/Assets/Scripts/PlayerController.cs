@@ -83,6 +83,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool magIsEmpty;
 
     bool isReloading;
+    float gravityCurr;
+    float startJumpHeight;
 
 
 
