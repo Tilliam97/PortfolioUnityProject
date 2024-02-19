@@ -14,11 +14,12 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] Transform meleePos;
     [SerializeField] Transform headPos;
     [SerializeField] Animator simAni;
+    [SerializeField] AudioClip damagedSound;
     #endregion
 
     #region Enemy Stats
     [Header("----- Enemy Stats -----")]
-    [Range(1, 5)][SerializeField] int HP;
+    [Range(1, 10)][SerializeField] public int HP;
     [SerializeField] int fov;
     [SerializeField] int fovAtk;
     [SerializeField] int targetFaceSpeed;
@@ -32,6 +33,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     [SerializeField] GameObject meleeWeapon;
     [SerializeField] Collider weaponCollider;
     [Range(0.01f, 3.0f)][SerializeField] float swingSpeed;
+    [Range(0.05f, 1.0f)][SerializeField] float damageTime;
     #endregion
 
     bool isSwinging;
@@ -42,6 +44,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     bool destChosen;
     Vector3 startPos;
     float stopDistOrig;
+    bool hurt;
 
     #region Enemy HP Bar 
     public Image enemyHPBar;
@@ -54,9 +57,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         HPOrig = HP;
         updateEnemyUI();
-
         GameManager.instance.updateGameGoal(1);
         stopDistOrig = agent.stoppingDistance;
+        hurt = false;
         simAni.SetBool("swing", false);
     }
 
@@ -117,7 +120,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
             {
                 agent.SetDestination(GameManager.instance.player.transform.position);
 
-                if (angleToPlayer <= fovAtk && !isSwinging)
+                if (angleToPlayer <= fovAtk && !isSwinging && !hurt)
                     StartCoroutine(swing());
 
                 //if inside stopping distance rotate enemy
@@ -140,6 +143,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDir.x,
                                                              transform.position.y,
                                                              playerDir.z));
+
         //Smooth rotation over time while moving and inside stopping distance 
         transform.rotation = Quaternion.Lerp(transform.rotation, rot,
                                     Time.deltaTime * targetFaceSpeed);
@@ -150,7 +154,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         isSwinging = true;
 
-        if (agent.remainingDistance <= agent.stoppingDistance)
+        if (agent.remainingDistance <= agent.stoppingDistance && !hurt)
             simAni.SetBool("swing", true);
 
         yield return new WaitForSeconds(swingSpeed);
@@ -161,22 +165,34 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
             simAni.SetBool("swing", false);
     }
 
+    IEnumerator damaged()
+    {
+        simAni.SetBool("swing", false);
+
+        hurt = true;        
+
+        if (HP <= HPOrig)
+        {
+            simAni.SetBool("Hit", true);
+            StartCoroutine(flashRed());
+        }
+
+        yield return new WaitForSeconds(damageTime);
+
+        hurt = false;
+
+        simAni.SetBool("Hit", false);
+    }
+
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updateEnemyUI();
+        //updateEnemyUI();
 
+        StartCoroutine(damaged());
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
-
-
-        StartCoroutine(flashRed());
-
-        if (HP <= 0)
-        {
-            GameManager.instance.updateGameGoal(-1);
-            Destroy(gameObject);
-        }
+            
     }
 
     IEnumerator flashRed()
@@ -211,7 +227,6 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
-            simAni.SetBool("swing", false);
             agent.stoppingDistance = 0;
         }
     }

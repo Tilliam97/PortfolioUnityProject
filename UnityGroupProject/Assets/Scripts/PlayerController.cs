@@ -208,11 +208,23 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
             {
                 // we need to damage stuff 
-                IDamage dmg = hit.collider.GetComponent<IDamage>();
+                AIDamage dmg = hit.collider.GetComponent<AIDamage>();
+                IDamage damage = hit.collider.GetComponent<IDamage>();
 
                 if (hit.transform != transform && dmg != null) // if we did not hit ourselves & if what we hit can take damage 
                 {
-                    dmg.takeDamage(shootDamage);
+                    switch (dmg.damageType)
+                    {
+                        case AIDamage.collisionType.head: dmg.takeDamage(shootDamage * 2);                         
+                        break;
+                        case AIDamage.collisionType.body : dmg.takeDamage(shootDamage);
+                        break;
+                    }
+
+                }
+                else if ((hit.transform != transform && damage != null))                
+                {
+                    damage.takeDamage(shootDamage);
                 }
 
                 //Instantiate(gunList[selectedGun].hitEffect, hit.point, gunList[selectedGun].hitEffect.transform.rotation ); // gunshot effect, applicable for every gun 
