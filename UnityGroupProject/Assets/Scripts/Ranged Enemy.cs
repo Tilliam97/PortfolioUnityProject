@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Task List Today
 /// 
-/// 1. 
+/// 1. Have the enemy roam around
 /// 2. 
 /// 3. 
 /// 4. 

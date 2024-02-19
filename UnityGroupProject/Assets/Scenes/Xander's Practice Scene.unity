@@ -2107,6 +2107,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 2820219964937258440, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820219964937258440, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: quit
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820219964937258440, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Xander's Main Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 3017509413572306613, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
       propertyPath: m_FlipX
       value: 0
@@ -3168,6 +3180,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -28.459, z: 0}
+--- !u!1001 &2087388053
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -26.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000009536743
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6231314
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7821172
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 102.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 435069432425338625, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2408854195178168040, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4045623335451644476, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: m_Name
+      value: SwordWarrior
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
 --- !u!1 &2114026491
 GameObject:
   m_ObjectHideFlags: 0
