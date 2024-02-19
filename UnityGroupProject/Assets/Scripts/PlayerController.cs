@@ -280,25 +280,33 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
-            int magFill = MaxMag - CurMag; // this is how much ammo is needed to fill the mag 
-
-            if (CurAmmo > 0 && CurAmmo >= magFill) // if you have enough ammo to fully fill your mag 
+            bool isInfinite = gunList[selectedGun].hasInfinteAmmo; 
+            if ( isInfinite ) // infinite gun 
             {
-                CurMag += magFill;
-                CurAmmo -= magFill;
-                gunList[selectedGun].CurGunMag = CurMag;
-                gunList[selectedGun].CurGunCapacity = CurAmmo;
+                gunList[selectedGun].CurGunMag = gunList[selectedGun].MaxGunMag; 
+                CurMag = MaxMag; 
             }
-            else if (CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
+            else 
             {
-                CurMag += CurAmmo;
-                CurAmmo = 0;
-                gunList[selectedGun].CurGunMag = CurMag;
-                gunList[selectedGun].CurGunCapacity = CurAmmo;
+                int magFill = MaxMag - CurMag; // this is how much ammo is needed to fill the mag 
+
+                if (CurAmmo > 0 && CurAmmo >= magFill) // if you have enough ammo to fully fill your mag 
+                {
+                    CurMag += magFill;
+                    CurAmmo -= magFill;
+                    gunList[selectedGun].CurGunMag = CurMag;
+                    gunList[selectedGun].CurGunCapacity = CurAmmo;
+                }
+                else if (CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
+                {
+                    CurMag += CurAmmo;
+                    CurAmmo = 0;
+                    gunList[selectedGun].CurGunMag = CurMag;
+                    gunList[selectedGun].CurGunCapacity = CurAmmo;
+                }
             }
-            updatePlayerUI();
 
-
+            updatePlayerUI(); 
             if (CurMag > 0)
             {
                 magIsEmpty = false;

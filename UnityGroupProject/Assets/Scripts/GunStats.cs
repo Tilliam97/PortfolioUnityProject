@@ -19,5 +19,7 @@ public class GunStats : ScriptableObject
     public ParticleSystem hitEffect; 
     public AudioClip shootSound; 
     [Range(0, 1)] public float shootSoundVol; 
+
+    public bool hasInfinteAmmo; 
 }
 

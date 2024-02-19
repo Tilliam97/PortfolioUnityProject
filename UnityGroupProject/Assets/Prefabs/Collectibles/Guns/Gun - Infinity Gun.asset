@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
+  m_Name: Gun - Infinity Gun
+  m_EditorClassIdentifier: 
+  shootDamage: 1
+  shootRate: 0.3
+  shootDist: 200
+  CurGunMag: 8
+  MaxGunMag: 8
+  CurGunCapacity: 8
+  MaxGunCapacity: 8
+  model: {fileID: 3078451375222212465, guid: 7ff9a12cc406a684d804c1d29d6b2832, type: 3}
+  hitEffect: {fileID: 0}
+  shootSound: {fileID: 0}
+  shootSoundVol: 0
+  hasInfinteAmmo: 1
