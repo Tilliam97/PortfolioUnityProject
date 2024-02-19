@@ -82,6 +82,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     IEnumerator roam()
     {
+        startPos = new Vector3 (transform.position.x, transform.position.y, transform.position.z);
+
         if (agent.remainingDistance < 0.05f && !destChosen)
         {
             destChosen = true;
