@@ -280,33 +280,25 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
-            bool isInfinite = gunList[selectedGun].hasInfinteAmmo; 
-            if ( isInfinite ) // infinite gun 
-            {
-                gunList[selectedGun].CurGunMag = gunList[selectedGun].MaxGunMag; 
-                CurMag = MaxMag; 
-            }
-            else 
-            {
-                int magFill = MaxMag - CurMag; // this is how much ammo is needed to fill the mag 
+            int magFill = MaxMag - CurMag; // this is how much ammo is needed to fill the mag 
 
-                if (CurAmmo > 0 && CurAmmo >= magFill) // if you have enough ammo to fully fill your mag 
-                {
-                    CurMag += magFill;
-                    CurAmmo -= magFill;
-                    gunList[selectedGun].CurGunMag = CurMag;
-                    gunList[selectedGun].CurGunCapacity = CurAmmo;
-                }
-                else if (CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
-                {
-                    CurMag += CurAmmo;
-                    CurAmmo = 0;
-                    gunList[selectedGun].CurGunMag = CurMag;
-                    gunList[selectedGun].CurGunCapacity = CurAmmo;
-                }
+            if (CurAmmo > 0 && CurAmmo >= magFill) // if you have enough ammo to fully fill your mag 
+            {
+                CurMag += magFill;
+                CurAmmo -= magFill;
+                gunList[selectedGun].CurGunMag = CurMag;
+                gunList[selectedGun].CurGunCapacity = CurAmmo;
             }
+            else if (CurAmmo > 0 && CurAmmo < magFill) // if you don't have enough ammo to fully fill your mag, use CurrAmmo (less than magFill, greater than 0) 
+            {
+                CurMag += CurAmmo;
+                CurAmmo = 0;
+                gunList[selectedGun].CurGunMag = CurMag;
+                gunList[selectedGun].CurGunCapacity = CurAmmo;
+            }
+            updatePlayerUI();
 
-            updatePlayerUI(); 
+
             if (CurMag > 0)
             {
                 magIsEmpty = false;
@@ -502,6 +494,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 case "Pistol":
                     {
                         GameManager.instance.gunPistol.SetActive(true);
+                        GameManager.instance.gunAR.SetActive(false);
+                        GameManager.instance.gunShotgun.SetActive(false);
+                        GameManager.instance.gunSniper.SetActive(false);
+                        break;
+                    }
+                case "AR":
+                    {
+                        GameManager.instance.gunAR.SetActive(true);
+                        GameManager.instance.gunPistol.SetActive(false);
                         GameManager.instance.gunShotgun.SetActive(false);
                         GameManager.instance.gunSniper.SetActive(false);
                         break;
@@ -509,6 +510,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 case "Shotgun":
                     {
                         GameManager.instance.gunShotgun.SetActive(true);
+                        GameManager.instance.gunAR.SetActive(false);
                         GameManager.instance.gunPistol.SetActive(false);
                         GameManager.instance.gunSniper.SetActive(false);
                         break;
@@ -516,6 +518,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 case "Sniper":
                     {
                         GameManager.instance.gunSniper.SetActive(true);
+                        GameManager.instance.gunAR.SetActive(false);
                         GameManager.instance.gunPistol.SetActive(false);
                         GameManager.instance.gunShotgun.SetActive(false);
                         break;

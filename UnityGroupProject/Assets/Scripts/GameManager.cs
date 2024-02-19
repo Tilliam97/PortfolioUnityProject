@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text HPTxt;
 
     public GameObject gunPistol;
+    public GameObject gunAR;
     public GameObject gunShotgun;
     public GameObject gunSniper;
     public TMP_Text AmmoTxt;
