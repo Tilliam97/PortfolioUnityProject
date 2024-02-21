@@ -15,7 +15,7 @@ public class Laser : MonoBehaviour, IToggle
     // Damage amount
     [SerializeField] int damageAmt;
 
-    bool isShooting;
+    // bool isShooting;
 
     //key toggle
     bool reqKey;
@@ -49,10 +49,10 @@ public class Laser : MonoBehaviour, IToggle
     // change to laser On instead of shoot
     IEnumerator shoot()
     {
-        isShooting = true;
+        //isShooting = true;
         Instantiate(projectile, shootPos.position, transform.rotation);
         yield return new WaitForSeconds(shotSpeed);
-        isShooting = false;
+        //isShooting = false;
     }
 
     // raycasts infront of itself.
