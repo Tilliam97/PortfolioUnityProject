@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region SafeTelport Variables 
     [Header("----- Safe Teleport Settings ----- ")]
     [SerializeField] SafeTP safeTP;
-    Vector3 posSafe;
+    public Vector3 posSafe;
     float rotYSafe;
     bool canTP;
     #endregion
@@ -510,6 +510,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             posSafe = safeTP.playerPos;
             rotYSafe = safeTP.yRot;
         }
+    }
+    public void TPLocation()
+    {
+
     }
 
     public void takeDamageTP(int amount, bool TP)

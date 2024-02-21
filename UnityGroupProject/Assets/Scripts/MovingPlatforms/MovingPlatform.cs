@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : MonoBehaviour, IToggle
 {
     [SerializeField] MovePointPath _movePointPath;
+    [SerializeField] bool onButton;
     [SerializeField] float _speed;
+
+    bool _goToNext;
 
     private int _targetMovePointIndex;
 
@@ -15,16 +18,28 @@ public class MovingPlatform : MonoBehaviour
     private float _timeToMovePoint;
     private float _elapsedTime;
 
+    public bool _isWall;
+
     // Start is called before the first frame update
     void Start()
     {
+        _goToNext = onButton;
         TargetNextMovePoint();
     }
 
     // Update is called once per frame
     void FixedUpdate()  // changed to Fixed update to allow transformations of the platform movement to affect all children (this includes the player)
     {
-        MovePlatform();
+            if (_goToNext)
+            {
+                MovePlatform();
+            }        
+    }
+
+    public void ToggleMe()
+    {
+        _goToNext = !_goToNext;
+        onButton = !onButton;
     }
 
     void MovePlatform()
@@ -56,9 +71,15 @@ public class MovingPlatform : MonoBehaviour
         _timeToMovePoint = distanceToMovePoint / _speed;
     }
 
+    void WallHit()
+    {
+        this.gameObject.GetComponent<BoxCollider>().enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);  // making object that enters a child of the platform
+        if (!_isWall)
+            other.transform.SetParent(transform);  // making object that enters a child of the platform
     }
 
     private void OnTriggerExit(Collider other)
