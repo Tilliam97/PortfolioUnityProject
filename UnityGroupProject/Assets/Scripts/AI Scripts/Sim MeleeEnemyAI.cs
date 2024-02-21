@@ -10,9 +10,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     #region Enemy Components
     [Header("---- Components ----")]
     [SerializeField] public Renderer model;
+   /* [SerializeField] public Renderer headRenderer;
+    [SerializeField] public Renderer bodyRenderer;*/
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
-    [SerializeField] Transform headPos;
+    [SerializeField] public Transform headPos;
     [SerializeField] Animator simAni;
     [SerializeField] AudioClip damagedSound;
     [SerializeField] AudioClip deathSound;
@@ -80,6 +82,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
             StartCoroutine(roam());
         }
     }
+
+    #region AI Controls
 
     IEnumerator roam()
     {
@@ -167,7 +171,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (agent.remainingDistance > agent.stoppingDistance || angleToPlayer >= fovAtk)
             simAni.SetBool("swing", false);
     }
+    #endregion
 
+    #region Take Damage
     IEnumerator damaged()
     {
         simAni.SetBool("swing", false);
@@ -206,16 +212,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         }
 
     }
-
-    IEnumerator flashRed()
-    {
-        //Store the orig color 
-        Color origColor = model.material.color;
-
-        model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        model.material.color = origColor;
-    }
+    #endregion
 
     #region Enemy HP Bar 
     public void updateEnemyUI()
