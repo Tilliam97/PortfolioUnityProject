@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Gun Variables 
     [Header("----- Player Gun Settings -----")]
     [SerializeField] List<GunStats> gunList = new List<GunStats>();
-    [SerializeField] GameObject gunModel;
+    [SerializeField] GameObject gunModel; 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     float startJumpHeight;
 
     bool isDisabled;
-
+    
 
     // Start is called before the first frame update 
     void Start()
@@ -225,32 +225,48 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     private IEnumerator DropGun() 
     {
         isDropping = true; 
-        //GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
-        //gunList[selectedGun] = statsOfGunToDrop;        // grab stats of current gun (this records ammo as well) 
-        //gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
 
-        // we have to make a GunPickup 
-        // a GunPickup is a game object with the GunPickup scrip on it, in an animator, in an empty 
-        //GameObject gunToDrop; 
+        string gunName = GetSelectedGunName(); 
 
-        //Vector3 playerPosition = GameManager.instance.player.transform.forward; //.position 
-        Vector3 playerPosition = this.transform.position; 
-        playerPosition.x += 3; 
-        Quaternion playerRotation = GameManager.instance.player.transform.localRotation; //.rotation 
+        switch ( gunName ) 
+        {
+            case "Infinity Gun": 
+                break; 
+            case "AR": 
+            case "Shotgun": 
+            case "Sniper": 
+            case "Laser Gun": 
+                GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
+                statsOfGunToDrop = gunList[selectedGun];        // grab stats of current gun (this records ammo as well) 
+                
+                gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
+                if ( gunList.Count > 0 ) 
+                {
+                    selectedGun--; 
+                    changeGun(); 
+                }
 
-        Instantiate( PistolDrop, playerPosition, playerRotation ); 
+                Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3); 
+                Quaternion dropRotation = GameManager.instance.player.transform.localRotation; 
 
-        yield return new WaitForSeconds( 1 );
+                //GameObject gunToDrop = Instantiate( PistolDrop, dropPosition, dropRotation ); 
+                GameObject gunToDrop = PistolDrop; 
+                gunToDrop.GetComponentInChildren<GunPickup>().gunStats = statsOfGunToDrop;
+                Instantiate( gunToDrop, dropPosition, dropRotation ); 
+
+                yield return new WaitForSeconds( 1 ); 
+
+                break; 
+        }
 
 
-        //Instantiate(statsOfGunToDrop, playerPosition, playerRotation ); 
-        //ScriptableObject gunDrop = ScriptableObject.CreateInstance( "Pistol Pickup" ); 
-        //gunDrop = PistolDrop; 
-
-        //Instantiate( gunDrop, playerPosition, playerRotation ); 
         isDropping = false; 
     }
 
+    public bool getIsDropping()
+    {
+        return isDropping;
+    }
     IEnumerator shoot()
     {
         if (gunList[selectedGun].CurGunMag > 0)

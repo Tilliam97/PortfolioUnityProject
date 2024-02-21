@@ -116,6 +116,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 288506601007244604}
     m_Modifications:
+    - target: {fileID: 5088385034584238739, guid: dcf5e139f01d70543904504d23947120, type: 3}
+      propertyPath: gunStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 52c0c38ee21d5e14db6f54a4b1cc6227, type: 2}
     - target: {fileID: 6029083874907592204, guid: dcf5e139f01d70543904504d23947120, type: 3}
       propertyPath: m_Name
       value: Gun Pickup - Sniper
@@ -163,8 +167,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6029083874907592204, guid: dcf5e139f01d70543904504d23947120, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1193484015538933246}
   m_SourcePrefab: {fileID: 100100000, guid: dcf5e139f01d70543904504d23947120, type: 3}
+--- !u!1 &6529608102603592322 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6029083874907592204, guid: dcf5e139f01d70543904504d23947120, type: 3}
+  m_PrefabInstance: {fileID: 663797359281702030}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1193484015538933246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6529608102603592322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625141e3cb2414541b70ad7f5a707532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunStats: {fileID: 11400000, guid: 52c0c38ee21d5e14db6f54a4b1cc6227, type: 2}
 --- !u!4 &8483111810985347180 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8974646088223411426, guid: dcf5e139f01d70543904504d23947120, type: 3}
