@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region SafeTelport Variables 
     [Header("----- Safe Teleport Settings ----- ")]
     [SerializeField] SafeTP safeTP;
+    [SerializeField] bool teleportEnabled;
     public Vector3 posSafe;
     float rotYSafe;
     bool canTP;
@@ -505,15 +506,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void TPCheck()
     {
-        if (canTP)
+        if (canTP && teleportEnabled)
         {
             posSafe = safeTP.playerPos;
             rotYSafe = safeTP.yRot;
         }
-    }
-    public void TPLocation()
-    {
-
     }
 
     public void takeDamageTP(int amount, bool TP)
@@ -533,6 +530,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     IEnumerator Teleport()
     {
+        if (teleportEnabled) 
+        { 
         isDisabled = true;
         //Debug.Log("Tried to teleport.  player disabled " + isDisabled);
         yield return new WaitForSeconds(.05f);
@@ -542,6 +541,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         yield return new WaitForSeconds(.05f);
         isDisabled = false;
         //Debug.Log("player disabled " + isDisabled);
+        }
     }
 
 
