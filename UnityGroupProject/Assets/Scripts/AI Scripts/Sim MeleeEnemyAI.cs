@@ -9,12 +9,15 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 {
     #region Enemy Components
     [Header("---- Components ----")]
-    [SerializeField] Renderer model;
+    [SerializeField] public Renderer model;
+   /* [SerializeField] public Renderer headRenderer;
+    [SerializeField] public Renderer bodyRenderer;*/
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
-    [SerializeField] Transform headPos;
+    [SerializeField] public Transform headPos;
     [SerializeField] Animator simAni;
     [SerializeField] AudioClip damagedSound;
+    [SerializeField] AudioClip deathSound;
     #endregion
 
     #region Enemy Stats
@@ -80,9 +83,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         }
     }
 
+    #region AI Controls
+
     IEnumerator roam()
     {
-        startPos = new Vector3 (transform.position.x, transform.position.y, transform.position.z);
+        startPos = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z);
 
         if (agent.remainingDistance < 0.05f && !destChosen)
         {
@@ -166,17 +171,23 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         if (agent.remainingDistance > agent.stoppingDistance || angleToPlayer >= fovAtk)
             simAni.SetBool("swing", false);
     }
+    #endregion
 
+    #region Take Damage
     IEnumerator damaged()
     {
         simAni.SetBool("swing", false);
 
         hurt = true;        
 
-        if (HP <= HPOrig)
+        if (HP <= HPOrig && HP > 0)
         {
             simAni.SetBool("Hit", true);
-            StartCoroutine(flashRed());
+            //Play damage sound 
+            if (damagedSound != null)
+            {
+                AudioSource.PlayClipAtPoint(damagedSound, transform.position);
+            }
         }
 
         yield return new WaitForSeconds(damageTime);
@@ -189,23 +200,19 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        //updateEnemyUI();
 
         StartCoroutine(damaged());
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
-            
-    }
 
-    IEnumerator flashRed()
-    {
-        //Store the orig color 
-        Color origColor = model.material.color;
+        if (HP <= 0 && deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            Destroy(gameObject);
+        }
 
-        model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        model.material.color = origColor;
     }
+    #endregion
 
     #region Enemy HP Bar 
     public void updateEnemyUI()
