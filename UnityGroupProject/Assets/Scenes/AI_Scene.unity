@@ -1891,33 +1891,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1164887101852885416, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: HP
-      value: 10
-      objectReference: {fileID: 0}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 9bdaf7e9e283aa845bbb7fdb3c3b797a, type: 3}
     - target: {fileID: 1164887101852885416, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: damageTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1164887101852885416, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: swingSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6521519423312367813, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: m_Speed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6521519423312367813, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: m_Acceleration
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6521519423312367813, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 700
-      objectReference: {fileID: 0}
-    - target: {fileID: 6521519423312367813, guid: 8d990b839efb1164d9bb9b25892f1e7e, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 2
-      objectReference: {fileID: 0}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 8df5db364a4d678488733a50a734ef23, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
