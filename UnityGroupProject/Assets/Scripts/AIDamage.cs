@@ -14,9 +14,17 @@ public class AIDamage : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         enemy.takeDamage(amount);
+        StartCoroutine(flashRed());
         enemy.updateEnemyUI();
+    }
 
-        if (enemy.HP <= 0)
-            Destroy(enemy.gameObject);
+    IEnumerator flashRed()
+    {
+        //Store the orig color 
+        Color origColor = enemy.model.material.color;
+
+        enemy.model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        enemy.model.material.color = origColor;
     }
 }
