@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [Range(-25.0f, 0)] public float gravity;
     #endregion
 
-    #region Dash 
+    #region Dash Variables 
     [Header("----- Player Dash Settings -----")]
     [SerializeField] float dashForce;
     [SerializeField] float dashUpwardForce;
@@ -40,6 +40,18 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode dashKey = KeyCode.E;
     //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
+    #endregion
+
+    #region Drop Gun Variables 
+    [Header("----- Weapon Drop Settings -----")]
+    public KeyCode dropKey = KeyCode.X; 
+    [SerializeField] GameObject PistolDrop;
+    //[SerializeField] ScriptableObject PistolDrop; 
+    // [SerializeField] GameObject ShotgunDrop; 
+    // [SerializeField] GameObject SniperDrop; 
+
+    bool isDropping; 
+
     #endregion
 
     #region Gun Variables 
@@ -66,7 +78,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     #endregion 
 
-    #region SafeTelport 
+    #region SafeTelport Variables 
     [Header("----- Safe Teleport Settings ----- ")]
     [SerializeField] SafeTP safeTP;
     Vector3 posSafe;
@@ -142,6 +154,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                         StartCoroutine(promptReload());
                     }
 
+                    if ( Input.GetKey( dropKey ) && !isDropping ) 
+                    {
+                        StartCoroutine( DropGun() ); 
+                    }
                 }
             }
         }
@@ -155,7 +171,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             + Input.GetAxis("Vertical") * transform.forward;
 
         controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
-
 
         // sprint 
         isSprinting = Input.GetKey(sprintKey);
@@ -187,8 +202,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
         // Dash
 
-
-
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
         if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
         {
@@ -207,6 +220,35 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         yield return new WaitForSeconds(dashTime);
         playerVel = Vector3.zero;
         //isdashing = false;
+    }
+
+    private IEnumerator DropGun() 
+    {
+        isDropping = true; 
+        //GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
+        //gunList[selectedGun] = statsOfGunToDrop;        // grab stats of current gun (this records ammo as well) 
+        //gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
+
+        // we have to make a GunPickup 
+        // a GunPickup is a game object with the GunPickup scrip on it, in an animator, in an empty 
+        //GameObject gunToDrop; 
+
+        //Vector3 playerPosition = GameManager.instance.player.transform.forward; //.position 
+        Vector3 playerPosition = this.transform.position; 
+        playerPosition.x += 3; 
+        Quaternion playerRotation = GameManager.instance.player.transform.localRotation; //.rotation 
+
+        Instantiate( PistolDrop, playerPosition, playerRotation ); 
+
+        yield return new WaitForSeconds( 1 );
+
+
+        //Instantiate(statsOfGunToDrop, playerPosition, playerRotation ); 
+        //ScriptableObject gunDrop = ScriptableObject.CreateInstance( "Pistol Pickup" ); 
+        //gunDrop = PistolDrop; 
+
+        //Instantiate( gunDrop, playerPosition, playerRotation ); 
+        isDropping = false; 
     }
 
     IEnumerator shoot()
