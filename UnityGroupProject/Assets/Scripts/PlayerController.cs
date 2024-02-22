@@ -11,13 +11,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     //[SerializeField] CharacterController controller;
     [Range(1, 100)][SerializeField] int HP;
 
+    //Rigid Body Settings
     Rigidbody rb;
     float _horMove;
     float _verMove;
     [SerializeField] float rbDrag = 6f;
     [SerializeField] float airDrag = 2f;
     float movementMult = 10f;
-    [SerializeField] float airMult = 0.4f;
+    float airMult = 0.4f;
     
 
     public KeyCode reloadKey = KeyCode.R;
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    [Range(-25.0f, 0)] public float gravity;
+    //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body
     #endregion
 
     #region Dash Variables 
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
 
     Vector3 move;
-    Vector3 playerVel;
+    //Vector3 playerVel; // no longer used since rigidbody change
     public bool groundedPlayer;
     int jumpCount;
     bool isShooting;
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool magIsEmpty;
 
     bool isReloading;
-    float gravityCurr;
+    //float gravityCurr;
     float startJumpHeight;
 
     bool isDisabled;
@@ -127,7 +128,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         HPOrig = HP;
         playerSpeedOrig = playerSpeed;
-        gravityCurr = gravity;
+        //gravityCurr = gravity;
         startJumpHeight = jumpHeight; 
 
         respawn(); 
@@ -144,6 +145,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 ControlDrag();  // rigidbody Drag
                 GroundedCheck();// is the player grounded
                 JumpCheck();
+                DashCheck();
 
                 TPCheck();
                 if (gunList.Count != 0)
@@ -217,11 +219,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         
 
         // Dash 
-        if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
-        {
-            StartCoroutine(Dash());
-            dashCount++;
-        }
+        
         // Dash
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
@@ -273,12 +271,22 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
+    void DashCheck()
+    {
+        if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
+        {
+            StartCoroutine(Dash());
+            dashCount++;
+        }
+    }
+
     private IEnumerator Dash()
     {
         //isdashing = true;
-        playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
+        //playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce); // RigidBody Change
+        rb.AddForce(move.x * dashForce, dashUpwardForce, move.z * dashForce, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
-        playerVel = Vector3.zero;
+        //playerVel = Vector3.zero;
         //isdashing = false;
     }
 
@@ -733,16 +741,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     public void WallRunStart()
     {
-        gravity = -2.5f;
+        //gravity = -2.5f;
         jumpHeight = startJumpHeight / 4;
         jumpCount = 0;
-        playerVel.y = 0; // needs adjusting for Rigid body movement
+        //playerVel.y = 0; // needs adjusting for Rigid body movement
         dashCount = 0;
     }
 
     public void WallRunEnd()
     {
-        gravity = gravityCurr;
+        //gravity = gravityCurr;
         jumpHeight = startJumpHeight;
     }
 

@@ -23,7 +23,7 @@ public class MovingPlatform : MonoBehaviour, IToggle
     // Start is called before the first frame update
     void Awake()
     {
-        _goToNext = onButton;
+        OnButtonCheck();
         TargetNextMovePoint();
     }
 
@@ -34,6 +34,14 @@ public class MovingPlatform : MonoBehaviour, IToggle
             {
                 MovePlatform();
             }        
+    }
+    
+    void OnButtonCheck()
+    {
+        if (onButton)
+            _goToNext = onButton;
+        else
+            _goToNext = true;
     }
 
     public void ToggleMe()
