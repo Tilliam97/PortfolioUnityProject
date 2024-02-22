@@ -370,7 +370,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7213898311065890298}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 11.93, y: 0.94000006, z: 0.42000008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -393,7 +393,6 @@ MonoBehaviour:
   HP: 10
   rbDrag: 6
   airDrag: 2
-  airMult: 0.4
   reloadKey: 114
   sprintKey: 304
   playerSpeed: 5
@@ -401,14 +400,13 @@ MonoBehaviour:
   jumpKey: 32
   jumpMax: 2
   jumpHeight: 15
-  gravity: -25
   dashForce: 18
   dashUpwardForce: 2
   dashTime: 0.3
   dashMax: 2
-  dashKey: 101
+  dashKey: 306
   dropKey: 120
-  PistolDrop: {fileID: 0}
+  PistolDrop: {fileID: 9078219996066654164, guid: d59f11843bfda474ea7242521719b44c, type: 3}
   gunList: []
   gunModel: {fileID: 2447915802358911785}
   shootDamage: 0
