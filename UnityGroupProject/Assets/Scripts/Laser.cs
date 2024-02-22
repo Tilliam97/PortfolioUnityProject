@@ -69,7 +69,7 @@ public class Laser : MonoBehaviour, IToggle
 
         if (Physics.Raycast(shootPos.position, forward, out hit, 100.0f))
         {
-            //Debug.DrawLine(shootPos.position, hit.point, Color.blue);
+            Debug.DrawLine(shootPos.position, hit.point, Color.blue);
             Vector3 start = shootPos.localPosition.z * Vector3.forward;                     // OH MY F****** G**.  F*** LineRenderers
             Vector3 targetHit = Vector3.forward * hit.distance + 0.8f * Vector3.forward;
 

@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] float airDrag = 2f;
     float movementMult = 10f;
     float airMult = 0.4f;
+    // needs gravity force to apply only when not grounded
     
 
     public KeyCode reloadKey = KeyCode.R;
@@ -256,6 +257,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
         }
     }
+
     void JumpCheck()
     {
         if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
