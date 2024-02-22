@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class GunPickup : MonoBehaviour 
 {
-    [SerializeField] GunStats gun; 
+    public GunStats gunStats; //[SerializeField] 
 
     // Start is called before the first frame update 
     void Start() 
     {
-        gun.CurGunMag = gun.MaxGunMag; 
-        gun.CurGunCapacity = gun.MaxGunCapacity; 
+        if (!GameManager.instance.playerScript.getIsDropping())
+        {
+            gunStats.CurGunMag = gunStats.MaxGunMag;
+            gunStats.CurGunCapacity = gunStats.MaxGunCapacity;
+        }
     }
 
     private void OnTriggerEnter( Collider other ) 
     {
         if ( other.CompareTag( "Player" )) 
         {
-            GameManager.instance.playerScript.getGunStats( gun ); 
+            GameManager.instance.playerScript.getGunStats( gunStats ); 
             Destroy( gameObject ); 
         }
     }

@@ -8,8 +8,14 @@ public class FallTrap : MonoBehaviour
 
     [SerializeField] int damageAmount;
     [SerializeField] bool tpPlayer;
+    [SerializeField] bool tpSetLocation;
     [SerializeField] bool damageOvertime;
     [SerializeField] float damageInterval;
+
+    [SerializeField] Transform setLocation;
+
+    GameObject Player;
+    PlayerController controller;
 
     bool overtimedamage = false;
     private Coroutine damageCoroutine;
@@ -17,13 +23,15 @@ public class FallTrap : MonoBehaviour
 
     void Start()
     {
-        if (tpPlayer)
-        {
-            // turn off physical collider
-        }
+        Player = GameManager.instance.player;
+        controller = Player.GetComponent<PlayerController>();
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (tpSetLocation)
+        {
+            controller.posSafe = setLocation.position;
+        }
         if (damageOvertime)
         {
             overtimedamage = true;
@@ -52,6 +60,8 @@ public class FallTrap : MonoBehaviour
 
         if (dmg != null)
             dmg.takeDamageTP(damageAmount, tpPlayer);
+
+        
     }
 
     IEnumerator DamageOverTime(Collider other)
