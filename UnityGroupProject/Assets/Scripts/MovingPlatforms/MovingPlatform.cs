@@ -21,7 +21,7 @@ public class MovingPlatform : MonoBehaviour, IToggle
     public bool _isWall;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _goToNext = onButton;
         TargetNextMovePoint();

@@ -8,8 +8,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 {
     #region Player Settings 
     [Header("----- Player Settings -----")]
-    [SerializeField] CharacterController controller;
+    //[SerializeField] CharacterController controller;
     [Range(1, 100)][SerializeField] int HP;
+
+    Rigidbody rb;
+    float _horMove;
+    float _verMove;
+    [SerializeField] float rbDrag = 6f;
+    [SerializeField] float airDrag = 2f;
+    float movementMult = 10f;
+    [SerializeField] float airMult = 0.4f;
+    
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion
@@ -109,6 +118,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     // Start is called before the first frame update 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
         // 
         laserLine = GetComponent<LineRenderer>(); 
         // 
@@ -122,16 +134,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         canTP = safeTP.canTP;
     }
 
-    // Update is called once per frame 
     void Update()
     {
         if (!isDisabled)
         {
-            Debug.Log("Player is enabled");
             if (!GameManager.instance.isPaused)
             {
-                //Debug.Log("is disabled " + isDisabled);
-                movement();
+                PlayerInput();  // players input
+                ControlDrag();  // rigidbody Drag
+                GroundedCheck();// is the player grounded
+                JumpCheck();
+
                 TPCheck();
                 if (gunList.Count != 0)
                 {
@@ -155,11 +168,25 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                         StartCoroutine(promptReload());
                     }
 
-                    if ( Input.GetKey( dropKey ) && !isDropping ) 
+                    if (Input.GetKey(dropKey) && !isDropping)
                     {
-                        StartCoroutine( DropGun() ); 
+                        StartCoroutine(DropGun());
                     }
                 }
+            }
+        }
+    }
+
+    // Update is called once per frame 
+    void FixedUpdate()
+    {
+        if (!isDisabled)
+        {
+            Debug.Log("Player is enabled");
+            if (!GameManager.instance.isPaused)
+            {
+                //Debug.Log("is disabled " + isDisabled);
+                movement();
             }
         }
     }
@@ -168,10 +195,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Player Moveset 
     void movement()
     {
-        move = Input.GetAxis("Horizontal") * transform.right
-            + Input.GetAxis("Vertical") * transform.forward;
+        //move = Input.GetAxis("Horizontal") * transform.right
+        //  + Input.GetAxis("Vertical") * transform.forward;
 
-        controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
+        RBMovement();
+        //controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
 
         // sprint 
         isSprinting = Input.GetKey(sprintKey);
@@ -186,14 +214,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         // sprint 
 
         //groundedPlayer = controller.isGrounded;
-        GroundedCheck();
-
-        if (groundedPlayer)
-        {
-            jumpCount = 0;
-            playerVel.y = 0;
-            dashCount = 0;
-        }
+        
 
         // Dash 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
@@ -204,14 +225,52 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         // Dash
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
+        //Jump has been changed into a method called JumpCheck
+        
+
+        //playerVel.y += gravity * Time.deltaTime;
+        //controller.Move(playerVel * Time.deltaTime);
+    }
+
+    void PlayerInput()
+    {
+        _horMove = Input.GetAxisRaw("Horizontal"); // inputs
+        _verMove = Input.GetAxisRaw("Vertical");
+        move = transform.forward * _verMove + transform.right * _horMove;
+    }
+
+    void ControlDrag()
+    {
+        if (groundedPlayer)
+            rb.drag = rbDrag;
+        else
+            rb.drag = airDrag;
+    }
+
+    void RBMovement()
+    {
+        if (groundedPlayer)
+        {
+            rb.AddForce(move.normalized * playerSpeed * movementMult, ForceMode.Acceleration);
+        }
+        else if (!groundedPlayer)
+        {
+            rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
+        }
+    }
+    void JumpCheck()
+    {
         if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
         {
-            playerVel.y = jumpHeight;
+            //playerVel.y = jumpHeight;
+            Jump();
             jumpCount++;
         }
+    }
 
-        playerVel.y += gravity * Time.deltaTime;
-        controller.Move(playerVel * Time.deltaTime);
+    void Jump()
+    {
+        rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
     private IEnumerator Dash()
@@ -550,9 +609,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         HP = HPOrig;
         updatePlayerUI();
 
-        controller.enabled = false;
+        //controller.enabled = false; // commented out for Rigid body changes
+        isDisabled = true;
         transform.position = GameManager.instance.playerSpawnPos.transform.position;
-        controller.enabled = true;
+        //controller.enabled = true;
+        isDisabled = false;
+
     }
 
     #endregion 
@@ -674,7 +736,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         gravity = -2.5f;
         jumpHeight = startJumpHeight / 4;
         jumpCount = 0;
-        playerVel.y = 0;
+        playerVel.y = 0; // needs adjusting for Rigid body movement
         dashCount = 0;
     }
 
@@ -698,6 +760,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
         else
             groundedPlayer = false;
+
+        if (groundedPlayer)
+        {
+            jumpCount = 0;
+            //playerVel.y = 0;
+            dashCount = 0;
+        }
     }
 }
 
