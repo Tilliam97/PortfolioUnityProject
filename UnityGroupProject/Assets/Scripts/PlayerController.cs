@@ -56,10 +56,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Drop Gun Variables 
     [Header("----- Weapon Drop Settings -----")]
     public KeyCode dropKey = KeyCode.X; 
-    [SerializeField] GameObject PistolDrop;
-    //[SerializeField] ScriptableObject PistolDrop; 
-    // [SerializeField] GameObject ShotgunDrop; 
-    // [SerializeField] GameObject SniperDrop; 
+    [SerializeField] GameObject PistolDrop; 
+    [SerializeField] GameObject ShotgunDrop; 
+    [SerializeField] GameObject SniperDrop; 
 
     bool isDropping; 
 
@@ -297,47 +296,68 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         isDropping = true; 
 
-        string gunName = GetSelectedGunName(); 
-
-        switch ( gunName ) 
+        AmmoTypes gunTypeToDrop = gunList[selectedGun].ammoType;    // figure out what type of gun they are trying to drop 
+        GameObject gunToDrop = PistolDrop;                          // temporary assertion 
+        bool isDroppable = true;                                    // is it a gun we want them to be allowed to drop 
+        
+        switch ( gunTypeToDrop )                                    // figure out what type of gun drop to use 
         {
-            case "Infinity Gun": 
+            case AmmoTypes.PISTOL: 
+                gunToDrop = PistolDrop; 
                 break; 
-            case "AR": 
-            case "Shotgun": 
-            case "Sniper": 
-            case "Laser Gun": 
-                GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
-                statsOfGunToDrop = gunList[selectedGun];        // grab stats of current gun (this records ammo as well) 
-                
-                gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
-                if ( gunList.Count > 0 ) 
-                {
-                    selectedGun--; 
-                    changeGun(); 
-                }
-
-                Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3); 
-                Quaternion dropRotation = GameManager.instance.player.transform.localRotation; 
-
-                //GameObject gunToDrop = Instantiate( PistolDrop, dropPosition, dropRotation ); 
-                GameObject gunToDrop = PistolDrop; 
-                gunToDrop.GetComponentInChildren<GunPickup>().gunStats = statsOfGunToDrop;
-                Instantiate( gunToDrop, dropPosition, dropRotation ); 
-
-                yield return new WaitForSeconds( 1 ); 
-
+            case AmmoTypes.SNIPER: 
+                gunToDrop = SniperDrop; 
+                break; 
+            case AmmoTypes.SHOTGUN: 
+                gunToDrop = ShotgunDrop; 
+                break; 
+            default: 
+                isDroppable = false; 
                 break; 
         }
 
+        if ( isDroppable )                                          // if they are trying to drop a gun we want them to be able to drop, it'll drop 
+        {
+            string gunName = GetSelectedGunName(); 
 
-        isDropping = false; 
+            switch ( gunName ) 
+            {
+                case "Infinity Gun": 
+                    break; 
+                case "AR": 
+                case "Shotgun": 
+                case "Sniper": 
+                case "Laser Gun": 
+                    GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
+                    statsOfGunToDrop = gunList[selectedGun];        // grab stats of current gun (this records ammo as well) 
+                
+                    gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
+                    if ( gunList.Count > 0 ) 
+                    {
+                        selectedGun--; 
+                        changeGun(); 
+                    }
+
+                    Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3); 
+                    Quaternion dropRotation = GameManager.instance.player.transform.localRotation; 
+
+                    gunToDrop.GetComponentInChildren<GunPickup>().gunStats = statsOfGunToDrop;
+                    Instantiate( gunToDrop, dropPosition, dropRotation ); 
+
+                    yield return new WaitForSeconds( 1 ); 
+
+                    break; 
+            }
+
+            isDropping = false; 
+        }
     }
 
     public bool getIsDropping()
     {
         return isDropping;
     }
+
     IEnumerator shoot()
     {
         if (gunList[selectedGun].CurGunMag > 0)
@@ -380,6 +400,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             isShooting = false;
         }
     }
+
     /*
     IEnumerator shootLaser() 
     {
@@ -532,6 +553,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     public void getGunStats(GunStats gun)
     {
+        for ( int i = 0; i < gunList.Count; i++ ) 
+        {
+            if ( gunList[i] == gun ) 
+            {
+                selectedGun = i;
+                changeGun();
+                RefillAmmo( gunList[selectedGun].ammoType, gunList[selectedGun].MaxGunCapacity );
+                return; 
+            }
+        }
+
         gunList.Add(gun);
         selectedGun = gunList.Count - 1;
 
