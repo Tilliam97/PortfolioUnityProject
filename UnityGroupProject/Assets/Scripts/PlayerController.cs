@@ -140,6 +140,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (!isDisabled)
         {
+            //Debug.Log("Player is enabled");
             if (!GameManager.instance.isPaused)
             {
                 PlayerInput();  // players input
