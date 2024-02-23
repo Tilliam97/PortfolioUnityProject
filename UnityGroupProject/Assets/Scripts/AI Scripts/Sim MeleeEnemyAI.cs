@@ -179,15 +179,17 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         simAni.SetBool("swing", false);
 
         hurt = true;
-
-
-        simAni.SetBool("Hit", true);
-        //Play damage sound 
-        if (damagedSound != null)
+        if (HP <= HPOrig && HP > 0)
         {
-            damagedSound.Play();
-        }
 
+            simAni.SetBool("Hit", true);
+
+            //Play damage sound 
+            if (damagedSound != null)
+            {
+                damagedSound.Play();
+            }
+        }
 
         yield return new WaitForSeconds(damageTime);
 
@@ -199,10 +201,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        if (HP <= HPOrig && HP > 0)
-        {
-            StartCoroutine(damaged());
-        }
+
+        StartCoroutine(damaged());
+
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
