@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
   m_Name: Gun - Shotgun
   m_EditorClassIdentifier: 
+  ammoType: 3
   shootDamage: 8
   shootRate: 0.6
   shootDist: 150
   CurGunMag: 3
   MaxGunMag: 3
-  CurGunCapacity: 3
+  CurGunCapacity: 9
   MaxGunCapacity: 9
   model: {fileID: 5494625650325380441, guid: 944f765b84e4c4012876d61f4dfc7b5a, type: 3}
   hitEffect: {fileID: 0}
   shootSound: {fileID: 0}
   shootSoundVol: 0
+  hasInfinteAmmo: 0

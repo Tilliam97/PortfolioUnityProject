@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
   m_Name: Gun - Sniper
   m_EditorClassIdentifier: 
+  ammoType: 2
   shootDamage: 8
   shootRate: 0.8
   shootDist: 500
   CurGunMag: 4
   MaxGunMag: 4
-  CurGunCapacity: 8
+  CurGunCapacity: 12
   MaxGunCapacity: 12
   model: {fileID: 4698201593948852689, guid: 185ce04d44da342739f0bef843698e6c, type: 3}
   hitEffect: {fileID: 0}
   shootSound: {fileID: 0}
   shootSoundVol: 0
+  hasInfinteAmmo: 0

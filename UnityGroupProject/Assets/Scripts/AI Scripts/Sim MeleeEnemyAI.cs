@@ -10,14 +10,14 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     #region Enemy Components
     [Header("---- Components ----")]
     [SerializeField] public Renderer model;
-   /* [SerializeField] public Renderer headRenderer;
-    [SerializeField] public Renderer bodyRenderer;*/
+    /* [SerializeField] public Renderer headRenderer;
+     [SerializeField] public Renderer bodyRenderer;*/
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
     [SerializeField] public Transform headPos;
     [SerializeField] Animator simAni;
-    [SerializeField] AudioClip damagedSound;
-    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioSource damagedSound;
+    [SerializeField] AudioSource deathSound;
     #endregion
 
     #region Enemy Stats
@@ -87,7 +87,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
 
     IEnumerator roam()
     {
-        startPos = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        startPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 
         if (agent.remainingDistance < 0.05f && !destChosen)
         {
@@ -178,15 +178,16 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         simAni.SetBool("swing", false);
 
-        hurt = true;        
-
+        hurt = true;
         if (HP <= HPOrig && HP > 0)
         {
+
             simAni.SetBool("Hit", true);
+
             //Play damage sound 
             if (damagedSound != null)
             {
-                AudioSource.PlayClipAtPoint(damagedSound, transform.position);
+                damagedSound.Play();
             }
         }
 
@@ -202,12 +203,14 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         HP -= amount;
 
         StartCoroutine(damaged());
+
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0 && deathSound != null)
         {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            deathSound.Play();
+            GameManager.instance.updateGameGoal(-1);
             Destroy(gameObject);
         }
 

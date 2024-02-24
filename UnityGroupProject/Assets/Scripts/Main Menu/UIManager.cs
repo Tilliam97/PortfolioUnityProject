@@ -281,10 +281,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public List<string> GetLeaderBoard()
-    {
-        return leaderboardStrings;
-    }
 
     public void QuitGame()
     {

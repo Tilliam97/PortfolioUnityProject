@@ -113,7 +113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -52.613}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 749.625, y: -424.5}
+  m_AnchoredPosition: {x: 749.625, y: -274.37442}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3803798768828234893
@@ -321,7 +321,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 781.22, y: -463.39993}
+  m_AnchoredPosition: {x: 781.22, y: -313.27435}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4632663157306567530
@@ -532,7 +532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 84.6, y: 437.6}
+  m_AnchoredPosition: {x: 84.6, y: 321.74164}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5275798674935877441
@@ -1089,7 +1089,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 432.25, y: -425.75}
+  m_AnchoredPosition: {x: 432.25, y: -275.62442}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6884204879456544766
@@ -1685,7 +1685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -514, y: 444}
+  m_AnchoredPosition: {x: -514, y: 328.1416}
   m_SizeDelta: {x: 526, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4991391583954093946
@@ -2017,6 +2017,7 @@ GameObject:
   - component: {fileID: 5765071961639009262}
   - component: {fileID: 4084196744522412079}
   - component: {fileID: 1965860462547798621}
+  - component: {fileID: 9136227655263470159}
   - component: {fileID: 1160834864219023132}
   m_Layer: 5
   m_Name: Game Manager
@@ -2077,9 +2078,9 @@ MonoBehaviour:
   playerHPBar: {fileID: 3668471529986385165}
   HPTxt: {fileID: 7114405416793294086}
   gunPistol: {fileID: 6656361373226400540}
+  gunAR: {fileID: 8068644358227121696}
   gunShotgun: {fileID: 868938786238854166}
   gunSniper: {fileID: 5510285449545959993}
-  gunAR: {fileID: 8068644358227121696}
   AmmoTxt: {fileID: 3189628077089932344}
   reloadPrompt: {fileID: 2789314633916304797}
   outOfAmmoPrompt: {fileID: 480012515524387931}
@@ -2088,6 +2089,20 @@ MonoBehaviour:
   playerSpawnPos: {fileID: 1065442133567159781, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
   isPaused: 0
   leaderboards: []
+--- !u!114 &9136227655263470159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2744477423187579984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3adb9e3f61f0d954999b9f9aa2de8d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundAudio: {fileID: 0}
+  SFXAudio: []
 --- !u!114 &1160834864219023132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3927,7 +3942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 378.5, y: -406.97}
+  m_AnchoredPosition: {x: 378.5, y: -256.84442}
   m_SizeDelta: {x: 431, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1127611899709388739
@@ -4500,7 +4515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 533.25, y: -425.75}
+  m_AnchoredPosition: {x: 533.25, y: -275.62442}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7080397021561494108
@@ -5070,7 +5085,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 446.75, y: -419.125}
+  m_AnchoredPosition: {x: 446.75, y: -268.99942}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7721754865863217968
