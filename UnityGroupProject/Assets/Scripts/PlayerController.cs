@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body
+    //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> using Constant Force Component now
+    //float grav;
     #endregion
 
     #region Dash Variables 
@@ -49,7 +50,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
+    private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
     #endregion
 
@@ -143,6 +144,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             if (!GameManager.instance.isPaused)
             {
                 PlayerInput();  // players input
+                SpeedControl();
                 ControlDrag();  // rigidbody Drag
                 GroundedCheck();// is the player grounded
                 JumpCheck();
@@ -158,14 +160,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 if (gunList.Count > 0)
                 {
                     selectGun();
-                    //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
-                    Reload();
 
-                    if (Input.GetButton("Shoot") & !isShooting)
+                    if (!isReloading)
                     {
-                        StartCoroutine(shoot());
-                    }
+                        Reload();
 
+                        if (Input.GetButton("Shoot") & !isShooting)
+                        {
+                            StartCoroutine(shoot());
+                        }
+                    }
                     if (magIsEmpty && !isFlashing && CurAmmo > 0)
                     {
                         StartCoroutine(promptReload());
@@ -185,7 +189,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (!isDisabled)
         {
-            Debug.Log("Player is enabled");
+            //Debug.Log("Player is enabled");
             if (!GameManager.instance.isPaused)
             {
                 //Debug.Log("is disabled " + isDisabled);
@@ -257,6 +261,20 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
         }
     }
+    void SpeedControl()
+    {
+        SpeedLimit();
+    }
+    void SpeedLimit()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if (flatVel.magnitude > playerSpeed && !isdashing)
+        {
+            Vector3 limitVel = flatVel.normalized * playerSpeed;
+            rb.velocity = new Vector3(limitVel.x, rb.velocity.y, limitVel.z);
+        }
+    }
 
     void JumpCheck()
     {
@@ -270,6 +288,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void Jump()
     {
+        //grav = -1;
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
@@ -284,12 +303,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     private IEnumerator Dash()
     {
-        //isdashing = true;
+        isdashing = true;
         //playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce); // RigidBody Change
         rb.AddForce(move.x * dashForce, dashUpwardForce, move.z * dashForce, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
         //playerVel = Vector3.zero;
-        //isdashing = false;
+        isdashing = false;
     }
 
     private IEnumerator DropGun() 
@@ -442,6 +461,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
+            StopCoroutine(shoot());
+            StartCoroutine(isReload());
             if ( gunList[selectedGun].hasInfinteAmmo ) // infinite gun 
             {
                 gunList[selectedGun].CurGunMag = gunList[selectedGun].CurGunCapacity; 
@@ -474,6 +495,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 magIsEmpty = false;
             }
         }
+    }
+
+    IEnumerator isReload()
+    {
+        isReloading = true;
+        yield return new WaitForSeconds(1.2f);
+        isReloading = false;
     }
 
     public void FillAmmo( int fillAmount ) 
@@ -806,8 +834,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         if (groundedPlayer)
         {
+            //Debug.Log("Player is Grounded");
             jumpCount = 0;
-            //playerVel.y = 0;
+            //grav = 0;
             dashCount = 0;
         }
     }

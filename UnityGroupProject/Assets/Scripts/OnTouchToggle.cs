@@ -12,7 +12,8 @@ public class OnTouchToggle : MonoBehaviour, IToggle
 
     void Awake()
     {
-        _active = _obj.active;  // if using this script make sure to set this object in the inspector or the program will crash
+        _active = _obj.activeSelf;  // if using this script make sure to set this object in the inspector or the program will crash
+        
     }
     private void OnTriggerEnter(Collider other)
     {

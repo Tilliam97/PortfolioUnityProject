@@ -12,17 +12,20 @@ public class MovingPlatform : MonoBehaviour, IToggle
 
     private int _targetMovePointIndex;
 
+    [SerializeField] Transform _startPoint;
+    [SerializeField] Transform _platformPos;
     private Transform _previousMovePoint;
     private Transform _targetMovePoint;
 
     private float _timeToMovePoint;
     private float _elapsedTime;
 
-    public bool _isWall;
+    //bool _goToStart;
 
     // Start is called before the first frame update
     void Awake()
     {
+
         OnButtonCheck();
         TargetNextMovePoint();
     }
@@ -30,10 +33,14 @@ public class MovingPlatform : MonoBehaviour, IToggle
     // Update is called once per frame
     void FixedUpdate()  // changed to Fixed update to allow transformations of the platform movement to affect all children (this includes the player)
     {
-            if (_goToNext)
-            {
-                MovePlatform();
-            }        
+        if (_goToNext)
+        {
+            MovePlatform();
+        }
+        //else if (_goToStart)
+        //{
+        //    MovePlatform();
+        //}
     }
     
     void OnButtonCheck()
@@ -52,6 +59,7 @@ public class MovingPlatform : MonoBehaviour, IToggle
 
     void MovePlatform()
     {
+        //Debug.Log("go to start is " + _goToStart + " go to next is " + _goToNext);
         _elapsedTime += Time.deltaTime;
 
         float elapsedPerc = _elapsedTime / _timeToMovePoint;  // time it takes to get from point A to Point B
@@ -65,6 +73,10 @@ public class MovingPlatform : MonoBehaviour, IToggle
         {
             TargetNextMovePoint(); 
         }
+        //if (_goToStart)
+       // {
+        //    _goToStart = false;
+        //}
     }
 
     void TargetNextMovePoint()
@@ -79,14 +91,8 @@ public class MovingPlatform : MonoBehaviour, IToggle
         _timeToMovePoint = distanceToMovePoint / _speed;
     }
 
-    void WallHit()
-    {
-        this.gameObject.GetComponent<BoxCollider>().enabled = false;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (!_isWall)
             other.transform.SetParent(transform);  // making object that enters a child of the platform
     }
 
