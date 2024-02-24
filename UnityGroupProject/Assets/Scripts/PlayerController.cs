@@ -261,9 +261,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
     void SpeedControl()
     {
+        SpeedLimit();
+    }
+    void SpeedLimit()
+    {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if(flatVel.magnitude > playerSpeed && !isdashing)
+        if (flatVel.magnitude > playerSpeed && !isdashing)
         {
             Vector3 limitVel = flatVel.normalized * playerSpeed;
             rb.velocity = new Vector3(limitVel.x, rb.velocity.y, limitVel.z);
@@ -282,7 +286,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void Jump()
     {
-        grav = 0;
+        grav = -1;
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
@@ -819,14 +823,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         if (groundedPlayer)
         {
+            Debug.Log("Player is Grounded");
             jumpCount = 0;
             grav = 0;
             dashCount = 0;
-        }
-        else
-        {
-            grav += gravity;  // this is techincally adding a negative number
-            rb.AddForce(transform.up * grav, ForceMode.Force);
         }
     }
 }
