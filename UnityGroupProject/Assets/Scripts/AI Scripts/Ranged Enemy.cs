@@ -14,27 +14,28 @@ using UnityEngine.UI;
 /// 4. 
 /// </summary>
 
-public class RangedEnemy : MonoBehaviour, IDamage
+public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
 {
     [Header("----- Components -----")]
-    [SerializeField] Renderer model;
+    [SerializeField] Renderer headRenderer;
+    [SerializeField] Renderer bodyRenderer;
+    [SerializeField] Renderer armsRenderer;
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform shootPosLeft;
-    [SerializeField] Transform shootPosRight;
+    [SerializeField] Transform shootPos;
     [SerializeField] Transform headPos;
 
     [Header("----- Enemy Stats -----")]
-    [Range(1, 100)][SerializeField] int HP;
+    [Range(1, 20)][SerializeField] int HP;
     [SerializeField] int viewCone;
-    [SerializeField] int fovshoot;
+    [SerializeField] int fovShoot;
     [SerializeField] int targetFaceSpeed;
     [SerializeField] int animSpeedTrans;
     [SerializeField] int roamDist;
-    [SerializeField] int roamPauseTimer;
+    [SerializeField] int roamPauseTime;
     
     [Header("----- Gun Attributes -----")]
     [SerializeField] GameObject bullet;
-    [SerializeField] float shootrate;
+    [SerializeField] float shootRate;
 
     bool isShooting;
     bool playerInRange;
@@ -43,6 +44,7 @@ public class RangedEnemy : MonoBehaviour, IDamage
     bool destChosen;
     Vector3 startingPos;
     float stoppingDistOrig;
+
 
     #region Enemy HP Bar 
     public Image enemyHPBar; 
@@ -76,28 +78,56 @@ public class RangedEnemy : MonoBehaviour, IDamage
         }
     }
 
+    #region Renderer Getters
+
+    public Renderer GetHeadRenderer()
+    {
+       return headRenderer;
+    }
+
+    public Renderer GetBodyRenderer()
+    {
+        return bodyRenderer;
+    }
+
+    public Renderer GetArmsRenderer()
+    {
+        return armsRenderer;
+    }
+
+    #endregion
+
     IEnumerator roam()
     {
+
         if (agent.remainingDistance < 0.05f && !destChosen)
         {
             destChosen = true;
+            //roaming dist needs to be zero to roam to exact pos
             agent.stoppingDistance = 0;
-            yield return new WaitForSeconds(roamPauseTimer);
-            destChosen = false;
+            yield return new WaitForSeconds(roamPauseTime);
 
+            //move above yield to roam on start
             Vector3 randomPos = Random.insideUnitSphere * roamDist;
             randomPos += startingPos;
 
             NavMeshHit hit;
             NavMesh.SamplePosition(randomPos, out hit, roamDist, 1);
             agent.SetDestination(hit.position);
+
+            destChosen = false;
+
         }
     }
 
     bool canSeePlayer()
     {
         playerDir = GameManager.instance.player.transform.position - headPos.position;
-        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x, 0, playerDir.z), transform.forward);
+
+        angleToPlayer = Vector3.Angle(new Vector3(playerDir.x,
+                                                 0, playerDir.z),
+                                                 transform.forward);
+
         Debug.DrawRay(headPos.position, playerDir);
 
 
@@ -110,11 +140,11 @@ public class RangedEnemy : MonoBehaviour, IDamage
 
                 agent.SetDestination(GameManager.instance.player.transform.position);
                 
-                if (agent.remainingDistance < agent.stoppingDistance)
+                if (agent.remainingDistance < agent.stoppingDistance && angleToPlayer <= viewCone)
                 {
                     faceTarget();
 
-                    if (angleToPlayer <= fovshoot && !isShooting)
+                    if (angleToPlayer <= fovShoot && !isShooting)
                         StartCoroutine(shoot());
                 }
 
@@ -136,19 +166,17 @@ public class RangedEnemy : MonoBehaviour, IDamage
     IEnumerator shoot()
     {
         isShooting = true;
-        Instantiate(bullet, shootPosLeft.position, transform.rotation);
-        yield return new WaitForSeconds(shootrate);
-        Instantiate(bullet, shootPosRight.position, transform.rotation);
-        yield return new WaitForSeconds(shootrate);
+        Instantiate(bullet, shootPos.position, transform.rotation);
+        yield return new WaitForSeconds(shootRate);
         isShooting = false;
     }
 
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updateEnemyUI(); 
+        updateEnemyUI();
         agent.SetDestination(GameManager.instance.player.transform.position);
-        StartCoroutine(flashRed());
+        //StartCoroutine(flashRed());
 
         Debug.Log("Take Damage");
 
@@ -159,18 +187,11 @@ public class RangedEnemy : MonoBehaviour, IDamage
         }
     }
 
-    IEnumerator flashRed()
-    {
-        Color color = model.material.color;
-        model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        model.material.color = color;
-    }
 
     #region Enemy HP Bar 
     public void updateEnemyUI() 
     {
-        //GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig; 
+
         this.enemyHPBar.fillAmount = (float)HP / HPOrig; 
     }
 

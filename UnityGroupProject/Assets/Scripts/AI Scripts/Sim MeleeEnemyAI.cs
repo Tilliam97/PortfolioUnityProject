@@ -5,16 +5,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class SimMeleeEnemyAI : MonoBehaviour, IDamage
+public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
 {
     #region Enemy Components
     [Header("---- Components ----")]
-    [SerializeField] public Renderer model;
-   /* [SerializeField] public Renderer headRenderer;
-    [SerializeField] public Renderer bodyRenderer;*/
+    [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform meleePos;
-    [SerializeField] public Transform headPos;
+    [SerializeField] Transform headPos;
     [SerializeField] Animator simAni;
     [SerializeField] AudioClip damagedSound;
     [SerializeField] AudioClip deathSound;
@@ -48,6 +46,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     Vector3 startPos;
     float stopDistOrig;
     bool hurt;
+    AIDamage dmg;
 
     #region Enemy HP Bar 
     public Image enemyHPBar;
@@ -82,6 +81,25 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
             StartCoroutine(roam());
         }
     }
+
+    #region Renderer Getters
+
+    public Renderer GetHeadRenderer()
+    {
+        return model;
+    }
+
+    public Renderer GetBodyRenderer()
+    {
+        return model;
+    }
+
+    public Renderer GetArmsRenderer()
+    {
+        return model;
+    }
+
+    #endregion
 
     #region AI Controls
 
@@ -174,6 +192,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     #endregion
 
     #region Take Damage
+
     IEnumerator damaged()
     {
         simAni.SetBool("swing", false);
@@ -201,7 +220,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
     {
         HP -= amount;
 
+        updateEnemyUI();
         StartCoroutine(damaged());
+
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
@@ -212,6 +233,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         }
 
     }
+
     #endregion
 
     #region Enemy HP Bar 

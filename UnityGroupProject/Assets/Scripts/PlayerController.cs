@@ -92,7 +92,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     bool isDisabled;
 
-
     // Start is called before the first frame update 
     void Start()
     {
@@ -230,6 +229,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                         case AIDamage.collisionType.head: dmg.takeDamage(shootDamage * 2);                         
                         break;
                         case AIDamage.collisionType.body : dmg.takeDamage(shootDamage);
+                        break;
+                        case AIDamage.collisionType.arms : dmg.takeDamage(shootDamage);
                         break;
                     }
 
