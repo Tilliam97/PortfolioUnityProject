@@ -160,14 +160,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 if (gunList.Count > 0)
                 {
                     selectGun();
-                    //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
-                    Reload();
 
-                    if (Input.GetButton("Shoot") & !isShooting)
+                    if (!isReloading)
                     {
-                        StartCoroutine(shoot());
-                    }
+                        Reload();
 
+                        if (Input.GetButton("Shoot") & !isShooting)
+                        {
+                            StartCoroutine(shoot());
+                        }
+                    }
                     if (magIsEmpty && !isFlashing && CurAmmo > 0)
                     {
                         StartCoroutine(promptReload());
@@ -459,6 +461,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
+            StopCoroutine(shoot());
+            StartCoroutine(isReload());
             if ( gunList[selectedGun].hasInfinteAmmo ) // infinite gun 
             {
                 gunList[selectedGun].CurGunMag = gunList[selectedGun].CurGunCapacity; 
@@ -491,6 +495,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 magIsEmpty = false;
             }
         }
+    }
+
+    IEnumerator isReload()
+    {
+        isReloading = true;
+        yield return new WaitForSeconds(1.2f);
+        isReloading = false;
     }
 
     public void FillAmmo( int fillAmount ) 
