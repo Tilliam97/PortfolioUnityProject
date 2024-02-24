@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
+    private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
     #endregion
 
@@ -263,7 +263,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if(flatVel.magnitude > playerSpeed)
+        if(flatVel.magnitude > playerSpeed && !isdashing)
         {
             Vector3 limitVel = flatVel.normalized * playerSpeed;
             rb.velocity = new Vector3(limitVel.x, rb.velocity.y, limitVel.z);
@@ -297,12 +297,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     private IEnumerator Dash()
     {
-        //isdashing = true;
+        isdashing = true;
         //playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce); // RigidBody Change
         rb.AddForce(move.x * dashForce, dashUpwardForce, move.z * dashForce, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
         //playerVel = Vector3.zero;
-        //isdashing = false;
+        isdashing = false;
     }
 
     private IEnumerator DropGun() 
@@ -820,12 +820,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (groundedPlayer)
         {
             jumpCount = 0;
-            grav = 0f;
+            grav = 0;
             dashCount = 0;
         }
         else
         {
-            grav += gravity;
+            grav += gravity;  // this is techincally adding a negative number
             rb.AddForce(transform.up * grav, ForceMode.Force);
         }
     }
