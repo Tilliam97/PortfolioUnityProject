@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body
+    [Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> now adds force to player when not grounded
+    float grav;
     #endregion
 
     #region Dash Variables 
@@ -143,6 +144,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             if (!GameManager.instance.isPaused)
             {
                 PlayerInput();  // players input
+                SpeedControl();
                 ControlDrag();  // rigidbody Drag
                 GroundedCheck();// is the player grounded
                 JumpCheck();
@@ -257,6 +259,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
         }
     }
+    void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if(flatVel.magnitude > playerSpeed)
+        {
+            Vector3 limitVel = flatVel.normalized * playerSpeed;
+            rb.velocity = new Vector3(limitVel.x, rb.velocity.y, limitVel.z);
+        }
+    }
 
     void JumpCheck()
     {
@@ -270,6 +282,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void Jump()
     {
+        grav = 0;
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
@@ -807,8 +820,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (groundedPlayer)
         {
             jumpCount = 0;
-            //playerVel.y = 0;
+            grav = 0f;
             dashCount = 0;
+        }
+        else
+        {
+            grav += gravity;
+            rb.AddForce(transform.up * grav, ForceMode.Force);
         }
     }
 }
