@@ -24,22 +24,13 @@ public class ButtonFunctions : MonoBehaviour
 			Application.Quit();
         #endif
     }
-    IEnumerator LoadAsynchronously(string sceneName)
-    {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-        operation.allowSceneActivation = false;
-        if (operation.progress >= 0.9f)
-        {
-            operation.allowSceneActivation = true;
-        }
-        yield return null;
-    }
 
-    public void LoadFirstScene(string scene)
+
+    public void LoadScene(string scene)
     {
         if (scene != "")
         {
-            StartCoroutine(LoadAsynchronously(scene));
+            SceneManager.LoadSceneAsync(scene);
         }
     }
     public void respawnPayer()
