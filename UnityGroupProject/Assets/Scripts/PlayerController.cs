@@ -98,6 +98,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool canTP;
     #endregion
 
+    #region SFX
+
+    public AudioSource pistolShot;
+    public AudioSource ARShot;
+    public AudioSource shotgunShot;
+    public AudioSource sniperShot;
+    public AudioSource reloadSound;
+    public AudioSource changeWeaponSound;
+
+    #endregion
+
 
     Vector3 move;
     //Vector3 playerVel; // no longer used since rigidbody change
@@ -384,6 +395,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             isShooting = true;
             gunList[selectedGun].CurGunMag--;
             CurMag--;
+            playShotSound();
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
             {
@@ -500,7 +512,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     IEnumerator isReload()
     {
         isReloading = true;
-        yield return new WaitForSeconds(1.2f);
+        pistolShot.Stop();
+        sniperShot.Stop();
+        ARShot.Stop();
+        shotgunShot.Stop();
+        reloadSound.Play();
+        yield return new WaitForSeconds(1.3f);
         isReloading = false;
     }
 
@@ -567,6 +584,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        changeWeaponSound.Play();
         updatePlayerUI();
         OutOfAmmo();
         if (CurMag == 0)
@@ -795,6 +813,41 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
 
     #endregion
+
+    public void playShotSound()
+    {
+        if (gunList.Count != 0)
+        {
+            switch (gunList[selectedGun].model.tag)
+            {
+                case "Pistol":
+                    {
+                        pistolShot.Play();
+                        break;
+                    }
+                case "AR":
+                    {
+                        ARShot.Play();
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        shotgunShot.Play();
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        sniperShot.Play();
+                        break;
+                    }
+                case "Laser Gun":
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+    }
 
 
     private void OnTriggerEnter( Collider other ) 
