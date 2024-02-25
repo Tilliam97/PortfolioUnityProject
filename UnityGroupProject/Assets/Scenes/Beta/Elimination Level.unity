@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667746, g: 0.48427188, b: 0.56452245, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667746, g: 0.48427176, b: 0.5645232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -242,6 +242,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -623,6 +631,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1123,6 +1139,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1308952425}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3008,6 +3032,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3221,11 +3253,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+--- !u!82 &1308952425 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 3845084872960075721, guid: 9278eb5decfc9074f965c6940fe23ed6, type: 3}
+  m_PrefabInstance: {fileID: 1595305595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1325444898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3278,6 +3323,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3444,6 +3497,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd5fded20118adc44bbd2b2289286e4b, type: 3}
+--- !u!82 &1460872817 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2912848471734010274, guid: 9278eb5decfc9074f965c6940fe23ed6, type: 3}
+  m_PrefabInstance: {fileID: 1595305595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1469711222
 GameObject:
   m_ObjectHideFlags: 0
@@ -3866,11 +3924,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8424793099290450869, guid: 9278eb5decfc9074f965c6940fe23ed6, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: bbaf5b470db84aa47a8e85c67683be96, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9278eb5decfc9074f965c6940fe23ed6, type: 3}
+--- !u!82 &1597039765 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8891779078709488097, guid: 9278eb5decfc9074f965c6940fe23ed6, type: 3}
+  m_PrefabInstance: {fileID: 1595305595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1687153650 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3784477733141938767, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
@@ -4117,6 +4184,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4381,6 +4456,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4715,6 +4798,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwordWarrior
       objectReference: {fileID: 0}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 1460872817}
+    - target: {fileID: 7542109211912138877, guid: 88c8ba71e99a7494d9888ef4a10e1ae7, type: 3}
+      propertyPath: damagedSound
+      value: 
+      objectReference: {fileID: 1597039765}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -142,7 +142,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         HPOrig = HP;
         playerSpeedOrig = playerSpeed;
         //gravityCurr = gravity;
-        startJumpHeight = jumpHeight; 
+        startJumpHeight = jumpHeight;
+
+        pistolShot = GameManager.instance.pistolShot;
+        ARShot = GameManager.instance.ARShot;
+        shotgunShot = GameManager.instance.shotgunShot;
+        sniperShot = GameManager.instance.sniperShot;
+        reloadSound = GameManager.instance.reloadSound;
+        changeWeaponSound = GameManager.instance.changeWeaponSound;
 
         respawn(); 
         canTP = safeTP.canTP;
@@ -516,10 +523,6 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     IEnumerator isReload()
     {
         isReloading = true;
-        pistolShot.Stop();
-        sniperShot.Stop();
-        ARShot.Stop();
-        shotgunShot.Stop();
         reloadSound.Play();
         yield return new WaitForSeconds(1.3f);
         isReloading = false;

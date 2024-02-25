@@ -64,6 +64,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         stopDistOrig = agent.stoppingDistance;
         hurt = false;
         simAni.SetBool("swing", false);
+
+        damagedSound = GameManager.instance.damagedSound;
+        deathSound = GameManager.instance.deathSound;
     }
 
     // Update is called once per frame
@@ -215,6 +218,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage
         }
 
     }
+
     #endregion
 
     #region Enemy HP Bar 
