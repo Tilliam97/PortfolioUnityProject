@@ -23,6 +23,7 @@ public class LaserGunRaycast : MonoBehaviour
     private void Update() 
     {
         //fireTimer += Time.deltaTime; 
+        /*
         if ( Input.GetButton( "Shoot" )) //Down // && fireTimer > fireRate 
         {
             //laserLine.enabled = true; 
@@ -41,7 +42,7 @@ public class LaserGunRaycast : MonoBehaviour
             }
             //laserLine.enabled = false; 
             //StartCoroutine( ShootLaser() ); 
-        }
+        }*/
 
 
         /*

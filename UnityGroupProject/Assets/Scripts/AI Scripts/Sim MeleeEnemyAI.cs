@@ -14,8 +14,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     [SerializeField] Transform meleePos;
     [SerializeField] Transform headPos;
     [SerializeField] Animator simAni;
-    [SerializeField] AudioClip damagedSound;
-    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioSource damagedSound;
+    [SerializeField] AudioSource deathSound;
     #endregion
 
     #region Enemy Stats
@@ -46,7 +46,6 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     Vector3 startPos;
     float stopDistOrig;
     bool hurt;
-    AIDamage dmg;
 
     #region Enemy HP Bar 
     public Image enemyHPBar;
@@ -105,7 +104,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
 
     IEnumerator roam()
     {
-        startPos = new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        startPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 
         if (agent.remainingDistance < 0.05f && !destChosen)
         {
@@ -197,15 +196,16 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     {
         simAni.SetBool("swing", false);
 
-        hurt = true;        
-
+        hurt = true;
         if (HP <= HPOrig && HP > 0)
         {
+
             simAni.SetBool("Hit", true);
+
             //Play damage sound 
             if (damagedSound != null)
             {
-                AudioSource.PlayClipAtPoint(damagedSound, transform.position);
+                damagedSound.Play();
             }
         }
 
@@ -228,7 +228,8 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
 
         if (HP <= 0 && deathSound != null)
         {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            deathSound.Play();
+            GameManager.instance.updateGameGoal(-1);
             Destroy(gameObject);
         }
 

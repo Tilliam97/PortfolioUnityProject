@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MovePointPath : MonoBehaviour
 {
+    public int nextMoveIndex;
+
     public Transform GetMovePoint(int movepointIndex)
     {
         return transform.GetChild(movepointIndex);  // checks child object and returns its index in  hiearchy
@@ -11,7 +13,7 @@ public class MovePointPath : MonoBehaviour
 
     public int GetNextMovePoint(int currMovePointIndex)
     {
-        int nextMoveIndex = currMovePointIndex + 1;  // moves to next index
+        nextMoveIndex = currMovePointIndex + 1;  // moves to next index
         
         if (nextMoveIndex == transform.childCount)
         {

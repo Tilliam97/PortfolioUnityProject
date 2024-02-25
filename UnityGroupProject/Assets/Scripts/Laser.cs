@@ -15,7 +15,7 @@ public class Laser : MonoBehaviour, IToggle
     // Damage amount
     [SerializeField] int damageAmt;
 
-    bool isShooting;
+    // bool isShooting;
 
     //key toggle
     bool reqKey;
@@ -23,7 +23,7 @@ public class Laser : MonoBehaviour, IToggle
 
     [SerializeField] public bool isToggel;
 
-    void Update()
+    void FixedUpdate()
     {
         CheckReq();
 
@@ -49,10 +49,10 @@ public class Laser : MonoBehaviour, IToggle
     // change to laser On instead of shoot
     IEnumerator shoot()
     {
-        isShooting = true;
+        //isShooting = true;
         Instantiate(projectile, shootPos.position, transform.rotation);
         yield return new WaitForSeconds(shotSpeed);
-        isShooting = false;
+        //isShooting = false;
     }
 
     // raycasts infront of itself.
@@ -61,22 +61,27 @@ public class Laser : MonoBehaviour, IToggle
     IEnumerator LaserOn()
     {
         laserLine.enabled = true;  // turns on line renderer
+        
         RaycastHit hit;
         Vector3 forward = shootPos.transform.TransformDirection(Vector3.forward);
         
         yield return new WaitForSeconds(0.1f); // .1 is the min befor it breaks player restart cause it goes negative very quickly
-        
+
         if (Physics.Raycast(shootPos.position, forward, out hit, 100.0f))
         {
-            //Debug.DrawLine(shootPos.position, hit.point, Color.red);
-            laserLine.SetPosition(1, hit.point - shootPos.position + Vector3.forward);
+            //Debug.DrawLine(shootPos.position, hit.point, Color.blue);
+            Vector3 start = shootPos.localPosition.z * Vector3.forward;                     // OH MY F****** G**.  F*** LineRenderers
+            Vector3 targetHit = Vector3.forward * hit.distance + 0.8f * Vector3.forward;
+
+            laserLine.SetPosition(0, start);
+            laserLine.SetPosition(1, targetHit);
+            //Debug.Log(hit.point.z);
             // deal player damage when player enters path
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (hit.transform != transform && dmg != null)
             {
                 dmg.takeDamage(damageAmt);  // this does damage on each individual raycast hit causing rapid hits  even if wait for seconds is every .1 seconds
             }
-            
         }
         
     }

@@ -20,7 +20,7 @@ public class SafeTP : MonoBehaviour
     void Awake()
     {
         canSave = true;
-        controller = Player.GetComponent<CharacterController>();
+        //controller = Player.GetComponent<CharacterController>();
     }
     
     // Update is called once per frame

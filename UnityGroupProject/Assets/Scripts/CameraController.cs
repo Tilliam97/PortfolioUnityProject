@@ -5,11 +5,15 @@ using UnityEngine;
 public class CameraController : MonoBehaviour 
 {
     [Header("----- Camera Settings -----")] 
-    [SerializeField] int sensitivity; 
+    [SerializeField] float sensitivityX;
+    [SerializeField] float sensitivityY;
     [SerializeField] int lockVertMin, lockVertMax;
     [SerializeField] bool invertY;
 
     float xRot;
+
+    private static readonly string YPref = "YSensitivityPref";
+    private static readonly string XPref = "XSensitivityPref";
 
     public bool tp;
 
@@ -17,15 +21,16 @@ public class CameraController : MonoBehaviour
     void Start() 
     {
         Cursor.visible = false; 
-        Cursor.lockState = CursorLockMode.Locked; 
+        Cursor.lockState = CursorLockMode.Locked;
+        LoadSensitivity();
     }
     
     // Update is called once per frame 
     void Update() 
     {
         // get input 
-        float mouseY = Input.GetAxis( "Mouse Y" ) * Time.deltaTime * sensitivity; 
-        float mouseX = Input.GetAxis( "Mouse X" ) * Time.deltaTime * sensitivity;
+        float mouseY = Input.GetAxis( "Mouse Y" ) * Time.deltaTime * sensitivityY; 
+        float mouseX = Input.GetAxis( "Mouse X" ) * Time.deltaTime * sensitivityX;
 
         if ( invertY ) 
             xRot += mouseY; 
@@ -49,6 +54,13 @@ public class CameraController : MonoBehaviour
             //transform.localRotation = Quaternion.Euler(Vector3.right);
             tp = false;
         }
+    }
+
+    private void LoadSensitivity()
+    {
+        sensitivityX = PlayerPrefs.GetFloat(XPref);
+        sensitivityY = PlayerPrefs.GetFloat(YPref);
+
     }
 }
 

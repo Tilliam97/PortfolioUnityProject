@@ -8,8 +8,19 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 {
     #region Player Settings 
     [Header("----- Player Settings -----")]
-    [SerializeField] CharacterController controller;
+    //[SerializeField] CharacterController controller;
     [Range(1, 100)][SerializeField] int HP;
+
+    //Rigid Body Settings
+    Rigidbody rb;
+    float _horMove;
+    float _verMove;
+    [SerializeField] float rbDrag = 6f;
+    [SerializeField] float airDrag = 2f;
+    float movementMult = 10f;
+    float airMult = 0.4f;
+    // needs gravity force to apply only when not grounded
+    
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion
@@ -28,24 +39,36 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    [Range(-25.0f, 0)] public float gravity;
+    [Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> now adds force to player when not grounded
+    float grav;
     #endregion
 
-    #region Dash 
+    #region Dash Variables 
     [Header("----- Player Dash Settings -----")]
     [SerializeField] float dashForce;
     [SerializeField] float dashUpwardForce;
     [SerializeField] float dashTime;
     [SerializeField] int dashMax;
     public KeyCode dashKey = KeyCode.E;
-    //private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
+    private bool isdashing; //commenting out for now cause annoying warning - use this for bullet time or immunity frames 
     private int dashCount;
+    #endregion
+
+    #region Drop Gun Variables 
+    [Header("----- Weapon Drop Settings -----")]
+    public KeyCode dropKey = KeyCode.X; 
+    [SerializeField] GameObject PistolDrop; 
+    [SerializeField] GameObject ShotgunDrop; 
+    [SerializeField] GameObject SniperDrop; 
+
+    bool isDropping; 
+
     #endregion
 
     #region Gun Variables 
     [Header("----- Player Gun Settings -----")]
     [SerializeField] List<GunStats> gunList = new List<GunStats>();
-    [SerializeField] GameObject gunModel;
+    [SerializeField] GameObject gunModel; 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
@@ -66,17 +89,18 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     #endregion 
 
-    #region SafeTelport 
+    #region SafeTelport Variables 
     [Header("----- Safe Teleport Settings ----- ")]
     [SerializeField] SafeTP safeTP;
-    Vector3 posSafe;
+    [SerializeField] bool teleportEnabled;
+    public Vector3 posSafe;
     float rotYSafe;
     bool canTP;
     #endregion
 
 
     Vector3 move;
-    Vector3 playerVel;
+    //Vector3 playerVel; // no longer used since rigidbody change
     public bool groundedPlayer;
     int jumpCount;
     bool isShooting;
@@ -87,37 +111,45 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     bool magIsEmpty;
 
     bool isReloading;
-    float gravityCurr;
+    //float gravityCurr;
     float startJumpHeight;
 
     bool isDisabled;
+    
 
     // Start is called before the first frame update 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+
         // 
         laserLine = GetComponent<LineRenderer>(); 
         // 
 
         HPOrig = HP;
         playerSpeedOrig = playerSpeed;
-        gravityCurr = gravity;
+        //gravityCurr = gravity;
         startJumpHeight = jumpHeight; 
 
         respawn(); 
         canTP = safeTP.canTP;
     }
 
-    // Update is called once per frame 
     void Update()
     {
         if (!isDisabled)
         {
-            Debug.Log("Player is enabled");
+            //Debug.Log("Player is enabled");
             if (!GameManager.instance.isPaused)
             {
-                //Debug.Log("is disabled " + isDisabled);
-                movement();
+                PlayerInput();  // players input
+                SpeedControl();
+                ControlDrag();  // rigidbody Drag
+                GroundedCheck();// is the player grounded
+                JumpCheck();
+                DashCheck();
+
                 TPCheck();
                 if (gunList.Count != 0)
                 {
@@ -128,20 +160,40 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 if (gunList.Count > 0)
                 {
                     selectGun();
-                    //Reload( ref CurrPistolMag, ref MaxPistolMag, ref CurrPistolAmmo, ref MaxPistolAmmo );
-                    Reload();
 
-                    if (Input.GetButton("Shoot") & !isShooting)
+                    if (!isReloading)
                     {
-                        StartCoroutine(shoot());
-                    }
+                        Reload();
 
+                        if (Input.GetButton("Shoot") & !isShooting)
+                        {
+                            StartCoroutine(shoot());
+                        }
+                    }
                     if (magIsEmpty && !isFlashing && CurAmmo > 0)
                     {
                         StartCoroutine(promptReload());
                     }
 
+                    if (Input.GetKey(dropKey) && !isDropping)
+                    {
+                        StartCoroutine(DropGun());
+                    }
                 }
+            }
+        }
+    }
+
+    // Update is called once per frame 
+    void FixedUpdate()
+    {
+        if (!isDisabled)
+        {
+            //Debug.Log("Player is enabled");
+            if (!GameManager.instance.isPaused)
+            {
+                //Debug.Log("is disabled " + isDisabled);
+                movement();
             }
         }
     }
@@ -150,11 +202,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #region Player Moveset 
     void movement()
     {
-        move = Input.GetAxis("Horizontal") * transform.right
-            + Input.GetAxis("Vertical") * transform.forward;
+        //move = Input.GetAxis("Horizontal") * transform.right
+        //  + Input.GetAxis("Vertical") * transform.forward;
 
-        controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
-
+        RBMovement();
+        //controller.Move(move * playerSpeed * Time.deltaTime); // this is telling the player object to move at a speed based on time 
 
         // sprint 
         isSprinting = Input.GetKey(sprintKey);
@@ -169,43 +221,160 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         // sprint 
 
         //groundedPlayer = controller.isGrounded;
-        GroundedCheck();
-
-        if (groundedPlayer)
-        {
-            jumpCount = 0;
-            playerVel.y = 0;
-            dashCount = 0;
-        }
+        
 
         // Dash 
+        
+        // Dash
+
+        //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
+        //Jump has been changed into a method called JumpCheck
+        
+
+        //playerVel.y += gravity * Time.deltaTime;
+        //controller.Move(playerVel * Time.deltaTime);
+    }
+
+    void PlayerInput()
+    {
+        _horMove = Input.GetAxisRaw("Horizontal"); // inputs
+        _verMove = Input.GetAxisRaw("Vertical");
+        move = transform.forward * _verMove + transform.right * _horMove;
+    }
+
+    void ControlDrag()
+    {
+        if (groundedPlayer)
+            rb.drag = rbDrag;
+        else
+            rb.drag = airDrag;
+    }
+
+    void RBMovement()
+    {
+        if (groundedPlayer)
+        {
+            rb.AddForce(move.normalized * playerSpeed * movementMult, ForceMode.Acceleration);
+        }
+        else if (!groundedPlayer)
+        {
+            rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
+        }
+    }
+    void SpeedControl()
+    {
+        SpeedLimit();
+    }
+    void SpeedLimit()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if (flatVel.magnitude > playerSpeed && !isdashing)
+        {
+            Vector3 limitVel = flatVel.normalized * playerSpeed;
+            rb.velocity = new Vector3(limitVel.x, rb.velocity.y, limitVel.z);
+        }
+    }
+
+    void JumpCheck()
+    {
+        if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
+        {
+            //playerVel.y = jumpHeight;
+            Jump();
+            jumpCount++;
+        }
+    }
+
+    void Jump()
+    {
+        grav = -1;
+        rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+    }
+
+    void DashCheck()
+    {
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
         {
             StartCoroutine(Dash());
             dashCount++;
         }
-        // Dash
-
-
-
-        //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
-        if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
-        {
-            playerVel.y = jumpHeight;
-            jumpCount++;
-        }
-
-        playerVel.y += gravity * Time.deltaTime;
-        controller.Move(playerVel * Time.deltaTime);
     }
 
     private IEnumerator Dash()
     {
-        //isdashing = true;
-        playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce);
+        isdashing = true;
+        //playerVel = new Vector3(move.x * dashForce, dashUpwardForce, move.z * dashForce); // RigidBody Change
+        rb.AddForce(move.x * dashForce, dashUpwardForce, move.z * dashForce, ForceMode.Impulse);
         yield return new WaitForSeconds(dashTime);
-        playerVel = Vector3.zero;
-        //isdashing = false;
+        //playerVel = Vector3.zero;
+        isdashing = false;
+    }
+
+    private IEnumerator DropGun() 
+    {
+        isDropping = true; 
+
+        AmmoTypes gunTypeToDrop = gunList[selectedGun].ammoType;    // figure out what type of gun they are trying to drop 
+        GameObject gunToDrop = PistolDrop;                          // temporary assertion 
+        bool isDroppable = true;                                    // is it a gun we want them to be allowed to drop 
+        
+        switch ( gunTypeToDrop )                                    // figure out what type of gun drop to use 
+        {
+            case AmmoTypes.PISTOL: 
+                gunToDrop = PistolDrop; 
+                break; 
+            case AmmoTypes.SNIPER: 
+                gunToDrop = SniperDrop; 
+                break; 
+            case AmmoTypes.SHOTGUN: 
+                gunToDrop = ShotgunDrop; 
+                break; 
+            default: 
+                isDroppable = false; 
+                break; 
+        }
+
+        if ( isDroppable )                                          // if they are trying to drop a gun we want them to be able to drop, it'll drop 
+        {
+            string gunName = GetSelectedGunName(); 
+
+            switch ( gunName ) 
+            {
+                case "Infinity Gun": 
+                    break; 
+                case "AR": 
+                case "Shotgun": 
+                case "Sniper": 
+                case "Laser Gun": 
+                    GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
+                    statsOfGunToDrop = gunList[selectedGun];        // grab stats of current gun (this records ammo as well) 
+                
+                    gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
+                    if ( gunList.Count > 0 ) 
+                    {
+                        selectedGun--; 
+                        changeGun(); 
+                    }
+
+                    Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3); 
+                    Quaternion dropRotation = GameManager.instance.player.transform.localRotation; 
+
+                    gunToDrop.GetComponentInChildren<GunPickup>().gunStats = statsOfGunToDrop;
+                    Instantiate( gunToDrop, dropPosition, dropRotation ); 
+
+                    yield return new WaitForSeconds( 1 ); 
+
+                    break; 
+            }
+
+            isDropping = false; 
+        }
+    }
+
+    public bool getIsDropping()
+    {
+        return isDropping;
     }
 
     IEnumerator shoot()
@@ -252,6 +421,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             isShooting = false;
         }
     }
+
     /*
     IEnumerator shootLaser() 
     {
@@ -293,6 +463,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     {
         if (Input.GetKeyDown(reloadKey) && CurMag != MaxMag) // if you push the R key & you are not at full mag capacity 
         {
+            StopCoroutine(shoot());
+            StartCoroutine(isReload());
             if ( gunList[selectedGun].hasInfinteAmmo ) // infinite gun 
             {
                 gunList[selectedGun].CurGunMag = gunList[selectedGun].CurGunCapacity; 
@@ -325,6 +497,13 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 magIsEmpty = false;
             }
         }
+    }
+
+    IEnumerator isReload()
+    {
+        isReloading = true;
+        yield return new WaitForSeconds(1.2f);
+        isReloading = false;
     }
 
     public void FillAmmo( int fillAmount ) 
@@ -404,6 +583,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     public void getGunStats(GunStats gun)
     {
+        for ( int i = 0; i < gunList.Count; i++ ) 
+        {
+            if ( gunList[i] == gun ) 
+            {
+                selectedGun = i;
+                changeGun();
+                RefillAmmo( gunList[selectedGun].ammoType, gunList[selectedGun].MaxGunCapacity );
+                return; 
+            }
+        }
+
         gunList.Add(gun);
         selectedGun = gunList.Count - 1;
 
@@ -448,7 +638,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void TPCheck()
     {
-        if (canTP)
+        if (canTP && teleportEnabled)
         {
             posSafe = safeTP.playerPos;
             rotYSafe = safeTP.yRot;
@@ -472,6 +662,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     IEnumerator Teleport()
     {
+        if (teleportEnabled) 
+        { 
         isDisabled = true;
         //Debug.Log("Tried to teleport.  player disabled " + isDisabled);
         yield return new WaitForSeconds(.05f);
@@ -481,6 +673,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         yield return new WaitForSeconds(.05f);
         isDisabled = false;
         //Debug.Log("player disabled " + isDisabled);
+        }
     }
 
 
@@ -489,9 +682,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         HP = HPOrig;
         updatePlayerUI();
 
-        controller.enabled = false;
+        //controller.enabled = false; // commented out for Rigid body changes
+        isDisabled = true;
         transform.position = GameManager.instance.playerSpawnPos.transform.position;
-        controller.enabled = true;
+        //controller.enabled = true;
+        isDisabled = false;
+
     }
 
     #endregion 
@@ -610,16 +806,16 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     public void WallRunStart()
     {
-        gravity = -2.5f;
+        //gravity = -2.5f;
         jumpHeight = startJumpHeight / 4;
         jumpCount = 0;
-        playerVel.y = 0;
+        //playerVel.y = 0; // needs adjusting for Rigid body movement
         dashCount = 0;
     }
 
     public void WallRunEnd()
     {
-        gravity = gravityCurr;
+        //gravity = gravityCurr;
         jumpHeight = startJumpHeight;
     }
 
@@ -637,6 +833,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
         else
             groundedPlayer = false;
+
+        if (groundedPlayer)
+        {
+            Debug.Log("Player is Grounded");
+            jumpCount = 0;
+            grav = 0;
+            dashCount = 0;
+        }
     }
 }
 

@@ -2,33 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : MonoBehaviour, IToggle
 {
     [SerializeField] MovePointPath _movePointPath;
+    [SerializeField] bool onButton;
     [SerializeField] float _speed;
+
+    bool _goToNext;
 
     private int _targetMovePointIndex;
 
+    [SerializeField] Transform _startPoint;
+    [SerializeField] Transform _platformPos;
     private Transform _previousMovePoint;
     private Transform _targetMovePoint;
 
     private float _timeToMovePoint;
     private float _elapsedTime;
 
+    //bool _goToStart;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+
+        OnButtonCheck();
         TargetNextMovePoint();
     }
 
     // Update is called once per frame
     void FixedUpdate()  // changed to Fixed update to allow transformations of the platform movement to affect all children (this includes the player)
     {
-        MovePlatform();
+        if (_goToNext)
+        {
+            MovePlatform();
+        }
+        //else if (_goToStart)
+        //{
+        //    MovePlatform();
+        //}
+    }
+    
+    void OnButtonCheck()
+    {
+        if (onButton)
+            _goToNext = onButton;
+        else
+            _goToNext = true;
+    }
+
+    public void ToggleMe()
+    {
+        _goToNext = !_goToNext;
+        onButton = !onButton;
     }
 
     void MovePlatform()
     {
+        //Debug.Log("go to start is " + _goToStart + " go to next is " + _goToNext);
         _elapsedTime += Time.deltaTime;
 
         float elapsedPerc = _elapsedTime / _timeToMovePoint;  // time it takes to get from point A to Point B
@@ -42,6 +73,10 @@ public class MovingPlatform : MonoBehaviour
         {
             TargetNextMovePoint(); 
         }
+        //if (_goToStart)
+       // {
+        //    _goToStart = false;
+        //}
     }
 
     void TargetNextMovePoint()
@@ -58,7 +93,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);  // making object that enters a child of the platform
+            other.transform.SetParent(transform);  // making object that enters a child of the platform
     }
 
     private void OnTriggerExit(Collider other)

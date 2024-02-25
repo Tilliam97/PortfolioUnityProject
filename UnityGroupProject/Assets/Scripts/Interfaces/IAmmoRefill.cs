@@ -7,7 +7,8 @@ public enum AmmoTypes
     PISTOL = 1, 
     SNIPER, 
     SHOTGUN, 
-    LASER 
+    LASER, 
+    INFINITE 
 }
 
 public interface IAmmoRefill

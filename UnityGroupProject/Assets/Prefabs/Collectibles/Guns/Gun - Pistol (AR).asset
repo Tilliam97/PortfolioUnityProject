@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd6362b4da1f04f48977a421289a25be, type: 3}
   m_Name: Gun - Pistol (AR)
   m_EditorClassIdentifier: 
+  ammoType: 1
   shootDamage: 1
   shootRate: 0.2
   shootDist: 250
   CurGunMag: 12
   MaxGunMag: 12
-  CurGunCapacity: 36
+  CurGunCapacity: 24
   MaxGunCapacity: 36
   model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
   hitEffect: {fileID: 0}
   shootSound: {fileID: 0}
   shootSoundVol: 0
+  hasInfinteAmmo: 0
