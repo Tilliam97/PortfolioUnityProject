@@ -39,7 +39,7 @@ public class CapsulePickup : MonoBehaviour
                     }
                     break; 
                 case CapsuleType.A_PISTOL: 
-                    if ( gunType == "Pistol" ) 
+                    if ( gunType == "AR" ) 
                     {
                         GameManager.instance.playerScript.RefillAmmo( AmmoTypes.PISTOL, capsule.refillAmount ); 
                         Destroy( gameObject ); 

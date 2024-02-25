@@ -39,8 +39,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
-    [Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> now adds force to player when not grounded
-    float grav;
+    //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> using Constant Force Component now
+    //float grav;
     #endregion
 
     #region Dash Variables 
@@ -288,7 +288,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     void Jump()
     {
-        grav = -1;
+        //grav = -1;
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
@@ -834,9 +834,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         if (groundedPlayer)
         {
-            Debug.Log("Player is Grounded");
+            //Debug.Log("Player is Grounded");
             jumpCount = 0;
-            grav = 0;
+            //grav = 0;
             dashCount = 0;
         }
     }
