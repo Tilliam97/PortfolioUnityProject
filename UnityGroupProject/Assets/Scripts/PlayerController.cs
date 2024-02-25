@@ -422,6 +422,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                         break;
                         case AIDamage.collisionType.body : dmg.takeDamage(shootDamage);
                         break;
+                        case AIDamage.collisionType.arms : dmg.takeDamage(shootDamage);
+                        break;
                     }
 
                 }
