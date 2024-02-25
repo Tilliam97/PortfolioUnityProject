@@ -29,6 +29,16 @@ public class GameManager : MonoBehaviour
     public GameObject reloadPrompt;
     public GameObject outOfAmmoPrompt;
 
+    [Header("Audio")]
+    public AudioSource pistolShot;
+    public AudioSource ARShot;
+    public AudioSource shotgunShot;
+    public AudioSource sniperShot;
+    public AudioSource reloadSound;
+    public AudioSource changeWeaponSound;
+    public AudioSource damagedSound;
+    public AudioSource deathSound;
+
 
     public GameObject player;
     public PlayerController playerScript;

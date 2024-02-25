@@ -8,50 +8,59 @@ public class AIDamage : MonoBehaviour, IDamage
     public enum collisionType { head, body, arms }
     public collisionType damageType;
 
-     public SimMeleeEnemyAI enemy;
+    public SimMeleeEnemyAI melee;
+    public RangedEnemy ranged;
 
-    //public SimMeleeEnemyAI aiController;
+
     public void takeDamage(int amount)
     {
-        enemy.takeDamage(amount);
-        StartCoroutine(flashRed());
-        enemy.updateEnemyUI();
+        if (melee)
+        {
+            melee.takeDamage(amount);
+            StartCoroutine(blinkRed());
+        }
+        else if (ranged)
+        {
+            ranged.takeDamage(amount);
+            StartCoroutine(flashRed());
+        }
     }
 
-    /*IEnumerator flashRed()
+     IEnumerator blinkRed()
+     {
+         Color origColor = melee.GetBodyRenderer().material.color;
+
+         melee.GetBodyRenderer().material.color = Color.red;
+         yield return new WaitForSeconds(0.1f);
+         melee.GetBodyRenderer().material.color = origColor;
+     }
+
+    IEnumerator flashRed()
     {
         Color origColor;
 
         //Store the orig color 
         switch (damageType)
         {
-            case collisionType.head:
-                                    origColor = enemy.headRenderer.material.color;
-                                    //enemy.headRenderer.material.renderQueue = 6000;
-                                    enemy.headRenderer.material.color = Color.red;
-                                    yield return new WaitForSeconds(0.1f);
-                                    enemy.headRenderer.material.color = origColor;
-                                    //enemy.headRenderer.material.renderQueue = 2000;
+            case AIDamage.collisionType.head:
+                origColor = ranged.GetHeadRenderer().material.color;
+                ranged.GetHeadRenderer().material.color = Color.red;
+                yield return new WaitForSeconds(0.1f);
+                ranged.GetHeadRenderer().material.color = origColor;
                 break;
-            case collisionType.body:
-                                    origColor = enemy.bodyRenderer.material.color;
-                                    //enemy.bodyRenderer.material.renderQueue = 6000;
-                                    enemy.bodyRenderer.material.color = Color.red;
-                                    yield return new WaitForSeconds(0.1f);
-                                    enemy.bodyRenderer.material.color = origColor;
-                                    //enemy.bodyRenderer.material.renderQueue = 2000;
+            case AIDamage.collisionType.body:
+                origColor = ranged.GetBodyRenderer().material.color;
+                ranged.GetBodyRenderer().material.color = Color.red;
+                yield return new WaitForSeconds(0.1f);
+                ranged.GetBodyRenderer().material.color = origColor;
                 break;
-
-
-        }*/
-
-    IEnumerator flashRed()
-    {
-        Color origColor = enemy.model.material.color;
-
-        enemy.model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        enemy.model.material.color = origColor;
+            case AIDamage.collisionType.arms:
+                origColor = ranged.GetArmsRenderer().material.color;
+                ranged.GetArmsRenderer().material.color = Color.red;
+                yield return new WaitForSeconds(0.1f);
+                ranged.GetArmsRenderer().material.color = origColor;
+                break;
+        }
     }
 
 }
