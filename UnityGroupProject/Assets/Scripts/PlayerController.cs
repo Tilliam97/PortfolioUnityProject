@@ -295,7 +295,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             //playerVel.y = jumpHeight;
             StartCoroutine(Jump());
             jumpCount++;
-            Debug.Log("jump " + jumpCount + " is grounded " + groundedPlayer);
+            //Debug.Log("jump " + jumpCount + " is grounded " + groundedPlayer);
         }
     }
 
