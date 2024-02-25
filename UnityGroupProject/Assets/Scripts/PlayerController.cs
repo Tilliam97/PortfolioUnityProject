@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public KeyCode jumpKey = KeyCode.Space;
     [SerializeField] int jumpMax;
     [SerializeField] float jumpHeight;
+    bool _isJumping;
     //[Range(-25.0f, 0)] public float gravity; // gravity is set by the physics tab in the project settings for rigid body -> using Constant Force Component now
     //float grav;
     #endregion
@@ -96,6 +97,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public Vector3 posSafe;
     float rotYSafe;
     bool canTP;
+    #endregion
+
+    #region SFX
+
+    public AudioSource pistolShot;
+    public AudioSource ARShot;
+    public AudioSource shotgunShot;
+    public AudioSource sniperShot;
+    public AudioSource reloadSound;
+    public AudioSource changeWeaponSound;
+
     #endregion
 
 
@@ -281,15 +293,18 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (Input.GetKeyDown(jumpKey) && jumpCount < jumpMax)
         {
             //playerVel.y = jumpHeight;
-            Jump();
+            StartCoroutine(Jump());
             jumpCount++;
+            Debug.Log("jump " + jumpCount + " is grounded " + groundedPlayer);
         }
     }
 
-    void Jump()
+    private IEnumerator Jump()
     {
-        //grav = -1;
+        _isJumping = true;
         rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+        yield return new WaitForSeconds(.1f);
+        _isJumping = false;
     }
 
     void DashCheck()
@@ -384,6 +399,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             isShooting = true;
             gunList[selectedGun].CurGunMag--;
             CurMag--;
+            playShotSound();
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ViewportPointToRay(new Vector2(0.5f, 0.5f)), out hit, shootDist))
             {
@@ -500,7 +516,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     IEnumerator isReload()
     {
         isReloading = true;
-        yield return new WaitForSeconds(1.2f);
+        pistolShot.Stop();
+        sniperShot.Stop();
+        ARShot.Stop();
+        shotgunShot.Stop();
+        reloadSound.Play();
+        yield return new WaitForSeconds(1.3f);
         isReloading = false;
     }
 
@@ -567,6 +588,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        changeWeaponSound.Play();
         updatePlayerUI();
         OutOfAmmo();
         if (CurMag == 0)
@@ -796,6 +818,41 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     #endregion
 
+    public void playShotSound()
+    {
+        if (gunList.Count != 0)
+        {
+            switch (gunList[selectedGun].model.tag)
+            {
+                case "Pistol":
+                    {
+                        pistolShot.Play();
+                        break;
+                    }
+                case "AR":
+                    {
+                        ARShot.Play();
+                        break;
+                    }
+                case "Shotgun":
+                    {
+                        shotgunShot.Play();
+                        break;
+                    }
+                case "Sniper":
+                    {
+                        sniperShot.Play();
+                        break;
+                    }
+                case "Laser Gun":
+                default:
+                    {
+                        break;
+                    }
+            }
+        }
+    }
+
 
     private void OnTriggerEnter( Collider other ) 
     {
@@ -824,6 +881,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         // change to a shpear cast so it isnt a single point or a plane cast
         RaycastHit floorhit;
         Vector3 down = transform.TransformDirection(-Vector3.up);
+        //calculate player hieght
         if (Physics.Raycast(transform.position, down, out floorhit, 1.1f))
         {
             Debug.DrawLine(transform.position, floorhit.point, Color.red);
@@ -832,7 +890,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         else
             groundedPlayer = false;
 
-        if (groundedPlayer)
+        if (groundedPlayer && !_isJumping)
         {
             //Debug.Log("Player is Grounded");
             jumpCount = 0;
