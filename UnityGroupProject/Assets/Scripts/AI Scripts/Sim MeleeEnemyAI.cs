@@ -58,10 +58,11 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     {
         HPOrig = HP;
         updateEnemyUI();
-        GameManager.instance.updateGameGoal(1);
         stopDistOrig = agent.stoppingDistance;
         hurt = false;
         simAni.SetBool("swing", false);
+
+        GameManager.instance.updateGameGoal(1);
     }
 
     // Update is called once per frame
@@ -135,7 +136,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
                                                 transform.forward);
 
         Debug.Log(angleToPlayer);
-        Debug.DrawRay(transform.position, playerDir);
+        Debug.DrawRay(headPos.position, playerDir);
 
         RaycastHit hit;
         if (Physics.Raycast(headPos.position, playerDir, out hit))
@@ -144,7 +145,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
             {
                 agent.SetDestination(GameManager.instance.player.transform.position);
 
-                if (angleToPlayer <= fovAtk && !isSwinging && !hurt)
+                if ( angleToPlayer <= fovAtk && !isSwinging && !hurt)
                     StartCoroutine(swing());
 
                 //if inside stopping distance rotate enemy
@@ -197,13 +198,12 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
         simAni.SetBool("swing", false);
 
         hurt = true;
-        if (HP <= HPOrig && HP > 0)
+        if (HP <= HPOrig)
         {
-
             simAni.SetBool("Hit", true);
 
             //Play damage sound 
-            if (damagedSound != null)
+            if (damagedSound != null && (!damagedSound.isPlaying || !deathSound.isPlaying))
             {
                 damagedSound.Play();
             }
@@ -226,13 +226,14 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
         //if taking damage outside fov go to player's last known position 
         agent.SetDestination(GameManager.instance.player.transform.position);
 
-        if (HP <= 0 && deathSound != null)
+        if (HP <= 0)
         {
-            deathSound.Play();
             GameManager.instance.updateGameGoal(-1);
             Destroy(gameObject);
-        }
 
+            if (deathSound != null)
+                deathSound.Play();
+        }
     }
 
     #endregion

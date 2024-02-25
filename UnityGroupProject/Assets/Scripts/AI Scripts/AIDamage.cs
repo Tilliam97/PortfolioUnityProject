@@ -14,12 +14,12 @@ public class AIDamage : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
-        if (melee != null && ranged == null)
+        if (melee)
         {
             melee.takeDamage(amount);
             StartCoroutine(blinkRed());
         }
-        else
+        else if (ranged)
         {
             ranged.takeDamage(amount);
             StartCoroutine(flashRed());

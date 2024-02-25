@@ -23,9 +23,12 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform shootPos;
     [SerializeField] Transform headPos;
+    [SerializeField] AudioSource damagedSound;
+    [SerializeField] AudioSource deathSound;
+    [SerializeField] AudioSource shootSound;
 
     [Header("----- Enemy Stats -----")]
-    [Range(1, 20)][SerializeField] int HP;
+    [Range(1, 6)][SerializeField] int HP;
     [SerializeField] int viewCone;
     [SerializeField] int fovShoot;
     [SerializeField] int targetFaceSpeed;
@@ -44,6 +47,7 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     bool destChosen;
     Vector3 startingPos;
     float stoppingDistOrig;
+    float remainingDist;
 
 
     #region Enemy HP Bar 
@@ -130,7 +134,6 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
 
         Debug.DrawRay(headPos.position, playerDir);
 
-
         RaycastHit hit;
         if(Physics.Raycast(headPos.position, playerDir, out hit))
         {
@@ -166,8 +169,23 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     IEnumerator shoot()
     {
         isShooting = true;
+        
+        //stop enemy before shooting so doesn't chase
+        agent.stoppingDistance = agent.stoppingDistance - 1;
+        agent.isStopped = true;
+        
         Instantiate(bullet, shootPos.position, transform.rotation);
+
+        //play damage sound if not currently playing a sound
+        if (shootSound != null)
+            shootSound.Play();
+        
+
         yield return new WaitForSeconds(shootRate);
+
+        //resume movement
+        agent.isStopped = false;
+        agent.stoppingDistance = stoppingDistOrig;
         isShooting = false;
     }
 
@@ -175,14 +193,16 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     {
         HP -= amount;
         updateEnemyUI();
-        agent.SetDestination(GameManager.instance.player.transform.position);
-        //StartCoroutine(flashRed());
 
-        Debug.Log("Take Damage");
+        if (damagedSound != null)
+           damagedSound.Play();
+
+        agent.SetDestination(GameManager.instance.player.transform.position);
 
         if (HP <= 0)
         {
             GameManager.instance.updateGameGoal(-1);
+            deathSound.Play();
             Destroy(gameObject);
         }
     }

@@ -9,6 +9,4 @@ public interface IEnemy
     Renderer GetHeadRenderer();
     Renderer GetBodyRenderer();
     Renderer GetArmsRenderer();
-
-
 }
