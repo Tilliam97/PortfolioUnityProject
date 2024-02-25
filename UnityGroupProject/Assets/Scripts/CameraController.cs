@@ -60,6 +60,14 @@ public class CameraController : MonoBehaviour
     {
         sensitivityX = PlayerPrefs.GetFloat(XPref);
         sensitivityY = PlayerPrefs.GetFloat(YPref);
+        if (sensitivityX == 0)
+        {
+            sensitivityX = 300;
+        }
+        if (sensitivityY == 0 )
+        {
+            sensitivityY = 300;
+        }
 
     }
 }
