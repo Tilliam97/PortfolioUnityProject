@@ -21,7 +21,7 @@ public class AnimationControl : MonoBehaviour
         if (Input.GetButtonDown("Reload"))
         {
             TP.GetComponent<Animator>().Play("Reload");
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1.3f);
         }
         isReloading = false;
     }
