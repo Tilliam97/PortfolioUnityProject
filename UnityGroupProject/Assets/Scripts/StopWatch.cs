@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class StopWatch : MonoBehaviour
 {
-    bool stopWatchActive = true;
+    bool stopWatchActive = false;
     float currTime;
     public TMP_Text currTimeText;
 
@@ -31,6 +31,18 @@ public class StopWatch : MonoBehaviour
     public string getTimeText()
     {
         return currTimeText.text;
+    }
+
+    public void StartTimer()
+    {
+        Debug.Log("Start");
+        stopWatchActive = true;
+    }
+
+    public void StopTimer()
+    {
+        Debug.Log("Stop");
+        stopWatchActive = false;
     }
 }
 
