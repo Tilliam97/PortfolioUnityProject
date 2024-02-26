@@ -16,6 +16,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     [SerializeField] Animator simAni;
     [SerializeField] AudioSource damagedSound;
     [SerializeField] AudioSource deathSound;
+    [SerializeField] AudioSource swingSound;
     #endregion
 
     #region Enemy Stats
@@ -185,8 +186,10 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
         isSwinging = true;
 
         if (agent.remainingDistance <= agent.stoppingDistance && !hurt)
+        {
             simAni.SetBool("swing", true);
-
+        }
+           
         yield return new WaitForSeconds(swingSpeed);
 
         isSwinging = false;
@@ -272,6 +275,9 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
     public void weaponColliderOn()
     {
         weaponCollider.enabled = true;
+
+        if (swingSound)
+            swingSound.Play();
     }
 
     public void weaponColliderOff()
