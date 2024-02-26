@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isActive = false;
         CameraObject = transform.GetComponent<Animator>();
 
         playMenu.SetActive(false);
@@ -75,8 +76,6 @@ public class UIManager : MonoBehaviour
     {
         if (!isActive)
         {
-            firstMenu.SetActive(false);
-            mainMenu.SetActive(false);
             firstMenu.SetActive(true);
             mainMenu.SetActive(true);
         }

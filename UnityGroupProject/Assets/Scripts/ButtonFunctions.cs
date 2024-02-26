@@ -26,13 +26,11 @@ public class ButtonFunctions : MonoBehaviour
     }
 
 
-    public void LoadScene(string scene)
+    public void LoadScene()
     {
-        if (scene != "")
-        {
-            SceneManager.LoadSceneAsync(scene);
-        }
+        SceneManager.LoadScene(0);
     }
+
     public void respawnPayer()
     {
         GameManager.instance.playerScript.respawn();
