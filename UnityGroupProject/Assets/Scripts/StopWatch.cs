@@ -35,13 +35,13 @@ public class StopWatch : MonoBehaviour
 
     public void StartTimer()
     {
-        Debug.Log("Start");
+        //Debug.Log("Start");
         stopWatchActive = true;
     }
 
     public void StopTimer()
     {
-        Debug.Log("Stop");
+        //Debug.Log("Stop");
         stopWatchActive = false;
     }
 }
