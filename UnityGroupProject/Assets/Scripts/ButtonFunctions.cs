@@ -29,11 +29,22 @@ public class ButtonFunctions : MonoBehaviour
     public void LoadScene()
     {
         SceneManager.LoadScene(0);
+        GameManager.instance.stateUnpaused();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void respawnPayer()
     {
         GameManager.instance.playerScript.respawn();
+        GameManager.instance.stateUnpaused();
+    }
+
+    public void NextLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int next = currentSceneIndex + 1;
+        SceneManager.LoadSceneAsync(next);
         GameManager.instance.stateUnpaused();
     }
 }
