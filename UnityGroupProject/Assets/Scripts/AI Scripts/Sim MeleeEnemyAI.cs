@@ -66,7 +66,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
 
         damagedSound = GameManager.instance.damagedSound;
         deathSound = GameManager.instance.deathSound;
-
+        swingSound = GameManager.instance.swingSound;
         GameManager.instance.updateGameGoal(1);
 
     }
