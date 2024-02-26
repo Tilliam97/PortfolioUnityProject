@@ -64,7 +64,12 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
         stoppingDistOrig = agent.stoppingDistance;
 
         HPOrig = HP; 
-        updateEnemyUI(); 
+        updateEnemyUI();
+
+        damagedSound = GameManager.instance.damagedSoundRanged;
+        deathSound = GameManager.instance.deathSoundRanged;
+        shootSound = GameManager.instance.shootSoundRanged;
+
         GameManager.instance.updateGameGoal(1);
     }
 
