@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
+    public static UIManager instance; // there are two instances set to static cause there are 2 UI managers other manager is GameManager
     private Animator CameraObject;
 
     [Header("Menus")]
