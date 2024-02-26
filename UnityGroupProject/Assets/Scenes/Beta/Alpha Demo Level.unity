@@ -3181,6 +3181,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Elevator Room (Start) (WIP)
       objectReference: {fileID: 0}
+    - target: {fileID: 7226554059416397533, guid: 5e6364b381a65e144829712f5bcac31a, type: 3}
+      propertyPath: Watch
+      value: 
+      objectReference: {fileID: 720715853}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3642,6 +3646,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e58e9cddf3def8c40a68867a1427fdc8, type: 3}
+--- !u!114 &720715853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4084196744522412079, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+  m_PrefabInstance: {fileID: 1089133411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d3119636a271142a589fa8198c1410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &728432280 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3784477733141938767, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
@@ -11645,6 +11660,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7964535748973469142, guid: 9152edff6ccffec4ca206dfb88e1711f, type: 3}
+      propertyPath: Watch
+      value: 
+      objectReference: {fileID: 720715853}
     - target: {fileID: 8851660283443997107, guid: 9152edff6ccffec4ca206dfb88e1711f, type: 3}
       propertyPath: m_Name
       value: Elevator Room (End) (WIP)
