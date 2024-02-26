@@ -28,7 +28,7 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     [SerializeField] AudioSource shootSound;
 
     [Header("----- Enemy Stats -----")]
-    [Range(1, 6)][SerializeField] int HP;
+    [Range(1, 15)][SerializeField] int HP;
     [SerializeField] int viewCone;
     [SerializeField] int fovShoot;
     [SerializeField] int targetFaceSpeed;

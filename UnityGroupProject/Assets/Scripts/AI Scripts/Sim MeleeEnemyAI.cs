@@ -21,7 +21,7 @@ public class SimMeleeEnemyAI : MonoBehaviour, IDamage, IEnemy
 
     #region Enemy Stats
     [Header("----- Enemy Stats -----")]
-    [Range(1, 10)][SerializeField] public int HP;
+    [Range(1, 12)][SerializeField] public int HP;
     [SerializeField] int fov;
     [SerializeField] int fovAtk;
     [SerializeField] int targetFaceSpeed;
