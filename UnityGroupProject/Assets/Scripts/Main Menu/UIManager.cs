@@ -52,10 +52,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] List<TMP_Text> leaderBoard;
     List<string> leaderboardStrings;
+    bool isActive;
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
         CameraObject = transform.GetComponent<Animator>();
 
         playMenu.SetActive(false);
@@ -65,13 +65,22 @@ public class UIManager : MonoBehaviour
         firstMenu.SetActive(true);
         mainMenu.SetActive(true);
 
+        
+
         LoadLeaderboard();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (!isActive)
+        {
+            firstMenu.SetActive(false);
+            mainMenu.SetActive(false);
+            firstMenu.SetActive(true);
+            mainMenu.SetActive(true);
+        }
+        isActive = true;
     }
 
     public void Play()
