@@ -2720,11 +2720,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!82 &959585050906061612 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 6979292824353466725, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-  m_PrefabInstance: {fileID: 3842450534593886112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!222 &1050340045540972384
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2818,6 +2813,67 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &1230790700098278311
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 282383188640153636, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_Name
+      value: SwordWarrior AI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000009536743
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6231314
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7821172
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 102.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443163459982358240, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
 --- !u!222 &1249974439215935299
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3221,8 +3277,8 @@ MonoBehaviour:
   sniperShot: {fileID: 6371577848209894876}
   reloadSound: {fileID: 4871266921872382447}
   changeWeaponSound: {fileID: 3721310591871502581}
-  damagedSound: {fileID: 959585050906061612}
-  deathSound: {fileID: 2350526316259772990}
+  damagedSound: {fileID: 6163261575583964869}
+  deathSound: {fileID: 8931628782253816558}
   player: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
   playerScript: {fileID: 0}
   playerSpawnPos: {fileID: 1065442133567159781, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
@@ -3644,11 +3700,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!82 &2350526316259772990 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 5665710201934630222, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-  m_PrefabInstance: {fileID: 3842450534593886112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2361237194524996730
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5252,63 +5303,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4947854063581219854}
   m_CullTransparentMesh: 1
---- !u!1001 &3842450534593886112
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 282383188640153636, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_Name
-      value: SwordWarrior AI
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0000009536743
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.41
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.6231314
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7821172
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 102.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 4398920026975223043, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
 --- !u!114 &3845502654819008193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6787,6 +6781,11 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!82 &6163261575583964869 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6979292824353466725, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+  m_PrefabInstance: {fileID: 1230790700098278311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6248367607070346050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9053,6 +9052,11 @@ RectTransform:
   m_AnchoredPosition: {x: 42.685402, y: -38}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!82 &8931628782253816558 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5665710201934630222, guid: c1f6b3b0140560b4c9f3c3001d4bc33e, type: 3}
+  m_PrefabInstance: {fileID: 1230790700098278311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!222 &8985613830538595240
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9123,8 +9127,8 @@ MonoBehaviour:
   - {fileID: 6371577848209894876}
   - {fileID: 4871266921872382447}
   - {fileID: 3721310591871502581}
-  - {fileID: 959585050906061612}
-  - {fileID: 2350526316259772990}
+  - {fileID: 6163261575583964869}
+  - {fileID: 8931628782253816558}
 --- !u!222 &9164721003562876496
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9163,7 +9167,7 @@ SceneRoots:
   - {fileID: 228080050}
   - {fileID: 705507995}
   - {fileID: 403705113}
-  - {fileID: 3842450534593886112}
+  - {fileID: 1230790700098278311}
   - {fileID: 5582131203886704079}
   - {fileID: 3434243409745389901}
   - {fileID: 706678661296305267}

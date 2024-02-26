@@ -25,5 +25,10 @@ public class OnTouchToggle : MonoBehaviour, IToggle
         {
             _obj.GetComponent<ToggleStation>().takeDamage(1);
         }
+        if (_obj.GetComponent<ToggleObject>())
+        {
+            Debug.Log("Toggle Activated");
+            _obj.GetComponent<ToggleObject>().ToggleMe();
+        }
     }
 }

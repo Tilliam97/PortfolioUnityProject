@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     float currTime;
     string score;
 
+    public bool _locationGoalReached;
+
 
     // Start is called before the first frame update 
     void Awake()
@@ -64,7 +66,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
-
+        _locationGoalReached = false;
         currTime = 0;
     }
 
@@ -103,8 +105,9 @@ public class GameManager : MonoBehaviour
     {
         enemyCount += amount;
 
-        // bring up the game over menu if no enemies are remaining 
-        if (enemyCount <= 0)
+        // bring up the game over menu if no enemies are remaining  - updated to \|/
+        // Player has reached end location
+        if (_locationGoalReached) //enemyCount <= 0 changed to reaching location
         {
             statePaused();
             setScore();
