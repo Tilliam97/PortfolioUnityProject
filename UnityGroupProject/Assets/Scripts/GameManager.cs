@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public AudioSource changeWeaponSound;
     public AudioSource damagedSound;
     public AudioSource deathSound;
+    public AudioSource swingSound;
     public AudioSource damagedSoundRanged;
     public AudioSource deathSoundRanged;
     public AudioSource shootSoundRanged;
