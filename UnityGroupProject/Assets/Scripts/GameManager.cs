@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager instance;  // there are two instances set to static cause there are 2 UI managers other manager is UIManager
 
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
