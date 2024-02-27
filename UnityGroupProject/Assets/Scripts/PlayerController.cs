@@ -107,6 +107,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public AudioSource sniperShot;
     public AudioSource reloadSound;
     public AudioSource changeWeaponSound;
+    public AudioSource jumpSound;
+    public AudioSource dashSound;
 
     #endregion
 
@@ -150,6 +152,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         sniperShot = GameManager.instance.sniperShot;
         reloadSound = GameManager.instance.reloadSound;
         changeWeaponSound = GameManager.instance.changeWeaponSound;
+        jumpSound = GameManager.instance.jumpSound;
+        dashSound = GameManager.instance.dashSound;
 
         respawn(); 
         canTP = safeTP.canTP;
@@ -301,6 +305,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             //playerVel.y = jumpHeight;
             StartCoroutine(Jump());
+            jumpSound.Play();
             jumpCount++;
             //Debug.Log("jump " + jumpCount + " is grounded " + groundedPlayer);
         }
@@ -319,6 +324,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
         {
             StartCoroutine(Dash());
+            dashSound.Play();
             dashCount++;
         }
     }
