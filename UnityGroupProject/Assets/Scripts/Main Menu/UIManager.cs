@@ -50,13 +50,13 @@ public class UIManager : MonoBehaviour
     public AudioSource sliderSound;
     public AudioSource swooshSound;
 
+    [Header("Leaderboards")]
     [SerializeField] List<TMP_Text> leaderBoard;
     List<string> leaderboardStrings;
-    bool isActive;
+
     // Start is called before the first frame update
     void Start()
     {
-        isActive = false;
         CameraObject = transform.GetComponent<Animator>();
 
         playMenu.SetActive(false);
@@ -74,12 +74,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isActive)
-        {
-            firstMenu.SetActive(true);
-            mainMenu.SetActive(true);
-        }
-        isActive = true;
+
     }
 
     public void Play()

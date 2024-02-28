@@ -31,7 +31,7 @@ public class ButtonFunctions : MonoBehaviour
         SceneManager.LoadScene(0);
         GameManager.instance.stateUnpaused();
         Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void respawnPayer()

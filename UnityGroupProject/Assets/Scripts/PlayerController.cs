@@ -107,6 +107,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     public AudioSource sniperShot;
     public AudioSource reloadSound;
     public AudioSource changeWeaponSound;
+    public AudioSource jumpSound;
+    public AudioSource dashSound;
 
     #endregion
 
@@ -150,6 +152,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         sniperShot = GameManager.instance.sniperShot;
         reloadSound = GameManager.instance.reloadSound;
         changeWeaponSound = GameManager.instance.changeWeaponSound;
+        jumpSound = GameManager.instance.jumpSound;
+        dashSound = GameManager.instance.dashSound;
 
         respawn(); 
         canTP = safeTP.canTP;
@@ -301,6 +305,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             //playerVel.y = jumpHeight;
             StartCoroutine(Jump());
+            jumpSound.Play();
             jumpCount++;
             //Debug.Log("jump " + jumpCount + " is grounded " + groundedPlayer);
         }
@@ -319,6 +324,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (Input.GetKeyDown(dashKey) && dashCount < dashMax)
         {
             StartCoroutine(Dash());
+            dashSound.Play();
             dashCount++;
         }
     }
@@ -591,8 +597,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         CurAmmo = gunList[selectedGun].CurGunCapacity;
         MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[selectedGun].model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[selectedGun].model.GetComponent<MeshRenderer>().sharedMaterial;
+        GetGunModel( gunList[selectedGun] ); 
+
         changeWeaponSound.Play();
         updatePlayerUI();
         OutOfAmmo();
@@ -631,8 +637,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         CurAmmo = gunList[selectedGun].CurGunCapacity;
         MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+        GetGunModel( gun ); 
 
         updatePlayerUI();
         if (CurMag == 0)
@@ -643,6 +648,12 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             magIsEmpty = false;
         }
+    }
+
+    void GetGunModel( GunStats gun ) 
+    {
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
     }
 
     #endregion 

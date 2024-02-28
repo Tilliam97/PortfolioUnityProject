@@ -42,6 +42,12 @@ public class GameManager : MonoBehaviour
     public AudioSource damagedSoundRanged;
     public AudioSource deathSoundRanged;
     public AudioSource shootSoundRanged;
+    public AudioSource hoverSound;
+    public AudioSource sliderSound;
+    public AudioSource swooshSound;
+    public AudioSource jumpSound;
+    public AudioSource dashSound;
+
 
 
     public GameObject player;
@@ -203,6 +209,21 @@ public class GameManager : MonoBehaviour
         statePaused();
         menuActive = menuLose;
         menuActive.SetActive(true);
+    }
+
+    public void PlayHover()
+    {
+        hoverSound.Play();
+    }
+
+    public void PlaySFXHover()
+    {
+        sliderSound.Play();
+    }
+
+    public void PlaySwoosh()
+    {
+        swooshSound.Play();
     }
 }
 
