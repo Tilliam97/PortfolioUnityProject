@@ -44,6 +44,11 @@ public class ButtonFunctions : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int next = currentSceneIndex + 1;
+        //Debug.Log(SceneManager.sceneCountInBuildSettings);
+        if (next >= SceneManager.sceneCountInBuildSettings)
+        {
+            next = 0;
+        }
         SceneManager.LoadSceneAsync(next);
         GameManager.instance.stateUnpaused();
     }
