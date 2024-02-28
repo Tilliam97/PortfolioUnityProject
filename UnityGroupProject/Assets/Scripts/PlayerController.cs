@@ -860,6 +860,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             switch (gunList[selectedGun].model.tag)
             {
+                case "Infinity Gun":
+                    {
+                        pistolShot.Play();
+                        break;
+                    }
                 case "Pistol":
                     {
                         pistolShot.Play();
