@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,7 +21,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     float movementMult = 10f;
     float airMult = 0.4f;
     // needs gravity force to apply only when not grounded
-    
+
 
     public KeyCode reloadKey = KeyCode.R;
     #endregion
@@ -57,19 +58,19 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     #region Drop Gun Variables 
     [Header("----- Weapon Drop Settings -----")]
-    public KeyCode dropKey = KeyCode.X; 
-    [SerializeField] GameObject PistolDrop; 
-    [SerializeField] GameObject ShotgunDrop; 
-    [SerializeField] GameObject SniperDrop; 
+    public KeyCode dropKey = KeyCode.X;
+    [SerializeField] GameObject PistolDrop;
+    [SerializeField] GameObject ShotgunDrop;
+    [SerializeField] GameObject SniperDrop;
 
-    bool isDropping; 
+    bool isDropping;
 
     #endregion
 
     #region Gun Variables 
     [Header("----- Player Gun Settings -----")]
     [SerializeField] List<GunStats> gunList = new List<GunStats>();
-    [SerializeField] GameObject gunModel; 
+    [SerializeField] GameObject gunModel;
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
@@ -80,15 +81,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     #endregion
 
     #region Laser Gun Variables 
-    [SerializeField] public Camera playerCamera; 
-    [SerializeField] public Transform laserOrigin; 
-    [SerializeField] public float gunRange = 50f; 
-    [SerializeField] public float fireRate = 0.2f; 
-    [SerializeField] public float laserDuration = 0f; 
+    [SerializeField] public Camera playerCamera;
+    [SerializeField] public Transform laserOrigin;
+    [SerializeField] public float gunRange = 50f;
+    [SerializeField] public float fireRate = 0.2f;
+    [SerializeField] public float laserDuration = 0f;
 
-    LineRenderer laserLine; 
+    LineRenderer laserLine;
 
-    #endregion 
+    #endregion
 
     #region SafeTelport Variables 
     [Header("----- Safe Teleport Settings ----- ")]
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     int jumpCount;
     bool isShooting;
     int HPOrig;
-    int selectedGun; 
+    int selectedGun;
 
     bool isFlashing;
     bool magIsEmpty;
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     float startJumpHeight;
 
     bool isDisabled;
-    
+
 
     // Start is called before the first frame update 
     void Start()
@@ -138,7 +139,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         rb.freezeRotation = true;
 
         // 
-        laserLine = GetComponent<LineRenderer>(); 
+        laserLine = GetComponent<LineRenderer>();
         // 
 
         HPOrig = HP;
@@ -155,7 +156,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         jumpSound = GameManager.instance.jumpSound;
         dashSound = GameManager.instance.dashSound;
 
-        respawn(); 
+        respawn();
         canTP = safeTP.canTP;
     }
 
@@ -178,7 +179,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 {
                     OutOfAmmo();
                 }
-                Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+                //Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
                 if (gunList.Count > 0)
                 {
@@ -244,15 +245,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         // sprint 
 
         //groundedPlayer = controller.isGrounded;
-        
+
 
         // Dash 
-        
+
         // Dash
 
         //if ( Input.GetButtonDown( "Jump" ) && jumpCount < jumpMax ) 
         //Jump has been changed into a method called JumpCheck
-        
+
 
         //playerVel.y += gravity * Time.deltaTime;
         //controller.Move(playerVel * Time.deltaTime);
@@ -339,64 +340,64 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         isdashing = false;
     }
 
-    private IEnumerator DropGun() 
+    private IEnumerator DropGun()
     {
-        isDropping = true; 
+        isDropping = true;
 
         AmmoTypes gunTypeToDrop = gunList[selectedGun].ammoType;    // figure out what type of gun they are trying to drop 
         GameObject gunToDrop = PistolDrop;                          // temporary assertion 
         bool isDroppable = true;                                    // is it a gun we want them to be allowed to drop 
-        
-        switch ( gunTypeToDrop )                                    // figure out what type of gun drop to use 
+
+        switch (gunTypeToDrop)                                    // figure out what type of gun drop to use 
         {
-            case AmmoTypes.PISTOL: 
-                gunToDrop = PistolDrop; 
-                break; 
-            case AmmoTypes.SNIPER: 
-                gunToDrop = SniperDrop; 
-                break; 
-            case AmmoTypes.SHOTGUN: 
-                gunToDrop = ShotgunDrop; 
-                break; 
-            default: 
-                isDroppable = false; 
-                break; 
+            case AmmoTypes.PISTOL:
+                gunToDrop = PistolDrop;
+                break;
+            case AmmoTypes.SNIPER:
+                gunToDrop = SniperDrop;
+                break;
+            case AmmoTypes.SHOTGUN:
+                gunToDrop = ShotgunDrop;
+                break;
+            default:
+                isDroppable = false;
+                break;
         }
 
-        if ( isDroppable )                                          // if they are trying to drop a gun we want them to be able to drop, it'll drop 
+        if (isDroppable)                                          // if they are trying to drop a gun we want them to be able to drop, it'll drop 
         {
-            string gunName = GetSelectedGunName(); 
+            string gunName = GetSelectedGunName();
 
-            switch ( gunName ) 
+            switch (gunName)
             {
-                case "Infinity Gun": 
-                    break; 
-                case "AR": 
-                case "Shotgun": 
-                case "Sniper": 
-                case "Laser Gun": 
+                case "Infinity Gun":
+                    break;
+                case "AR":
+                case "Shotgun":
+                case "Sniper":
+                case "Laser Gun":
                     GunStats statsOfGunToDrop = new GunStats();     // create variable for stats of current gun (the gun to be dropped) 
                     statsOfGunToDrop = gunList[selectedGun];        // grab stats of current gun (this records ammo as well) 
-                
-                    gunList.Remove( gunList[selectedGun] );       // removes GunStats from gunList, making it unusable 
-                    if ( gunList.Count > 0 ) 
+
+                    gunList.Remove(gunList[selectedGun]);       // removes GunStats from gunList, making it unusable 
+                    if (gunList.Count > 0)
                     {
-                        selectedGun--; 
-                        changeGun(); 
+                        selectedGun--;
+                        changeGun();
                     }
 
-                    Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3); 
-                    Quaternion dropRotation = GameManager.instance.player.transform.localRotation; 
+                    Vector3 dropPosition = (GameManager.instance.player.transform.position) + (GameManager.instance.player.transform.forward * 3);
+                    Quaternion dropRotation = GameManager.instance.player.transform.localRotation;
 
                     gunToDrop.GetComponentInChildren<GunPickup>().gunStats = statsOfGunToDrop;
-                    Instantiate( gunToDrop, dropPosition, dropRotation ); 
+                    Instantiate(gunToDrop, dropPosition, dropRotation);
 
-                    yield return new WaitForSeconds( 1 ); 
+                    yield return new WaitForSeconds(1);
 
-                    break; 
+                    break;
             }
 
-            isDropping = false; 
+            isDropping = false;
         }
     }
 
@@ -424,16 +425,19 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                 {
                     switch (dmg.damageType)
                     {
-                        case AIDamage.collisionType.head: dmg.takeDamage(shootDamage * 2);                         
-                        break;
-                        case AIDamage.collisionType.body : dmg.takeDamage(shootDamage);
-                        break;
-                        case AIDamage.collisionType.arms : dmg.takeDamage(shootDamage);
-                        break;
+                        case AIDamage.collisionType.head:
+                            dmg.takeDamage(shootDamage * 2);
+                            break;
+                        case AIDamage.collisionType.body:
+                            dmg.takeDamage(shootDamage);
+                            break;
+                        case AIDamage.collisionType.arms:
+                            dmg.takeDamage(shootDamage);
+                            break;
                     }
 
                 }
-                else if ((hit.transform != transform && damage != null))                
+                else if ((hit.transform != transform && damage != null))
                 {
                     damage.takeDamage(shootDamage);
                 }
@@ -462,27 +466,27 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     #region Heal/Reload/Gun Stuff 
     #region Getters 
-    public int GetPlayerHP() 
+    public int GetPlayerHP()
     {
-        return HP; 
+        return HP;
     }
     public int GetPlayerHPOrig()
     {
-        return HPOrig; 
+        return HPOrig;
     }
-    
-    public string GetSelectedGunName() 
+
+    public string GetSelectedGunName()
     {
-        return gunList[selectedGun].model.tag; 
+        return gunList[selectedGun].model.tag;
     }
 
     #endregion
 
-    public void HealMe( int amount ) 
+    public void HealMe(int amount)
     {
         HP += amount;       // Fill health 
-        if ( HP > HPOrig )  // Make sure health value isn't greater than max capacity 
-            HP = HPOrig; 
+        if (HP > HPOrig)  // Make sure health value isn't greater than max capacity 
+            HP = HPOrig;
         updatePlayerUI();   // Update health bar 
 
         // UI make flash green? 
@@ -494,10 +498,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             StopCoroutine(shoot());
             StartCoroutine(isReload());
-            if ( gunList[selectedGun].hasInfinteAmmo ) // infinite gun 
+            if (gunList[selectedGun].hasInfinteAmmo) // infinite gun 
             {
-                gunList[selectedGun].CurGunMag = gunList[selectedGun].CurGunCapacity; 
-                CurMag = MaxMag; 
+                gunList[selectedGun].CurGunMag = gunList[selectedGun].CurGunCapacity;
+                CurMag = MaxMag;
             }
             else
             {
@@ -528,6 +532,20 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
+    void SetGunScale()
+    {
+        if (gunList[selectedGun].hasInfinteAmmo)
+        {
+            Vector3 size = new Vector3(10.5f, 30f, 6f);
+            gunModel.transform.localScale = (size);
+        }
+        else
+        {
+            Vector3 size = new Vector3(3.5f, 10f, 2f);
+            gunModel.transform.localScale = (size);
+        }
+    }
+
     IEnumerator isReload()
     {
         isReloading = true;
@@ -536,39 +554,39 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         isReloading = false;
     }
 
-    public void FillAmmo( int fillAmount ) 
+    public void FillAmmo(int fillAmount)
     {
-        if ( CurAmmo + fillAmount > MaxAmmo ) 
+        if (CurAmmo + fillAmount > MaxAmmo)
         {
-            CurAmmo = MaxAmmo; 
+            CurAmmo = MaxAmmo;
         }
-        else 
+        else
         {
-            CurAmmo += fillAmount; 
+            CurAmmo += fillAmount;
         }
         //CurMag = MaxMag; // ammo capsule should set mag & ammo capacity to full, but this line causes errors 
 
-        updatePlayerUI(); 
+        updatePlayerUI();
     }
 
-    public void RefillAmmo( AmmoTypes ammoType, int ammoAmount ) 
+    public void RefillAmmo(AmmoTypes ammoType, int ammoAmount)
     {
-        switch ( ammoType ) 
+        switch (ammoType)
         {
-            case AmmoTypes.PISTOL: 
-                FillAmmo( ammoAmount ); 
-                break; 
-            case AmmoTypes.SNIPER: 
-                FillAmmo( ammoAmount ); 
-                break; 
-            case AmmoTypes.SHOTGUN: 
-                FillAmmo( ammoAmount ); 
-                break; 
-            case AmmoTypes.LASER: 
-                FillAmmo( ammoAmount ); 
-                break; 
-            default: 
-                break; 
+            case AmmoTypes.PISTOL:
+                FillAmmo(ammoAmount);
+                break;
+            case AmmoTypes.SNIPER:
+                FillAmmo(ammoAmount);
+                break;
+            case AmmoTypes.SHOTGUN:
+                FillAmmo(ammoAmount);
+                break;
+            case AmmoTypes.LASER:
+                FillAmmo(ammoAmount);
+                break;
+            default:
+                break;
         }
     }
 
@@ -597,7 +615,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         CurAmmo = gunList[selectedGun].CurGunCapacity;
         MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
-        GetGunModel( gunList[selectedGun] ); 
+        GetGunModel(gunList[selectedGun]);
+        SetGunScale();
 
         changeWeaponSound.Play();
         updatePlayerUI();
@@ -614,14 +633,14 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     public void getGunStats(GunStats gun)
     {
-        for ( int i = 0; i < gunList.Count; i++ ) 
+        for (int i = 0; i < gunList.Count; i++)
         {
-            if ( gunList[i] == gun ) 
+            if (gunList[i] == gun)
             {
                 selectedGun = i;
                 changeGun();
-                RefillAmmo( gunList[selectedGun].ammoType, gunList[selectedGun].MaxGunCapacity );
-                return; 
+                RefillAmmo(gunList[selectedGun].ammoType, gunList[selectedGun].MaxGunCapacity);
+                return;
             }
         }
 
@@ -637,7 +656,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         CurAmmo = gunList[selectedGun].CurGunCapacity;
         MaxAmmo = gunList[selectedGun].MaxGunCapacity;
 
-        GetGunModel( gun ); 
+        GetGunModel(gun);
 
         updatePlayerUI();
         if (CurMag == 0)
@@ -650,10 +669,11 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         }
     }
 
-    void GetGunModel( GunStats gun ) 
+    void GetGunModel(GunStats gun)
     {
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial; 
+        gunModel.GetComponentInChildren<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh; // this gives us the gun model 
+        gunModel.GetComponentInChildren<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+        SetGunScale();
     }
 
     #endregion 
@@ -698,17 +718,17 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
     IEnumerator Teleport()
     {
-        if (teleportEnabled) 
-        { 
-        isDisabled = true;
-        //Debug.Log("Tried to teleport.  player disabled " + isDisabled);
-        yield return new WaitForSeconds(.05f);
-        transform.position = new Vector3(posSafe.x, posSafe.y, posSafe.z); // working on adjusting cam pos.
-        //gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
-        //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
-        yield return new WaitForSeconds(.05f);
-        isDisabled = false;
-        //Debug.Log("player disabled " + isDisabled);
+        if (teleportEnabled)
+        {
+            isDisabled = true;
+            //Debug.Log("Tried to teleport.  player disabled " + isDisabled);
+            yield return new WaitForSeconds(.05f);
+            transform.position = new Vector3(posSafe.x, posSafe.y, posSafe.z); // working on adjusting cam pos.
+                                                                               //gameObject.GetComponentInChildren<CameraController>().tp = true; //set players x to be leveled.
+                                                                               //transform.rotation = Quaternion.Euler(0, rotYSafe, 0); // is currently not setting the correct direction
+            yield return new WaitForSeconds(.05f);
+            isDisabled = false;
+            //Debug.Log("player disabled " + isDisabled);
         }
     }
 
@@ -809,7 +829,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         GameManager.instance.playerDamageFlash.SetActive(false);
     }
 
-    
+
 
     IEnumerator promptReload()
     {
@@ -821,7 +841,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         isFlashing = false;
     }
 
-    
+
 
     public void OutOfAmmo()
     {
@@ -870,9 +890,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     }
 
 
-    private void OnTriggerEnter( Collider other ) 
+    private void OnTriggerEnter(Collider other)
     {
-        
+
     }
 
     public void WallRunStart()
@@ -900,7 +920,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         //calculate player hieght
         if (Physics.Raycast(transform.position, down, out floorhit, 1.1f))
         {
-            Debug.DrawLine(transform.position, floorhit.point, Color.red);
+            //Debug.DrawLine(transform.position, floorhit.point, Color.red);
             groundedPlayer = true;
         }
         else
