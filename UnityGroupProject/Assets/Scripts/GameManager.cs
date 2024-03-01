@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel") && menuActive == null)   // if the escape button is pressed 
+        if (Input.GetButtonDown("Cancel") || Input.GetKey(KeyCode.P) && menuActive == null)   // if the escape button is pressed 
         {
             statePaused();                      // it'll toggle the bool 
             menuActive = menuPause;             // move the pause menu into the temp menu 

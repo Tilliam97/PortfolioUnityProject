@@ -539,13 +539,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176584861641046400}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.057239555, y: 0.16657093, z: 0.31990167, w: 0.9309354}
-  m_LocalPosition: {x: -0.04760328, y: -1.4168129, z: -0.014690265}
+  m_LocalRotation: {x: 0.0000000037252892, y: -5.5511145e-17, z: 0.43935123, w: 0.89831537}
+  m_LocalPosition: {x: 0.37889096, y: -1.3987676, z: 0.035533197}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1251330285126304236}
-  m_Father: {fileID: 2958270866873627299}
+  m_Children: []
+  m_Father: {fileID: 7134780943201420167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8412492085119791252
 SkinnedMeshRenderer:
@@ -1397,6 +1396,8 @@ Transform:
   - {fileID: 1068161296394913061}
   - {fileID: 2669076690792070628}
   - {fileID: 2958270866873627299}
+  - {fileID: 9214270263575084115}
+  - {fileID: 1251330285126304236}
   m_Father: {fileID: 3365469096342323216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3928258875071507895
@@ -3097,13 +3098,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7731400774236285396}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000022351744, y: -0.000000044703487, z: 0.11447763, w: 0.99342585}
-  m_LocalPosition: {x: 1.482, y: 0.728, z: 0.46}
+  m_LocalRotation: {x: 0.021763988, y: -0.17478156, z: 0.121635, w: 0.97682273}
+  m_LocalPosition: {x: 0.8110517, y: -0.05080866, z: 0.24193561}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9214270263575084115}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 13.147}
+  m_Father: {fileID: 7134780943201420167}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7768982807136893772
 GameObject:
   m_ObjectHideFlags: 0
@@ -3376,7 +3377,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7438157990179108262}
-  - {fileID: 9214270263575084115}
   m_Father: {fileID: 7134780943201420167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8683769486738230224
@@ -3534,6 +3534,7 @@ MonoBehaviour:
   agent: {fileID: 702741059288352361}
   shootPos: {fileID: 1251330285126304236}
   headPos: {fileID: 4294121888553584753}
+  rangedAni: {fileID: 0}
   damagedSound: {fileID: 945949788227755421}
   deathSound: {fileID: 4619633668842512005}
   shootSound: {fileID: 1558500460910377251}

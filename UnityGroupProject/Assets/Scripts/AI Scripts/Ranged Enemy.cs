@@ -23,6 +23,7 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform shootPos;
     [SerializeField] Transform headPos;
+    [SerializeField] Animator rangedAni;
     [SerializeField] AudioSource damagedSound;
     [SerializeField] AudioSource deathSound;
     [SerializeField] AudioSource shootSound;
@@ -76,6 +77,10 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     // Update is called once per frame
     void Update()
     {
+        float animSpeed = agent.velocity.normalized.magnitude;
+
+        rangedAni.SetFloat("Speed", Mathf.Lerp(rangedAni.GetFloat("Speed"), animSpeed, Time.deltaTime * animSpeedTrans));
+
         if (playerInRange && !canSeePlayer())
         {
             StartCoroutine(roam());
@@ -153,6 +158,7 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
                     faceTarget();
 
                     if (angleToPlayer <= fovShoot && !isShooting)
+
                         StartCoroutine(shoot());
                 }
 
@@ -197,6 +203,7 @@ public class RangedEnemy : MonoBehaviour, IDamage, IEnemy
     public void takeDamage(int amount)
     {
         HP -= amount;
+
         updateEnemyUI();
 
         if (damagedSound != null)
