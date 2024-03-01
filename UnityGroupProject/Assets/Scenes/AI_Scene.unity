@@ -1296,6 +1296,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
+--- !u!1 &1539175082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1539175083}
+  m_Layer: 0
+  m_Name: ShootPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1539175083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539175082}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.0094728945, y: 0.014979874, z: -0.70385224, w: 0.7101253}
+  m_LocalPosition: {x: 0.826805, y: -0.039415468, z: 0.2525332}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7031649706916302568}
+  m_LocalEulerAnglesHint: {x: 1.979, y: 0.455, z: -89.484}
 --- !u!1001 &1559514951
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3180,7 +3211,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 8
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -3401,7 +3432,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 4
+  m_Radius: 12
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!222 &1078704426082870957
 CanvasRenderer:
@@ -4036,21 +4067,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!4 &1426298663367527555
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7628483532549924027}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.000000022351744, y: -0.000000044703487, z: 0.11447763, w: 0.99342585}
-  m_LocalPosition: {x: 1.482, y: 0.728, z: 0.46}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 9027760861532451132}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 13.147}
 --- !u!4 &1444681072213311058
 Transform:
   m_ObjectHideFlags: 0
@@ -4736,12 +4752,12 @@ MonoBehaviour:
   sniperShot: {fileID: 6371577848209894876}
   reloadSound: {fileID: 4871266921872382447}
   changeWeaponSound: {fileID: 3721310591871502581}
-  damagedSound: {fileID: 0}
-  deathSound: {fileID: 0}
-  swingSound: {fileID: 0}
-  damagedSoundRanged: {fileID: 0}
-  deathSoundRanged: {fileID: 0}
-  shootSoundRanged: {fileID: 0}
+  damagedSound: {fileID: 8061371924016315743}
+  deathSound: {fileID: 8292792111985142326}
+  swingSound: {fileID: 1242607146512153253}
+  damagedSoundRanged: {fileID: 1132115456521228530}
+  deathSoundRanged: {fileID: 4794813016951247850}
+  shootSoundRanged: {fileID: 1672597674267702348}
   player: {fileID: 3120418743101105966, guid: 288055eca481c3143bcbb424f69aa7fe, type: 3}
   playerScript: {fileID: 0}
   playerSpawnPos: {fileID: 1065442133567159781, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
@@ -7757,18 +7773,19 @@ MonoBehaviour:
   bodyRenderer: {fileID: 2445856514300430644}
   armsRenderer: {fileID: 1403494310942084524}
   agent: {fileID: 816847070885333766}
-  shootPos: {fileID: 1426298663367527555}
+  shootPos: {fileID: 1539175083}
   headPos: {fileID: 4107683406084687134}
-  damagedSound: {fileID: 1132115456521228530}
-  deathSound: {fileID: 4794813016951247850}
-  shootSound: {fileID: 1672597674267702348}
+  rangedAni: {fileID: 4844734715178879076}
+  damagedSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  shootSound: {fileID: 0}
   HP: 6
-  viewCone: 60
+  viewCone: 45
   fovShoot: 35
   targetFaceSpeed: 4
   animSpeedTrans: 4
-  roamDist: 2
-  roamPauseTime: 1
+  roamDist: 4
+  roamPauseTime: 2
   bullet: {fileID: 8327841169481781337, guid: 5c1d73c4fd1f040408c8ae82b6bf2358, type: 3}
   shootRate: 0.3
   enemyHPBar: {fileID: 6157750204473511912}
@@ -8400,9 +8417,9 @@ MonoBehaviour:
   meleePos: {fileID: 2125265745033294452}
   headPos: {fileID: 8482672429535143066}
   simAni: {fileID: 8463181772242894076}
-  damagedSound: {fileID: 8061371924016315743}
-  deathSound: {fileID: 8292792111985142326}
-  swingSound: {fileID: 1242607146512153253}
+  damagedSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  swingSound: {fileID: 0}
   HP: 10
   fov: 60
   fovAtk: 45
@@ -12564,6 +12581,7 @@ Transform:
   - {fileID: 883965955086354506}
   - {fileID: 2854387485573197963}
   - {fileID: 3142183223524933580}
+  - {fileID: 1539175083}
   m_Father: {fileID: 3180149502246686079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7062859154509857289
@@ -13311,22 +13329,6 @@ GameObject:
   - component: {fileID: 3985113809635676086}
   m_Layer: 5
   m_Name: Resume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &7628483532549924027
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1426298663367527555}
-  m_Layer: 0
-  m_Name: Shoot Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15699,8 +15701,7 @@ Transform:
   m_LocalPosition: {x: -0.04760328, y: -1.4168129, z: -0.014690265}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1426298663367527555}
+  m_Children: []
   m_Father: {fileID: 3142183223524933580}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &9034114556206040562
