@@ -6,6 +6,7 @@ public class AnimationControl : MonoBehaviour
 {
 
     public GameObject TP;
+    public PlayerController player;
 
     bool isReloading;
 
@@ -17,9 +18,9 @@ public class AnimationControl : MonoBehaviour
     }
     IEnumerator Reload()
     {
-        isReloading = true;
-        if (Input.GetButtonDown("Reload"))
+        if (Input.GetButtonDown("Reload") && player.CurMag != player.MaxMag)
         {
+            isReloading = true;
             TP.GetComponent<Animator>().Play("Reload");
             yield return new WaitForSeconds(1.3f);
         }

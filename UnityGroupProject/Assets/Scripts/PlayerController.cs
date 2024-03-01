@@ -74,8 +74,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
     [SerializeField] int shootDamage;
     [SerializeField] float shootRate;
     [SerializeField] int shootDist;
-    [SerializeField] int CurMag;
-    [SerializeField] int MaxMag;
+    [SerializeField] public int CurMag;
+    [SerializeField] public int MaxMag;
     [SerializeField] int CurAmmo;
     [SerializeField] int MaxAmmo;
     #endregion
@@ -521,6 +521,8 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
                     gunList[selectedGun].CurGunMag = CurMag;
                     gunList[selectedGun].CurGunCapacity = CurAmmo;
                 }
+
+                reloadSound.Play();
             }
 
             updatePlayerUI();
