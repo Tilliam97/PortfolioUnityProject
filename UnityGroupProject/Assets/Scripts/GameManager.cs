@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
         // bring up the game over menu if no enemies are remaining  - updated to \|/
         // Player has reached end location
-        if (_locationGoalReached) //enemyCount <= 0 changed to reaching location
+        if ( _locationGoalReached ) //enemyCount <= 0 changed to reaching location
         {
             statePaused();
             setScore();
@@ -122,6 +122,16 @@ public class GameManager : MonoBehaviour
             menuActive = menuWin;
             menuActive.SetActive(true);
         }
+        /*
+        if ( enemyCount <= 0 ) 
+        {
+            DefeatAllEnemies.
+        }*/
+    }
+
+    public int GetEnemyCount() 
+    {
+        return enemyCount; 
     }
 
     public void checkHighScore()

@@ -3395,7 +3395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5221466088885923063, guid: dd5fded20118adc44bbd2b2289286e4b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1400003
+      value: 4.21
       objectReference: {fileID: 0}
     - target: {fileID: 5221466088885923063, guid: dd5fded20118adc44bbd2b2289286e4b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4393,7 +4393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5221466088885923063, guid: dd5fded20118adc44bbd2b2289286e4b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1399965
+      value: 4.209996
       objectReference: {fileID: 0}
     - target: {fileID: 5221466088885923063, guid: dd5fded20118adc44bbd2b2289286e4b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6532,6 +6532,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4034318040981542224}
+  - component: {fileID: 5840251763011676926}
   - component: {fileID: 1380443118793695417}
   - component: {fileID: 5840251763011676925}
   - component: {fileID: 2638717595639931006}
@@ -6620,6 +6621,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5840251763011676926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2553540809880180648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d62bacfdf37459044991b4898e4f3c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyBarrier: {fileID: 2553540809880180648}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
