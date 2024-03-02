@@ -201,7 +201,10 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
                     if (Input.GetKey(dropKey) && !isDropping)
                     {
-                        StartCoroutine(DropGun());
+                        if ( gunList[selectedGun].ammoType != AmmoTypes.INFINITE ) 
+                        {
+                            StartCoroutine( DropGun() ); 
+                        }
                     }
                 }
             }
@@ -285,6 +288,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
             rb.AddForce(move.normalized * playerSpeed * movementMult * airMult, ForceMode.Acceleration);
         }
     }
+    
     void SpeedControl()
     {
         SpeedLimit();
@@ -350,6 +354,9 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
 
         switch (gunTypeToDrop)                                    // figure out what type of gun drop to use 
         {
+            case AmmoTypes.INFINITE: 
+                isDroppable = false; 
+                break; 
             case AmmoTypes.PISTOL:
                 gunToDrop = PistolDrop;
                 break;
