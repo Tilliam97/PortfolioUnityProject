@@ -22,7 +22,9 @@ public class AnimationControl : MonoBehaviour
         {
             isReloading = true;
             TP.GetComponent<Animator>().Play("Reload");
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitForSeconds(1.1f);
+            Vector3 pos = new Vector3(0.3950001f, -0.5120002f, 0.9910004f);
+            TP.transform.localPosition = pos;
         }
         isReloading = false;
     }
