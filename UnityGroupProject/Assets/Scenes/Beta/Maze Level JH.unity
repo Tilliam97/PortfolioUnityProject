@@ -7229,7 +7229,7 @@ Transform:
   m_GameObject: {fileID: 1667819608}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: -14.250003, y: 0, z: -54.750004}
+  m_LocalPosition: {x: -14.000003, y: 0, z: -54.750004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7967,6 +7967,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Respawn Point
       objectReference: {fileID: 0}
+    - target: {fileID: 1065442133567159781, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -7977,7 +7981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -53
+      value: -52
       objectReference: {fileID: 0}
     - target: {fileID: 6039251294660180922, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
       propertyPath: m_LocalRotation.w
