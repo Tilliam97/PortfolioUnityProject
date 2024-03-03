@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
     public AudioSource jumpSound;
     public AudioSource dashSound;
 
-
+    private static readonly string ScorePref = "ScorePref";
 
     public GameObject player;
     public PlayerController playerScript;
@@ -56,7 +57,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused; // we'll make this a getter & setter later 
     int enemyCount;
-    StopWatch stopWatch;
+    public StopWatch stopWatch;
 
     public List<string> leaderboards;
 
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
     string score;
 
     public bool _locationGoalReached;
-
+    bool isSaving;
 
     // Start is called before the first frame update 
     void Awake()
@@ -74,13 +75,14 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
         playerSpawnPos = GameObject.FindWithTag("Player Spawn Pos");
         _locationGoalReached = false;
-        currTime = 0;
+       
+        currTime = PlayerPrefs.GetFloat(ScorePref); ;
     }
 
     // Update is called once per frame 
     void Update()
     {
-        if (Input.GetButtonDown("Cancel") || Input.GetKey(KeyCode.P) && menuActive == null)   // if the escape button is pressed 
+        if ((Input.GetButtonDown("Cancel") || Input.GetKey(KeyCode.P)) && menuActive == null)   // if the escape button is pressed 
         {
             statePaused();                      // it'll toggle the bool 
             menuActive = menuPause;             // move the pause menu into the temp menu 
@@ -118,7 +120,13 @@ public class GameManager : MonoBehaviour
         {
             statePaused();
             setScore();
-            checkHighScore();
+            PlayerPrefs.SetFloat(ScorePref, currTime);
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            if ( currentSceneIndex == SceneManager.sceneCountInBuildSettings)
+            {
+                checkHighScore();
+                PlayerPrefs.SetFloat(ScorePref, 0);
+            }
             menuActive = menuWin;
             menuActive.SetActive(true);
         }
@@ -204,9 +212,32 @@ public class GameManager : MonoBehaviour
 
     public void setScore()
     {
-        currTime = currTime + Time.deltaTime;
-        TimeSpan time = TimeSpan.FromSeconds(currTime);
-        score = time.ToString(@"mm\:ss\:fff");
+        if (PlayerPrefs.GetFloat("isActive") == 1)
+        {
+            currTime = currTime + Time.deltaTime;
+        
+            if (!isSaving)
+            {
+                StartCoroutine(SaveCurTime());
+            }
+
+            TimeSpan time = TimeSpan.FromSeconds(currTime);
+            score = time.ToString(@"mm\:ss\:fff");
+        }
+
+    }
+    public string getTimeText()
+    {
+        return score;
+    }
+
+    IEnumerator SaveCurTime()
+    {
+        isSaving = true;
+        PlayerPrefs.SetFloat(ScorePref, currTime);
+        yield return new WaitForSeconds(0.001f);
+
+        isSaving = false;
     }
 
     public List<string> GetLeaderBoards()

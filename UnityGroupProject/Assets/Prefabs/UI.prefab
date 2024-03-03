@@ -199,7 +199,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1160834864219023132}
         m_TargetAssemblyTypeName: ButtonFunctions, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -665,6 +665,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7462474707569745103}
+  - component: {fileID: 4952440731549841070}
   - component: {fileID: 5275798674935877441}
   - component: {fileID: 2394225144932163993}
   m_Layer: 5
@@ -693,6 +694,19 @@ RectTransform:
   m_AnchoredPosition: {x: 84.6, y: 431.18}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4952440731549841070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379651555961706313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d3119636a271142a589fa8198c1410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currTimeText: {fileID: 2394225144932163993}
 --- !u!222 &5275798674935877441
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3520,6 +3534,7 @@ MonoBehaviour:
   playerScript: {fileID: 0}
   playerSpawnPos: {fileID: 1065442133567159781, guid: 52e40b61a0b23974a9922889dba7df41, type: 3}
   isPaused: 0
+  stopWatch: {fileID: 4952440731549841070}
   leaderboards: []
   _locationGoalReached: 0
 --- !u!114 &9136227655263470159
@@ -6311,7 +6326,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1160834864219023132}
         m_TargetAssemblyTypeName: ButtonFunctions, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7734,7 +7749,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1160834864219023132}
         m_TargetAssemblyTypeName: ButtonFunctions, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9211,7 +9226,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3a214ddf8f1f060419e9c7a3435ccb02, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

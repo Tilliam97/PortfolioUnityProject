@@ -7,20 +7,22 @@ using UnityEngine.UI;
 
 public class StopWatch : MonoBehaviour
 {
-    bool stopWatchActive = false;
     float currTime;
     public TMP_Text currTimeText;
+
+    private static readonly string ScorePref = "ScorePref";
+
 
     // Start is called before the first frame update
     void Start()
     {
-        currTime = 0;
+        currTime = PlayerPrefs.GetFloat(ScorePref);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (stopWatchActive)
+        if (PlayerPrefs.GetFloat("isActive") == 1)
         {
             currTime = currTime + Time.deltaTime;
         }
@@ -28,21 +30,17 @@ public class StopWatch : MonoBehaviour
         currTimeText.text = time.ToString(@"mm\:ss\:fff");
     }
 
-    public string getTimeText()
-    {
-        return currTimeText.text;
-    }
 
     public void StartTimer()
     {
         //Debug.Log("Start");
-        stopWatchActive = true;
+        PlayerPrefs.SetFloat("isActive", 1);
     }
 
     public void StopTimer()
     {
         //Debug.Log("Stop");
-        stopWatchActive = false;
+        PlayerPrefs.SetFloat("isActive", 0);
     }
 }
 
