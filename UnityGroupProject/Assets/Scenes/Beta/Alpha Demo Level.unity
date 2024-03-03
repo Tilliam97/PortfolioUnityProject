@@ -6006,6 +6006,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 1965860462547798621, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+      propertyPath: stopWatch
+      value: 
+      objectReference: {fileID: 1260431068}
     - target: {fileID: 2744477423187579984, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
@@ -6165,7 +6169,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 379651555961706313, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1260431068}
   m_SourcePrefab: {fileID: 100100000, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
 --- !u!114 &1089133412 stripped
 MonoBehaviour:
@@ -6996,6 +7003,35 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b6708c48accb3640aef46cd043b8b2d, type: 3}
+--- !u!1 &1260431064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 379651555961706313, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+  m_PrefabInstance: {fileID: 1089133411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1260431065 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2394225144932163993, guid: 0e2ef8e7d9baaf44cb5a41536bbe06d1, type: 3}
+  m_PrefabInstance: {fileID: 1089133411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260431064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1260431068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260431064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d3119636a271142a589fa8198c1410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currTimeText: {fileID: 1260431065}
 --- !u!4 &1266489302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7183125733089239396, guid: 3d5e9f65a96dbe24fad7a8178f7cfcba, type: 3}

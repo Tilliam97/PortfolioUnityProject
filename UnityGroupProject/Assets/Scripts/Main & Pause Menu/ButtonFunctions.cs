@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
+    private static readonly string ScorePref = "ScorePref";
+
+
     public void resume()
     {
         GameManager.instance.stateUnpaused();
@@ -12,23 +15,30 @@ public class ButtonFunctions : MonoBehaviour
 
     public void restart() 
     {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+            resetTime();
+        PlayerPrefs.SetFloat("isActive", 0);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GameManager.instance.stateUnpaused();
     }
 
     public void quit() 
-    { 
+    {
+        resetTime();
+        PlayerPrefs.SetFloat("isActive", 0);
         #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;
         #else
 			Application.Quit();
         #endif
     }
 
 
-    public void LoadScene()
+    public void MainMenu()
     {
         SceneManager.LoadScene(0);
+        resetTime();
+        PlayerPrefs.SetFloat("isActive", 0);
         GameManager.instance.stateUnpaused();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
@@ -51,5 +61,10 @@ public class ButtonFunctions : MonoBehaviour
         }
         SceneManager.LoadSceneAsync(next);
         GameManager.instance.stateUnpaused();
+    }
+
+    private void resetTime() 
+    {
+        PlayerPrefs.SetFloat(ScorePref, 0);
     }
 }
