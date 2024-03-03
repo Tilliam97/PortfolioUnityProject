@@ -15,9 +15,10 @@ public class OnTouchToggle : MonoBehaviour, IToggle
         _active = _obj.activeSelf;  // if using this script make sure to set this object in the inspector or the program will crash
         
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        ToggleMe();
+        if(other.CompareTag("Player"))
+            ToggleMe();
     }
     public void ToggleMe()
     {
