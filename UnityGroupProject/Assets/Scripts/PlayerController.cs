@@ -487,6 +487,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         return gunList[selectedGun].model.tag;
     }
 
+    public int GetCurrentAmmoCap() 
+    {
+        return CurAmmo; 
+    }
+    public int GetMaxAmmoCap() 
+    {
+        return MaxAmmo; 
+    }
+
     #endregion
 
     public void HealMe(int amount)
@@ -568,13 +577,15 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         if (CurAmmo + fillAmount > MaxAmmo)
         {
             CurAmmo = MaxAmmo;
+            gunList[selectedGun].CurGunCapacity = CurAmmo; 
         }
         else
         {
             CurAmmo += fillAmount;
+            gunList[selectedGun].CurGunCapacity = CurAmmo; 
         }
-        //CurMag = MaxMag; // ammo capsule should set mag & ammo capacity to full, but this line causes errors 
-
+        CurMag = MaxMag; 
+        gunList[selectedGun].CurGunMag = CurMag; 
         updatePlayerUI();
     }
 

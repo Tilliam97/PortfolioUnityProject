@@ -23,7 +23,8 @@ public class CapsulePickup : MonoBehaviour
             //int maxAmmo = GameManager.instance.playerScript.GetMaxAmmo();
 
             string gunType = GameManager.instance.playerScript.GetSelectedGunName(); 
-
+            int curAmmo = GameManager.instance.playerScript.GetCurrentAmmoCap(); 
+            int maxAmmo = GameManager.instance.playerScript.GetMaxAmmoCap(); 
 
             switch ( capsule.capsuleType ) 
             {
@@ -39,28 +40,28 @@ public class CapsulePickup : MonoBehaviour
                     }
                     break; 
                 case CapsuleType.A_PISTOL: 
-                    if ( gunType == "AR" ) 
+                    if ( gunType == "AR" && curAmmo < maxAmmo ) 
                     {
                         GameManager.instance.playerScript.RefillAmmo( AmmoTypes.PISTOL, capsule.refillAmount ); 
                         Destroy( gameObject ); 
                     }
                     break; 
                 case CapsuleType.A_SHOTGUN:
-                    if ( gunType == "Shotgun" ) 
+                    if ( gunType == "Shotgun" && curAmmo < maxAmmo ) 
                     {
                         GameManager.instance.playerScript.RefillAmmo( AmmoTypes.SHOTGUN, capsule.refillAmount ); 
                         Destroy( gameObject ); 
                     }
                     break; 
                 case CapsuleType.A_SNIPER: 
-                    if ( gunType == "Sniper" ) 
+                    if ( gunType == "Sniper" && curAmmo < maxAmmo ) 
                     {
                         GameManager.instance.playerScript.RefillAmmo( AmmoTypes.SNIPER, capsule.refillAmount ); 
                         Destroy( gameObject ); 
                     }
                     break; 
                 case CapsuleType.A_LASER_GUN: 
-                    if ( gunType == "Laser Gun" ) 
+                    if ( gunType == "Laser Gun" && curAmmo < maxAmmo ) 
                     {
                         GameManager.instance.playerScript.RefillAmmo( AmmoTypes.LASER, capsule.refillAmount ); 
                         Destroy( gameObject ); 
