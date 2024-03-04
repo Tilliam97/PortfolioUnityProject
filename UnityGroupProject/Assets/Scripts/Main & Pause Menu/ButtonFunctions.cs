@@ -22,6 +22,16 @@ public class ButtonFunctions : MonoBehaviour
         GameManager.instance.stateUnpaused();
     }
 
+    public void settings()
+    {
+        GameManager.instance.SettingsMenu();
+    }
+
+    public void back()
+    {
+        GameManager.instance.SettingsMenuBack();
+    }
+
     public void quit() 
     {
         resetTime();
@@ -52,6 +62,9 @@ public class ButtonFunctions : MonoBehaviour
 
     public void NextLevel()
     {
+
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+            resetTime();
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int next = currentSceneIndex + 1;
         //Debug.Log(SceneManager.sceneCountInBuildSettings);

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
+    [SerializeField] GameObject menuSettings;
     public GameObject playerDamageFlash;
 
     public Image playerHPBar;
@@ -108,6 +109,20 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         menuActive.SetActive(false); // turns off the menu 
         menuActive = null;             // resets the temp menu 
+    }
+
+    public void SettingsMenu()
+    {
+        menuActive.SetActive(false);
+        menuActive = menuSettings;
+        menuActive.SetActive(true);
+    }
+
+    public void SettingsMenuBack()
+    {
+        menuActive.SetActive(false);
+        menuActive = menuPause;
+        menuActive.SetActive(true);
     }
 
     public void updateGameGoal(int amount)
