@@ -1293,6 +1293,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412987447}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube
@@ -1560,6 +1564,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (2)
@@ -2913,6 +2921,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (4)
@@ -4349,6 +4361,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (7)
@@ -6835,6 +6851,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 687614300}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &692416453 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+  m_PrefabInstance: {fileID: 111700526}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &696943486
 GameObject:
   m_ObjectHideFlags: 0
@@ -7614,7 +7635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1903350318893700500, guid: f3cbb8acee4e0d246ae13b1783752a11, type: 3}
       propertyPath: areToggles.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1903350318893700500, guid: f3cbb8acee4e0d246ae13b1783752a11, type: 3}
       propertyPath: areToggles.Array.data[0]
@@ -7655,7 +7676,7 @@ PrefabInstance:
     - target: {fileID: 1903350318893700500, guid: f3cbb8acee4e0d246ae13b1783752a11, type: 3}
       propertyPath: areToggles.Array.data[9]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 692416453}
     - target: {fileID: 3385875344275597661, guid: f3cbb8acee4e0d246ae13b1783752a11, type: 3}
       propertyPath: m_Name
       value: toggle-station
@@ -11663,6 +11684,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (8)
@@ -11847,6 +11872,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (6)
@@ -13076,6 +13105,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (1)
@@ -13645,6 +13678,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (5)
@@ -13724,6 +13761,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube
@@ -14362,6 +14403,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 551773055}
     m_Modifications:
+    - target: {fileID: 433986511920728370, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
+      propertyPath: isToggel
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 631949974186489427, guid: f55fd2a68907b6c45acf53c72e69cf11, type: 3}
       propertyPath: m_Name
       value: laser-cube (3)
