@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
             statePaused();
             setScore();
             PlayerPrefs.SetFloat(ScorePref, currTime);
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
             if ( currentSceneIndex == SceneManager.sceneCountInBuildSettings)
             {
                 checkHighScore();
