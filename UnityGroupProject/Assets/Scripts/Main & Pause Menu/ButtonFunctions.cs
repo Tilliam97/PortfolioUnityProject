@@ -72,8 +72,15 @@ public class ButtonFunctions : MonoBehaviour
         {
             next = 0;
         }
-        SceneManager.LoadSceneAsync(next);
-        GameManager.instance.stateUnpaused();
+        if (next != 0)
+        {
+            SceneManager.LoadSceneAsync(next);
+            GameManager.instance.stateUnpaused();
+        }
+        else
+        {
+            MainMenu();
+        }
     }
 
     private void resetTime() 
