@@ -784,6 +784,7 @@ public class PlayerController : MonoBehaviour, IDamage, IDamageTeleport, IHeal, 
         {
             switch (gunList[selectedGun].model.tag)
             {
+                case "Infinity Gun": 
                 case "Pistol":
                     {
                         GameManager.instance.gunPistol.SetActive(true);
